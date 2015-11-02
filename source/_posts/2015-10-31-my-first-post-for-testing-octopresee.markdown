@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "My First Post for Testing Octopresee"
+title: "My First Post for Testing Octopress"
 date: 2015-10-31 15:46:15 +0800
 comments: true
 categories: 
