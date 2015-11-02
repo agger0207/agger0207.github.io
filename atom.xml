@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-02T15:10:15+08:00</updated>
+  <updated>2015-11-02T20:15:30+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,7 +14,16 @@
 
   
   <entry>
-    <title type="html"><![CDATA[My First Post for Testing Octopresee]]></title>
+    <title type="html"><![CDATA[使用Octopress搭建博客流程]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/"/>
+    <updated>2015-11-02T20:11:23+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My First Post for Testing Octopress]]></title>
     <link href="http://agger0207.github.io/blog/2015/10/31/my-first-post-for-testing-octopresee/"/>
     <updated>2015-10-31T15:46:15+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/10/31/my-first-post-for-testing-octopresee</id>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
+  <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
+  <link href="http://agger0207.github.io/"/>
+  <updated>2015-11-02T20:15:30+08:00</updated>
+  <id>http://agger0207.github.io/</id>
+  <author>
+    <name><![CDATA[Agger]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[使用Octopress搭建博客流程]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/"/>
+    <updated>2015-11-02T20:11:23+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+</feed>
