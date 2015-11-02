@@ -9,8 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="It is a test file
-">
+  <meta name="description" content="It is a test file 这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。 主要参考教程是Octopress 教程目录, 另外blog的一些配置参考了南峰子的技术博客, 这也是我非常推荐的一个iOS相关的技术博客，后续我会逐步完善自己的blog内容， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,6 +85,40 @@
 
 
 <div class="entry-content"><p>It is a test file</p>
+
+<p>这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。</p>
+
+<p>主要参考教程是<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>, 另外blog的一些配置参考了<a href="http://southpeak.github.io/">南峰子的技术博客</a>, 这也是我非常推荐的一个iOS相关的技术博客，后续我会逐步完善自己的blog内容，例如样式排版什么的.</p>
+
+<p>随便贴个代码试试看:</p>
+
+<pre><code>+ (NSArray *)getPropertyList:(Class)theClass {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+
+    unsigned int outCount, i;
+    objc_property_t *properties = class_copyPropertyList(theClass, &amp;outCount);
+    for (i = 0; i &lt; outCount; i++) {
+
+        objc_property_t property = properties[i];
+        NSString *propertyNameString = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+        NSString *propertyAttributeString = [[NSString alloc] initWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+
+        NSMutableString *filedTypeString = [NSMutableString stringWithString:propertyAttributeString];
+
+        NSRange range = [filedTypeString rangeOfString:@","];
+        filedTypeString = (NSMutableString *)[filedTypeString substringToIndex:range.location];
+
+        [dic setObject:filedTypeString forKey:propertyNameString];
+    }
+
+    return [dic allKeys];
+}
+</code></pre>
+
+<p>参考资料：</p>
+
+<p><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>
+<a href="http://southpeak.github.io/">南峰子的技术博客</a></p>
 </div>
 
 
