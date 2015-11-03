@@ -70,14 +70,11 @@ TODO
 ## 参考链接
 如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.
 
-[南峰子的技术博客](http://southpeak.github.io/)
-
-[雷纯锋的技术博客](http://blog.leichunfeng.com/)
+1 [南峰子的技术博客](http://southpeak.github.io/)   
+2 [雷纯锋的技术博客](http://blog.leichunfeng.com/)
 
 其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验.
 
-[Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)
-
-[使用 Octopress+GitHub Pages 搭建个人博客](http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/)
-
-[唐巧的技术博客](http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/)
+3 [Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)  
+4 [使用 Octopress+GitHub Pages 搭建个人博客](http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/)     
+5 [唐巧的技术博客](http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/)
