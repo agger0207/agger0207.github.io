@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-03T20:38:24+08:00</updated>
+  <updated>2015-11-03T20:40:26+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -92,17 +92,14 @@ git push origin source
 
 <p>如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.</p>
 
-<p><a href="http://southpeak.github.io/">南峰子的技术博客</a></p>
-
-<p><a href="http://blog.leichunfeng.com/">雷纯锋的技术博客</a></p>
+<p>1 <a href="http://southpeak.github.io/">南峰子的技术博客</a> <br/>
+2 <a href="http://blog.leichunfeng.com/">雷纯锋的技术博客</a></p>
 
 <p>其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验.</p>
 
-<p><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a></p>
-
-<p><a href="http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/">使用 Octopress+GitHub Pages 搭建个人博客</a></p>
-
-<p><a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">唐巧的技术博客</a></p>
+<p>3 <a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a><br/>
+4 <a href="http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/">使用 Octopress+GitHub Pages 搭建个人博客</a>   <br/>
+5 <a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">唐巧的技术博客</a></p>
 ]]></content>
   </entry>
   
