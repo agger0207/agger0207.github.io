@@ -14,6 +14,7 @@ It is a test file
 
 随便贴个代码试试看:
 
+``` objective-c
 	+ (NSArray *)getPropertyList:(Class)theClass {
 	    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
 	    
@@ -35,6 +36,7 @@ It is a test file
 	    
 	    return [dic allKeys];
 	}
+```	
 	
 参考资料：
 
