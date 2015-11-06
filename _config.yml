@@ -97,6 +97,10 @@ disqus_show_comment_count: false
 # Google Analytics
 google_analytics_tracking_id:
 
+# duoshuo comments
+duoshuo_comments: true
+duoshuo_short_name: agger0207
+
 # Facebook Like
 facebook_like: false
 
