@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-10T19:59:14+08:00</updated>
+  <updated>2015-11-10T20:37:23+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mac实用小工具 CheatSheet]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/"/>
+    <updated>2015-11-10T20:18:49+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet</id>
+    <content type="html"><![CDATA[<p>CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，使用起来相当方便；直接从官网下载安装即可，安装后，长按command键可以弹出当前程序下的快捷键列表，对于我这种懒得记那么多快捷键的人非常有用。</p>
+
+<p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
+
+<p><img src="../images/CheatSheet.png" alt="image" /></p>
+
+<p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用homebrew安装工具]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/"/>
+    <updated>2015-11-10T20:06:29+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju</id>
+    <content type="html"><![CDATA[<p>可以参考自己写的RestKit测试服务器启动问题.</p>
+
+<p>参考文章：</p>
+
+<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
+2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
+3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[工作问题记录 一]]></title>
