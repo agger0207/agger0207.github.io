@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/</loc>
+    <lastmod>2015-11-09T20:20:44+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/</loc>
+    <lastmod>2015-11-09T19:58:05+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/</loc>
     <lastmod>2015-11-02T20:11:23+08:00</lastmod>
   </url>
@@ -16,5 +24,8 @@
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/categories/gong-ju/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/categories/ios/</loc>
   </url>
 </urlset>
