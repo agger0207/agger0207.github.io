@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: 工具, - 穷小子Agger的技术博客</title>
+  <title>Pods: Unable to Satisfy the Following Requirements - 穷小子Agger的技术博客</title>
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="Category: 工具,">
+  <meta name="description" content="自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下 s.dependency "AFNetworking", "~&gt; 2.5" 再加上我们为了避免每个人都pods update一下， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://agger0207.github.io/blog/categories/gong-ju/">
+  <link rel="canonical" href="http://agger0207.github.io/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="穷小子Agger的技术博客" type="application/atom+xml">
@@ -64,37 +64,110 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: 工具,</h1>
+    
+      <h1 class="entry-title">Pods: Unable to Satisfy the Following Requirements</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-12T18:06:36+08:00'><span class='date'>2015 年11 月12 日</span> <span class='time'>6:06 pm</span></time>
+        
+        
+           | <a href="#comments">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
 
-  
-  <h2>2015</h2>
+<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
+</code></pre>
 
-<article>
-  
-<h1><a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">Pods: Unable to Satisfy the Following Requirements</a></h1>
-<time datetime="2015-11-12T18:06:36+08:00" pubdate><span class='month'>Nov</span> <span class='day'>12</span> <span class='year'>2015</span></time>
+<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/gong-ju/'>工具,</a>, <a class='category' href='/blog/categories/jing-yan-jiao-xun/'>经验教训</a></span>
-</footer>
+<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
 
+<pre><code>s.dependency "AFNetworking", "2.6.2"
+</code></pre>
 
-</article>
+<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
 
+<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
+
+<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
+
+<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Agger</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-11-12T18:06:36+08:00'><span class='date'>2015 年11 月12 日</span> <span class='time'>6:06 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gong-ju/'>工具,</a>, <a class='category' href='/blog/categories/jing-yan-jiao-xun/'>经验教训</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/" title="Previous Post: RestKit测试服务器搭建">&laquo; RestKit测试服务器搭建</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
+
+
+<section>
+    <h1>Comments</h1>
+    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread" data-title="Pods: Unable to Satisfy the Following Requirements"></div>
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"agger0207"};
+    (function() {
+     var ds = document.createElement('script');
+     ds.type = 'text/javascript';ds.async = true;
+     ds.src = 'http://static.duoshuo.com/embed.js';
+     ds.charset = 'UTF-8';
+     (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+</script>
+<!-- Duoshuo Comment END --></div>
+</section>
 
 </div>
 
