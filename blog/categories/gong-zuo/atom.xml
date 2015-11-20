@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 工作 | 穷小子Agger的技术博客]]></title>
+  <link href="http://agger0207.github.io/blog/categories/gong-zuo/atom.xml" rel="self"/>
+  <link href="http://agger0207.github.io/"/>
+  <updated>2015-11-20T19:51:26+08:00</updated>
+  <id>http://agger0207.github.io/</id>
+  <author>
+    <name><![CDATA[Agger]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Cocoapods和Git Submodules结合使用]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/"/>
+    <updated>2015-11-20T19:41:59+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong</id>
+    <content type="html"><![CDATA[<p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
+
+<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
+
+<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
+
+<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
+
+<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
+
+<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
+</code></pre>
+
+<p>Done.</p>
+
+<p>参考资料：<br/>
+1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
+]]></content>
+  </entry>
+  
+</feed>
