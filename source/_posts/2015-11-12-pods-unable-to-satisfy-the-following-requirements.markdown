@@ -3,7 +3,7 @@ layout: post
 title: "Pods: Unable to satisfy the following requirements"
 date: 2015-11-12 18:06:36 +0800
 comments: true
-categories: 工具, 经验教训
+categories: 工具 经验教训
 ---
 
 自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下
