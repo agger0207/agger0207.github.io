@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下 s.dependency "AFNetworking", "~&gt; 2.5" 再加上我们为了避免每个人都pods update一下， &hellip;">
+  <meta name="description" content="一 Swift中的设计模式 InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/">每周文章选读 第二周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T18:35:26+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>6:35 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>一 <a href="http://www.infoq.com/cn/articles/design-patterns-in-swift?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=articles_link&amp;utm_content=link_text">Swift中的设计模式</a></h2>
+
+<p>InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式，那么高阶函数的使用就可以直接替换掉原有的命令模式(Command模式)。同理，Swift中的一些新语言特性也能够帮我们更好的理解策略模式，抽象工厂模式，适配器模式等。</p>
+
+<p>所以语言上对设计模式有原生的支持后，实际的编码过程就会更加容易。</p>
+
+<h2> 二 <a href="http://www.cnblogs.com/dsxniubility/p/4821184.html">整理iOS9适配中出现的坑</a></h2>
+
+<p>从github上的个人介绍来看，作者似乎是美团的，这篇文章主要就是记录了实际开发过程中适配iOS 9遇到的问题，主要包括：iOS 9默认使用HTTPS； Bitcode等等，很有实用价值，省得大家走弯路了。</p>
+
+<h2>三 <a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893">iOS 保持界面流畅的技巧</a></h2>
+
+<p>作者详细的分析了iOS界面构建中的各种性能问题以及对应的解决思路，尤其是对于列表界面。界面的优化很多时候都是用空间换时间，多做缓存，预先加载，提前进行异步绘制，避免离屏渲染等等都能有效的提升界面的流畅度，另外，我个人真心觉得要多用Instruments里面的Time Profiler、Core Animation、GPU Driver等来检测界面性能，找出真正的性能瓶颈然后有针对性的优化。</p>
+
+<p><a href="https://github.com/facebook/AsyncDisplayKit">AsyncDisplayKit</a>我之前没有用过，这篇文章有提到，有空可以研究一下。</p>
+
+<h2>四 <a href="http://xujim.github.io/ios/2014/12/07/AsyncDisplayKit_inside.html">AsyncDisplayKit技术分析</a></h2>
+
+<p>上面刚刚提到了AsyncDisplayKit, 我自己就又找到一篇介绍的技术文章，有空可以结合源代码看看:)</p>
+
+<h2>五 <a href="http://blog.cnbang.net/tech/2578/">iOS图片加载速度极限优化—FastImageCache解析</a></h2>
+
+<p>又是一篇关于性能优化的文章，主要是对于<a href="https://github.com/path/FastImageCache">FastImageCache</a>的分析，介绍FastImageCache是如何对含有大量图片的列表进行性能优化的。FastImageCache的滑动确实很流畅，我有个很旧的iPhone 4, 滑动的时候FPS还能有差不多50左右。</p>
+
+<h2>六 <a href="http://draveness.me/dknightversion-de-shi-xian-wei-ios-ying-yong-tian-jia-ye-jian-mo-shi/">DKNightVersion 的实现 &mdash; 如何为 iOS 应用添加夜间模式</a></h2>
+
+<p>主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。</p>
+
+<p>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></p>
+
+<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -453,119 +515,6 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/">使用Octopress搭建博客流程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-02T20:11:23+08:00'><span class='date'>2015 年11 月2 日</span> <span class='time'>8:11 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>常见操作</h2>
-
-<p>以下操作都是在octopress目录下进行.</p>
-
-<h3>添加新文章</h3>
-
-<p>1 执行如下命令</p>
-
-<pre><code>rake new_post["title"] 
-</code></pre>
-
-<p>可以在 source/_posts 目录下创建一篇新博文, 文章是采用<a href="http://wowubuntu.com/markdown/">Markdown语法</a>进行书写的, 直接使用Markdown的免费编辑器来书写就好了；我暂时用的是Mou, 不过在编辑比较长的文章后会有卡顿，以后慢慢会尝试别人推荐的Sublime Text 3 + MarkdownEditing进行书写。</p>
-
-<p>2 执行如下命令进行预览</p>
-
-<pre><code>rake preview 
-</code></pre>
-
-<p>然后在浏览器中输入<a href="http://localhost:4000/">http://localhost:4000/</a> 就可以预览.</p>
-
-<h3>生成与发布</h3>
-
-<p>执行如下命令生成页面与发布页面.</p>
-
-<pre><code>rake generate # 生成页面
-rake deploy   # 发布到站点
-</code></pre>
-
-<p>从执行的时候命令行输出的信息可以看出，生成页面的命令实际上是在public目录生成html页面，而deploy命令实际上就是将public页面中的数据push到你的git仓库的master分支上，而我们日常编辑的文章原始内容就与source分支对应。</p>
-
-<p>因此，为了保存本地的更改，那么可以提交自己的源文件，并且push到远程source分支上.</p>
-
-<pre><code>git add .
-git commit
-git push origin source
-</code></pre>
-
-<p>同样，如果你像我一样，看到别人漂亮的排版后想参考对方的源文件，那么可以从github上找到对方对应的仓库，切换到source分支然后参考对方的源文件, 比如_config.yml是怎么写的啊，等等&hellip;</p>
-
-<h3>添加友情链接</h3>
-
-<p>在_config.yml文件中的default_asides栏中添加一项，然后在对应目录下添加一个html文件.</p>
-
-<p>例如我自己的_config.yml文件中对应的内容为：</p>
-
-<pre><code>default_asides: [asides/about.html, asides/recent_posts.html, asides/friendly_link.html]
-</code></pre>
-
-<p>那么在source->_includes->asides文件夹下要保证有这几个文件，html文件里面的内容无非就是添加一个标题和链接，比如:</p>
-
-<pre><code>&lt;section&gt;
-  &lt;h1&gt;友情链接&lt;/h1&gt;
-  &lt;ul id="friendly_link"&gt;
-    &lt;li class="post"&gt;
-      &lt;a href="http://blog.devtang.com"&gt;唐巧的技术博客&lt;/a&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/section&gt;
-</code></pre>
-
-<h3>添加导航栏上的链接</h3>
-
-<h3>添加分类</h3>
-
-<h2>代码着色</h2>
-
-<p>TODO</p>
-
-<h2>评论系统</h2>
-
-<h2>参考链接</h2>
-
-<p>如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.</p>
-
-<p>1 <a href="http://southpeak.github.io/">南峰子的技术博客</a> <br/>
-2 <a href="http://blog.leichunfeng.com/">雷纯锋的技术博客</a></p>
-
-<p>其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验.</p>
-
-<p>3 <a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a><br/>
-4 <a href="http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/">使用 Octopress+GitHub Pages 搭建个人博客</a>   <br/>
-5 <a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">唐巧的技术博客</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -586,6 +535,10 @@ git push origin source
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/">每周文章选读 第二周</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">Pods: Unable to Satisfy the Following Requirements</a>
