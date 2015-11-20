@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: 工具, | 穷小子Agger的技术博客]]></title>
+  <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-20T19:29:51+08:00</updated>
+  <updated>2015-11-20T19:31:14+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -37,6 +37,253 @@
 <p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
 
 <p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RestKit测试服务器搭建]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/"/>
+    <updated>2015-11-10T20:38:03+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian</id>
+    <content type="html"><![CDATA[<h2>用途</h2>
+
+<p>RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。本文档主要针对服务器的配置与启动列出实际的解决方案。</p>
+
+<h2>一 在用户目录安装Ruby</h2>
+
+<p>默认情况下，系统中已经安装了Ruby; 但如果直接使用系统的Ruby执行命令"gem install bundler"会报错，提示无权限。</p>
+
+<pre><code>While executing gem ... (Gem::FilePermissionError)
+You don't have write permissions for the /Library/Ruby/Gems/2.0.0 directory.
+</code></pre>
+
+<p>尽管使用命令"sudo gem install bundler"可以获得权限安装bundler, 但会影响系统自定义安装的Ruby. 故推荐在用户目录安装Ruby. 步骤如下：</p>
+
+<h3>1 使用brew安装ruby</h3>
+
+<pre><code>brew install ruby    
+</code></pre>
+
+<p>在这之前可以使用命令"ruby &ndash;version"查看系统安装的ruby版本或者使用命令"which ruby"查看系统安装的ruby路径.</p>
+
+<p>Note: brew安装有的时候会过慢，可以参考<code>http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html</code>提供的方式更换合适的镜像.</p>
+
+<h3>2 修改环境变量</h3>
+
+<p>到自己目录下的.profile 或者 .bashrc 或者  .bash_profile</p>
+
+<pre><code>/Users/agger/.profile   
+</code></pre>
+
+<p>用emacs或是vim打开 （更改前请备份好这个文件，避免误操作）在文件的末尾加入</p>
+
+<pre><code># for brew install
+export PATH=/usr/local/bin:$PATH
+</code></pre>
+
+<p>然后重启终端，就可以用到了新的ruby了    . 此时执行which ruby会发现路径和系统安装的ruby路径不相同.</p>
+
+<p>一点说明：实际操作中我机器上原本是没有这个.profile的，于是直接新建了这个文件并加入那段代码.</p>
+
+<h2>二 安装bundler</h2>
+
+<h3>1 执行如下命令安装bundler</h3>
+
+<pre><code>gem install bundler
+</code></pre>
+
+<h3>2 执行如下命令查看bundler是否安装成功</h3>
+
+<pre><code>gem list --local
+</code></pre>
+
+<h2>三 通过Bundle安装其他组件</h2>
+
+<h3>1 修改gemfile</h3>
+
+<p>在安装之前，需要修改RestKit目录下的gemfile; 将下面这行</p>
+
+<pre><code>source "https://rubygems.org"
+</code></pre>
+
+<p>修改为：</p>
+
+<pre><code>source "https://ruby.taobao.org/"
+</code></pre>
+
+<p>否则会不断提示安装步骤；</p>
+
+<p>Note: 之前的地址<code>http://ruby.taobao.org</code>无法访问，需要更新为<code>https://ruby.taobao.org</code>.</p>
+
+<h3>2 安装</h3>
+
+<p>执行命令<code>bundle install</code>安装gemfile指定的组件.</p>
+
+<h3>3 执行命令<code>bundle</code>查看使用的组件.</h3>
+
+<h3>4 可能发生的错误与解决方法</h3>
+
+<p>1 执行命令<code>bundle</code>时报错"Could not find rake-10.3.2 in any of the sources"
+解决方法：bundle install可以自动安装上rake-10.3.2; 执行完毕后可以在gem list &ndash;local中查看rake对应版本是否可以安装上.</p>
+
+<p>2 bundle install的时候报错：
+An error occurred while installing i18n (0.7.0), and Bundler cannot continue.
+Make sure that <code>gem install i18n -v '0.7.0'</code> succeeds before bundling.</p>
+
+<p>运行<code>gem install i18n -v '0.7.0'</code>即可; 一般如果gemfile按照上面的步骤做过修改是不会报这个错误的.</p>
+
+<p>3 报错：Make sure that <code>gem install nokogiri -v '1.6.6.2'</code> succeeds before bundling
+解决方法：运行如下命令</p>
+
+<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/libxml2
+</code></pre>
+
+<p>Note: 请根据自己的系统版本信息调整上述路径，例如，当我的系统升级到最新的版本10.11后，上面SDK的路径就应该从<code>MacOSX10.10.sdk</code>调整为
+<code>MacOSX10.11.sdk</code>.完成的命令如下：</p>
+
+<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
+Building native extensions with: '--use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2'
+</code></pre>
+
+<p>然后继续执行bundle install即可.
+参考：
+<a href="http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/">http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/</a></p>
+
+<h2>四 运行RestKit Test Server</h2>
+
+<p>按照RestKit原有的文档，执行命令<code>rake server</code>可以启动服务器；但实际操作中发现会报错，原因是server要求的rake版本是1.3.2; 而我系统上激活的rake版本为1.4.2; 这时换用如下命令可以正常启动服务器:</p>
+
+<pre><code>bundle exec rake server
+</code></pre>
+
+<h2>五 检查测试服务器是否运行</h2>
+
+<p>浏览器中输入：
+<a href="http://localhost:4567/">http://localhost:4567/</a></p>
+
+<h2>参考文档：</h2>
+
+<p><a href="http://blog.csdn.net/maojudong/article/details/7920578">http://blog.csdn.net/maojudong/article/details/7920578</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mac实用小工具 CheatSheet]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/"/>
+    <updated>2015-11-10T20:18:49+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet</id>
+    <content type="html"><![CDATA[<p>CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，使用起来相当方便；直接从官网下载安装即可，安装后，长按command键可以弹出当前程序下的快捷键列表，对于我这种懒得记那么多快捷键的人非常有用。</p>
+
+<p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
+
+<p><img src="../images/CheatSheet.png" alt="image" /></p>
+
+<p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用homebrew安装工具]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/"/>
+    <updated>2015-11-10T20:06:29+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju</id>
+    <content type="html"><![CDATA[<p>可以参考自己写的RestKit测试服务器启动问题.</p>
+
+<p>参考文章：</p>
+
+<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
+2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
+3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用Octopress搭建博客流程]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/"/>
+    <updated>2015-11-02T20:11:23+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng</id>
+    <content type="html"><![CDATA[<h2>常见操作</h2>
+
+<p>以下操作都是在octopress目录下进行.</p>
+
+<h3>添加新文章</h3>
+
+<p>1 执行如下命令</p>
+
+<pre><code>rake new_post["title"] 
+</code></pre>
+
+<p>可以在 source/_posts 目录下创建一篇新博文, 文章是采用<a href="http://wowubuntu.com/markdown/">Markdown语法</a>进行书写的, 直接使用Markdown的免费编辑器来书写就好了；我暂时用的是Mou, 不过在编辑比较长的文章后会有卡顿，以后慢慢会尝试别人推荐的Sublime Text 3 + MarkdownEditing进行书写。</p>
+
+<p>2 执行如下命令进行预览</p>
+
+<pre><code>rake preview 
+</code></pre>
+
+<p>然后在浏览器中输入<a href="http://localhost:4000/">http://localhost:4000/</a> 就可以预览.</p>
+
+<h3>生成与发布</h3>
+
+<p>执行如下命令生成页面与发布页面.</p>
+
+<pre><code>rake generate # 生成页面
+rake deploy   # 发布到站点
+</code></pre>
+
+<p>从执行的时候命令行输出的信息可以看出，生成页面的命令实际上是在public目录生成html页面，而deploy命令实际上就是将public页面中的数据push到你的git仓库的master分支上，而我们日常编辑的文章原始内容就与source分支对应。</p>
+
+<p>因此，为了保存本地的更改，那么可以提交自己的源文件，并且push到远程source分支上.</p>
+
+<pre><code>git add .
+git commit
+git push origin source
+</code></pre>
+
+<p>同样，如果你像我一样，看到别人漂亮的排版后想参考对方的源文件，那么可以从github上找到对方对应的仓库，切换到source分支然后参考对方的源文件, 比如_config.yml是怎么写的啊，等等&hellip;</p>
+
+<h3>添加友情链接</h3>
+
+<p>在_config.yml文件中的default_asides栏中添加一项，然后在对应目录下添加一个html文件.</p>
+
+<p>例如我自己的_config.yml文件中对应的内容为：</p>
+
+<pre><code>default_asides: [asides/about.html, asides/recent_posts.html, asides/friendly_link.html]
+</code></pre>
+
+<p>那么在source->_includes->asides文件夹下要保证有这几个文件，html文件里面的内容无非就是添加一个标题和链接，比如:</p>
+
+<pre><code>&lt;section&gt;
+  &lt;h1&gt;友情链接&lt;/h1&gt;
+  &lt;ul id="friendly_link"&gt;
+    &lt;li class="post"&gt;
+      &lt;a href="http://blog.devtang.com"&gt;唐巧的技术博客&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+</code></pre>
+
+<h3>添加导航栏上的链接</h3>
+
+<h3>添加分类</h3>
+
+<h2>代码着色</h2>
+
+<p>TODO</p>
+
+<h2>评论系统</h2>
+
+<h2>参考链接</h2>
+
+<p>如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.</p>
+
+<p>1 <a href="http://southpeak.github.io/">南峰子的技术博客</a> <br/>
+2 <a href="http://blog.leichunfeng.com/">雷纯锋的技术博客</a></p>
+
+<p>其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验.</p>
+
+<p>3 <a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a><br/>
+4 <a href="http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/">使用 Octopress+GitHub Pages 搭建个人博客</a>   <br/>
+5 <a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">唐巧的技术博客</a></p>
 ]]></content>
   </entry>
   
