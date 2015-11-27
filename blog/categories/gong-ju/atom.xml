@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-20T20:39:19+08:00</updated>
+  <updated>2015-11-27T17:45:34+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cocoa新的依赖管理工具 Carthage]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/"/>
+    <updated>2015-11-27T14:27:51+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage</id>
+    <content type="html"><![CDATA[<p>之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。</p>
+
+<p>不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS 8以及以后.</p>
+
+<pre><code>Note that Carthage only supports dynamic frameworks, which are only available on iOS 8 or later (or any version of OS X).
+</code></pre>
+
+<p>github地址：</p>
+
+<p><a href="https://github.com/Carthage/Carthage">https://github.com/Carthage/Carthage</a></p>
+
+<p>由于自己主要还是在用Cocoapods和git submodule，所以还是推荐两篇文章自己去看吧，也算是给自己的一个备忘:</p>
+
+<p><a href="http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager">Carthage：Xcode项目的GitHub依赖管理器</a>
+<a href="http://www.isaced.com/post-265.html">Cocoa 新的依赖管理工具：Carthage</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Nvm安装node后bash仍然提示找不到的问题]]></title>
@@ -197,21 +220,6 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
 <p><img src="../images/CheatSheet.png" alt="image" /></p>
 
 <p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用homebrew安装工具]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/"/>
-    <updated>2015-11-10T20:06:29+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju</id>
-    <content type="html"><![CDATA[<p>可以参考自己写的RestKit测试服务器启动问题.</p>
-
-<p>参考文章：</p>
-
-<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
-2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
-3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
 ]]></content>
   </entry>
   

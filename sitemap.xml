@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/</loc>
+    <lastmod>2015-11-27T17:02:50+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/markdownbian-ji-ji-qiao/</loc>
+    <lastmod>2015-11-27T14:37:53+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/</loc>
+    <lastmod>2015-11-27T14:37:29+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/rang-ren-beng-kui-de-bug/</loc>
+    <lastmod>2015-11-27T14:36:39+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li/</loc>
+    <lastmod>2015-11-27T14:36:21+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/</loc>
+    <lastmod>2015-11-27T14:35:06+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/</loc>
+    <lastmod>2015-11-27T14:33:55+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/</loc>
+    <lastmod>2015-11-27T14:33:18+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/</loc>
+    <lastmod>2015-11-27T14:31:44+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/</loc>
+    <lastmod>2015-11-27T14:31:27+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/</loc>
+    <lastmod>2015-11-27T14:28:17+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/</loc>
+    <lastmod>2015-11-27T14:27:51+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/git-submoduleji-ben-shi-yong-fang-fa/</loc>
+    <lastmod>2015-11-27T14:27:11+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie/</loc>
+    <lastmod>2015-11-27T14:26:58+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/cocoapodsji-ben-shi-yong/</loc>
+    <lastmod>2015-11-27T14:26:42+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/chang-yong-gitming-ling/</loc>
+    <lastmod>2015-11-27T14:26:30+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/</loc>
+    <lastmod>2015-11-27T14:25:41+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/</loc>
+    <lastmod>2015-11-27T14:24:38+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/xcode-error-use-of-undeclared-type/</loc>
+    <lastmod>2015-11-27T14:23:53+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/</loc>
+    <lastmod>2015-11-27T14:23:20+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/xcode-7-ui-testing/</loc>
+    <lastmod>2015-11-27T14:22:16+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/xcode-7diao-shi-xuan-xiang-address-sanitizer/</loc>
+    <lastmod>2015-11-27T14:21:58+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/</loc>
+    <lastmod>2015-11-27T14:20:53+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/</loc>
+    <lastmod>2015-11-27T14:19:24+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi/</loc>
     <lastmod>2015-11-20T20:13:42+08:00</lastmod>
   </url>
@@ -71,6 +167,24 @@
     <loc>http://agger0207.github.io/blog/categories/gong-zuo/</loc>
   </url>
   <url>
+    <loc>http://agger0207.github.io/blog/categories/jing-yan-ji-qiao/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/categories/jing-yan-zong-jie/</loc>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/3/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/4/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/5/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/6/</loc>
   </url>
 </urlset>

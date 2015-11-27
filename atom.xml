@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-20T20:39:19+08:00</updated>
+  <updated>2015-11-27T17:45:34+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,637 +14,334 @@
 
   
   <entry>
-    <title type="html"><![CDATA[YYModel源码略读]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi/"/>
-    <updated>2015-11-20T20:13:42+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi</id>
-    <content type="html"><![CDATA[<p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
-
-<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
-
-<p>例如其中的YYClassInfo类的定义如下：</p>
-
-<pre><code>@interface YYClassInfo : NSObject
-
-@property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, assign, readonly) Class superCls;
-@property (nonatomic, assign, readonly) Class metaCls;
-@property (nonatomic, assign, readonly) BOOL isMeta;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
-
-@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
-@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
-@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
-
-+ (instancetype)classInfoWithClass:(Class)cls;
-
-+ (instancetype)classInfoWithClassName:(NSString *)className;
-
-@end
-</code></pre>
-
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<strong>class_copyPropertyList</strong>， <strong>class_copyMethodList</strong>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
-
-<p>另，使用<strong>class_copyPropertyList</strong>时候需要注意，<strong>class_copyPropertyList</strong>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
-
-<pre><code>Any properties declared by superclasses are not included. 
-</code></pre>
-
-<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
-
-<pre><code>// Create all property metas.
-NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-YYClassInfo *curClassInfo = classInfo;
-while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
-    for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
-        if (!propertyInfo.name) continue;
-        if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
-        if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
-        _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
-                                                                propertyInfo:propertyInfo
-                                                                     generic:genericMapper[propertyInfo.name]];
-        if (!meta || !meta-&gt;_name) continue;
-        if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
-        if (allPropertyMetas[meta-&gt;_name]) continue;
-        allPropertyMetas[meta-&gt;_name] = meta;
-    }
-    curClassInfo = curClassInfo.superClassInfo;
-}
-if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
-</code></pre>
-
-<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
-
-<p>另，在YYClassPropertyInfo的- (instancetype)initWithProperty:(objc_property_t)property方法中可以看到下面的代码：</p>
-
-<pre><code>objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-for (unsigned int i = 0; i &lt; attrCount; i++) {
-    switch (attrs[i].name[0]) {
-        case 'T': { // Type encoding
-            if (attrs[i].value) {
-                _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                type = YYEncodingGetType(attrs[i].value);
-                if (type &amp; YYEncodingTypeObject) {
-                    size_t len = strlen(attrs[i].value);
-                    if (len &gt; 3) {
-                        char name[len - 2];
-                        name[len - 3] = '\0';
-                        memcpy(name, attrs[i].value + 2, len - 3);
-                        _cls = objc_getClass(name);
-                    }
-                }
-            }
-        } break;
-        case 'V': { // Instance variable
-            if (attrs[i].value) {
-                _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'R': {
-            type |= YYEncodingTypePropertyReadonly;
-        } break;
-        case 'C': {
-            type |= YYEncodingTypePropertyCopy;
-        } break;
-        case '&amp;': {
-            type |= YYEncodingTypePropertyRetain;
-        } break;
-        case 'N': {
-            type |= YYEncodingTypePropertyNonatomic;
-        } break;
-        case 'D': {
-            type |= YYEncodingTypePropertyDynamic;
-        } break;
-        case 'W': {
-            type |= YYEncodingTypePropertyWeak;
-        } break;
-        case 'P': {
-            type |= YYEncodingTypePropertyGarbage;
-        } break;
-        case 'G': {
-            type |= YYEncodingTypePropertyCustomGetter;
-            if (attrs[i].value) {
-                _getter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'S': {
-            type |= YYEncodingTypePropertyCustomSetter;
-            if (attrs[i].value) {
-                _setter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        default:
-            break;
-    }
-}
-</code></pre>
-
-<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties</a></p>
-
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a></p>
+    <title type="html"><![CDATA[ReactiveCocoa操作符介绍]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/"/>
+    <updated>2015-11-27T17:02:50+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Nvm安装node后bash仍然提示找不到的问题]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/"/>
-    <updated>2015-11-20T19:57:05+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti</id>
-    <content type="html"><![CDATA[<p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
-
-<p>后来通过下面的命令解决了这个问题：</p>
-
-<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
-</code></pre>
-
-<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
-
-<p>用homebrew直接安装的话没这个问题。</p>
+    <title type="html"><![CDATA[Markdown编辑技巧]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/markdownbian-ji-ji-qiao/"/>
+    <updated>2015-11-27T14:37:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/markdownbian-ji-ji-qiao</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Cocoapods和Git Submodules结合使用]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/"/>
-    <updated>2015-11-20T19:41:59+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong</id>
-    <content type="html"><![CDATA[<p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
+    <title type="html"><![CDATA[工作经历回忆 之 快速性能改进]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/"/>
+    <updated>2015-11-27T14:37:29+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin</id>
+    <content type="html"><![CDATA[<p>最近唐巧老师在他的个人博客上开始普及算法相关知识，其中提到熟悉算法和数据结构知识能够帮助我们更好的评估性能问题所在，能够认识到问题的规模对于实际性能的影响，并且举了一个由于问题的规模太小根本就不需要做算法改进的例子，这个我倒是有些体会，也见过一些将代码写得难看加不安全仅仅自以为可以提升性能的做法（比如去掉空指针的判断以为减少了性能开销，其实性能没有节省多少但是带来了crash的风险）；加上自己以前也做过一些性能优化方面的工作，能够很好的认识到，性能优化并不等同于算法优化，所以想回忆一些之前做的一些性能改进的实例，也算是对自己过往工作的一个总结。由于我其实一直是做客户端相关的工作，所以涉及到算法比较少，这些优化经验大部分也和算法优化关系不大, 或者说，这是在介绍自己如何在不改进算法的基础上做的一些性能改进，其实想法都比较简单。</p>
 
-<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
+<h2>一 多线程改进数据备份还原性能</h2>
 
-<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
+<p>问题描述：做磁盘/文件数据备份，性能慢
+一般误解：由于一般过程是，读取数据&ndash;>压缩&ndash;>写入目标文件；所以想到可能是改进压缩算法
+实际解决：性能太慢其实仅仅是因为所有的操作都是在一条线程中完成的，即使不压缩，也足够慢呀；所以改进策略就是采用多线程的解决方案，读，压缩，并行即可；无论对于文件备份还是磁盘备份都适合；
+进一步优化：
+1）多线程压缩；并行后压缩成为真正的瓶颈所在，那么这个时候就可以提高压缩性能了；而比换一个压缩算法更好的方式是，同时用多个线程进行的数据压缩；
+2）对部分文件避免压缩：如果是做文件备份，对于图片、视频数据，压缩得不偿失，压缩率低，压缩时间长，不压缩就好了
+3）读写线程改善；对同一块磁盘的读写并行，不仅不会提高性能，反而会降低性能；而对不同磁盘的读写并行，是可以提高性能的</p>
 
-<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
+<h2>二 遍历磁盘文件树的性能改进</h2>
 
-<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
+<p>问题描述：做某个分区的文件备份，需要建立分区的文件树，然后看这些文件是否需要备份，并且需要和已备份的文件树比较，来支持增量备份等一系列的功能；
+改进方案：
+1 递归改非递归；
+如果使用者不分区，那么一个分区里面十几万的文件很正常，这个时候递归遍历并且比较的时候，函数调用会有很多额外的开销，所以仅仅是递归改非递归就可以大大提高这部分性能；
+2 避免多次遍历与多次比较；（这个其实是原来的代码写得有问题^_^)
+3 利用文件系统的特性：
+Windows上有个很火的工具，叫做Everything, 号称是速度最快的文件名搜索工具；其实就是因为在NTFS系统下，所有文件目录和文件的meta信息都存放在一个叫做MFT文件里面，只需要获取到这里面的信息，就可以快速获取到NTFS分区里面的文件树信息了，是不是快了很多？</p>
 
-<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
-</code></pre>
+<p>还有一些，时间久远，不太想得起来了，后面慢慢加 :)</p>
 
-<p>Done.</p>
+<h2>三 随机存取备份文件改进文件提取性能</h2>
 
-<p>参考资料：<br/>
-1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
+<p>问题描述：需要从磁盘备份数据里面找到某个文件然后还原出来。。。
+之前的版本：从备份文件里面展示出所有文件大概需要一个多小时，然后找到这个文件后还原，大概需要两个小时，而且内存和CPU都占满了
+原因：之前是不支持随机存取，然后要展示所有的文件，差不多需要把整个磁盘备份解压缩一遍，然后找到文件还原的时候需要解压缩两遍，囧。。。
+改进：以NTFS文件系统为例啦，有个MFT(Master File Table)文件，它里面每一项呢，都代表一个文件，然后MFT呢，本身也是一个特殊的文件，其实大家可以把它想象成为一本书的目录啦，只不过有个特殊的是，这个目录(MFT)的内容，并不是固定在某一个区域里的，而是可能分散在分区的任何一处的。所以之前的做法相当于是，先把整本书翻了一遍，然后将目录信息取出来了；然后找到某个文件的时候呢，又把整本书翻了一遍找到某个文件对应的目录信息，然后呢，再把整本书翻了一遍取到这个文件的信息。忘了说了，NTFS文件系统的特殊性还包括，这个文件的后半部分在磁盘上的位置可能更前，这样的话，可能还得从头把这本书翻一遍。
+解决方案：其实就是允许随机存取备份生成的文件；对备份前的磁盘分块，通过改进文件格式，在已备份信息中记录类似MFT的信息，例如，所有待备份的都以2MB的大小分块，那么只要能够从备份生成的文件中快速找到要还原的文件是分布在哪些2MB块里面，就可以找到这些信息在备份文件里的偏移量，只需要解压缩这部分数据就可以了。比如说，先取目录信息(MFT)的时候，只需要取这个MFT文件对应的offset的内容进行解压缩，甚至可以做到，只取第一层目录；然后每个文件都能够找到它的对应内容处在备份文件的哪一块，再也不需要从头开始解压缩了。</p>
+
+<p>其实，上面这些基本上都不需要什么特殊的算法知识，很多时候都是具体分析瓶颈在那里，尤其是在数据规模大的时候；而常见的性能改进方法，无非就是多线程、缓存、随机存取等等。</p>
+
+<p>待续&hellip;.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ARC与MRC下 Block的区别]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/"/>
-    <updated>2015-11-20T19:34:23+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie</id>
-    <content type="html"><![CDATA[<p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
+    <title type="html"><![CDATA[让人崩溃的bug]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/rang-ren-beng-kui-de-bug/"/>
+    <updated>2015-11-27T14:36:39+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/rang-ren-beng-kui-de-bug</id>
+    <content type="html"><![CDATA[<h2>一 iOS使用不规范造成的首页白屏</h2>
 
-<p>详细可以参见唐巧的文章</p>
+<p>WebView页面被遮挡，然后被Remove掉的时候，页面内容没有渲染出来</p>
 
-<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
+<h2>二 人家的bug</h2>
+
+<p>H5页面的bug, iOS开发工程师来帮忙调, 最怕的是Android还没问题(其实是Andorid也有问题，负负得正)</p>
+
+<h2>三 人家的bug: Andorid内存溢出</h2>
+
+<h2>四 花费时间最长的两个bug</h2>
+
+<p>1 磁盘还原后某个文件内容不正确
+2 磁盘还原后系统无法启动</p>
+
+<h2>五 多线程</h2>
+
+<p>多线程永远都是最头痛的问题, 死锁，Crash等等</p>
+
+<h2>六 按键精灵</h2>
+
+<h2>七 无法重现</h2>
+
+<h2>八 客户报过来的</h2>
+
+<p>有dump就不怕:)</p>
+
+<p>之前CodeProject上有文章介绍在VC 6.0下如何根据crash日志定位到具体的代码行，在VS2010下其实也可用，不过有的时候对应不到代码行，只能到函数，这个时候，函数写的短小精悍的好处就出来了：）</p>
+
+<h2>九 内存泄漏</h2>
+
+<h2>十 已经改好了</h2>
+
+<p>总结：代码Review, 静态代码分析，XCode Instruments能够很好的避免bug的出现;</p>
+
+<p>待完善 （年纪大了，很多都已经不记得了，不过iOS相对来说更简单一些，至少多线程的问题少很多；代码量相对比较少也可以通过代码比对的方式来修正错误；一般如果是自己团队开发造成的bug都可以通过规范代码的方式来避免，除非crash在系统控件内部且无法重现）</p>
+
+<p>吐槽：很多开发同学只要不是自己负责代码的bug就一概忽略；自己重现不了的bug一概忽略；其实，很多稍微调试一下或者稍微看看代码就能够知道问题所在；或者搜索下错误信息；或者搜索下最近代码改动；或者看下相关功能的代码；绝大部分都能够定位到原因；少数不能定位到具体原因，也能够限制在少部分代码块中，而这部分代码块如果写法规范点，基本上就没啥问题了。
+当然，我也遇到过不靠谱的测试，由于网络问题的原因，中国这边无法测试，然后对方测试后给出个bug, 就只有一个出错界面，操作步骤和日志也没有，而且还经常把记录好的错误日志清除掉，再也重现不了。。。。</p>
+
+<p>当然，不排除部分问题确实很难查。对于出现的问题，我总记得之前的架构师说过的一句话：“Let me debug it !”</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[每周文章选读 第二周]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/"/>
-    <updated>2015-11-20T18:35:26+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou</id>
-    <content type="html"><![CDATA[<h2>一 <a href="http://www.infoq.com/cn/articles/design-patterns-in-swift?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=articles_link&amp;utm_content=link_text">Swift中的设计模式</a></h2>
-
-<p>InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式，那么高阶函数的使用就可以直接替换掉原有的命令模式(Command模式)。同理，Swift中的一些新语言特性也能够帮我们更好的理解策略模式，抽象工厂模式，适配器模式等。</p>
-
-<p>所以语言上对设计模式有原生的支持后，实际的编码过程就会更加容易。</p>
-
-<h2> 二 <a href="http://www.cnblogs.com/dsxniubility/p/4821184.html">整理iOS9适配中出现的坑</a></h2>
-
-<p>从github上的个人介绍来看，作者似乎是美团的，这篇文章主要就是记录了实际开发过程中适配iOS 9遇到的问题，主要包括：iOS 9默认使用HTTPS； Bitcode等等，很有实用价值，省得大家走弯路了。</p>
-
-<h2>三 <a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893">iOS 保持界面流畅的技巧</a></h2>
-
-<p>作者详细的分析了iOS界面构建中的各种性能问题以及对应的解决思路，尤其是对于列表界面。界面的优化很多时候都是用空间换时间，多做缓存，预先加载，提前进行异步绘制，避免离屏渲染等等都能有效的提升界面的流畅度，另外，我个人真心觉得要多用Instruments里面的Time Profiler、Core Animation、GPU Driver等来检测界面性能，找出真正的性能瓶颈然后有针对性的优化。</p>
-
-<p><a href="https://github.com/facebook/AsyncDisplayKit">AsyncDisplayKit</a>我之前没有用过，这篇文章有提到，有空可以研究一下。</p>
-
-<h2>四 <a href="http://xujim.github.io/ios/2014/12/07/AsyncDisplayKit_inside.html">AsyncDisplayKit技术分析</a></h2>
-
-<p>上面刚刚提到了AsyncDisplayKit, 我自己就又找到一篇介绍的技术文章，有空可以结合源代码看看:)</p>
-
-<h2>五 <a href="http://blog.cnbang.net/tech/2578/">iOS图片加载速度极限优化—FastImageCache解析</a></h2>
-
-<p>又是一篇关于性能优化的文章，主要是对于<a href="https://github.com/path/FastImageCache">FastImageCache</a>的分析，介绍FastImageCache是如何对含有大量图片的列表进行性能优化的。FastImageCache的滑动确实很流畅，我有个很旧的iPhone 4, 滑动的时候FPS还能有差不多50左右。</p>
-
-<h2>六 <a href="http://draveness.me/dknightversion-de-shi-xian-wei-ios-ying-yong-tian-jia-ye-jian-mo-shi/">DKNightVersion 的实现 &mdash; 如何为 iOS 应用添加夜间模式</a></h2>
-
-<p>主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。</p>
-
-<p>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></p>
-
-<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍.</p>
+    <title type="html"><![CDATA[我的工作经历]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li/"/>
+    <updated>2015-11-27T14:36:21+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Pods: Unable to Satisfy the Following Requirements]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/"/>
-    <updated>2015-11-12T18:06:36+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements</id>
-    <content type="html"><![CDATA[<p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
-
-<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
-</code></pre>
-
-<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
-
-<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
-
-<pre><code>s.dependency "AFNetworking", "2.6.2"
-</code></pre>
-
-<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
-
-<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
-
-<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
-
-<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
+    <title type="html"><![CDATA[日常积累的开发技巧（一）]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/"/>
+    <updated>2015-11-27T14:35:06+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-([?]-)</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[RestKit测试服务器搭建]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/"/>
-    <updated>2015-11-10T20:38:03+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian</id>
-    <content type="html"><![CDATA[<h2>用途</h2>
-
-<p>RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。本文档主要针对服务器的配置与启动列出实际的解决方案。</p>
-
-<h2>一 在用户目录安装Ruby</h2>
-
-<p>默认情况下，系统中已经安装了Ruby; 但如果直接使用系统的Ruby执行命令"gem install bundler"会报错，提示无权限。</p>
-
-<pre><code>While executing gem ... (Gem::FilePermissionError)
-You don't have write permissions for the /Library/Ruby/Gems/2.0.0 directory.
-</code></pre>
-
-<p>尽管使用命令"sudo gem install bundler"可以获得权限安装bundler, 但会影响系统自定义安装的Ruby. 故推荐在用户目录安装Ruby. 步骤如下：</p>
-
-<h3>1 使用brew安装ruby</h3>
-
-<pre><code>brew install ruby    
-</code></pre>
-
-<p>在这之前可以使用命令"ruby &ndash;version"查看系统安装的ruby版本或者使用命令"which ruby"查看系统安装的ruby路径.</p>
-
-<p>Note: brew安装有的时候会过慢，可以参考<code>http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html</code>提供的方式更换合适的镜像.</p>
-
-<h3>2 修改环境变量</h3>
-
-<p>到自己目录下的.profile 或者 .bashrc 或者  .bash_profile</p>
-
-<pre><code>/Users/agger/.profile   
-</code></pre>
-
-<p>用emacs或是vim打开 （更改前请备份好这个文件，避免误操作）在文件的末尾加入</p>
-
-<pre><code># for brew install
-export PATH=/usr/local/bin:$PATH
-</code></pre>
-
-<p>然后重启终端，就可以用到了新的ruby了    . 此时执行which ruby会发现路径和系统安装的ruby路径不相同.</p>
-
-<p>一点说明：实际操作中我机器上原本是没有这个.profile的，于是直接新建了这个文件并加入那段代码.</p>
-
-<h2>二 安装bundler</h2>
-
-<h3>1 执行如下命令安装bundler</h3>
-
-<pre><code>gem install bundler
-</code></pre>
-
-<h3>2 执行如下命令查看bundler是否安装成功</h3>
-
-<pre><code>gem list --local
-</code></pre>
-
-<h2>三 通过Bundle安装其他组件</h2>
-
-<h3>1 修改gemfile</h3>
-
-<p>在安装之前，需要修改RestKit目录下的gemfile; 将下面这行</p>
-
-<pre><code>source "https://rubygems.org"
-</code></pre>
-
-<p>修改为：</p>
-
-<pre><code>source "https://ruby.taobao.org/"
-</code></pre>
-
-<p>否则会不断提示安装步骤；</p>
-
-<p>Note: 之前的地址<code>http://ruby.taobao.org</code>无法访问，需要更新为<code>https://ruby.taobao.org</code>.</p>
-
-<h3>2 安装</h3>
-
-<p>执行命令<code>bundle install</code>安装gemfile指定的组件.</p>
-
-<h3>3 执行命令<code>bundle</code>查看使用的组件.</h3>
-
-<h3>4 可能发生的错误与解决方法</h3>
-
-<p>1 执行命令<code>bundle</code>时报错"Could not find rake-10.3.2 in any of the sources"
-解决方法：bundle install可以自动安装上rake-10.3.2; 执行完毕后可以在gem list &ndash;local中查看rake对应版本是否可以安装上.</p>
-
-<p>2 bundle install的时候报错：
-An error occurred while installing i18n (0.7.0), and Bundler cannot continue.
-Make sure that <code>gem install i18n -v '0.7.0'</code> succeeds before bundling.</p>
-
-<p>运行<code>gem install i18n -v '0.7.0'</code>即可; 一般如果gemfile按照上面的步骤做过修改是不会报这个错误的.</p>
-
-<p>3 报错：Make sure that <code>gem install nokogiri -v '1.6.6.2'</code> succeeds before bundling
-解决方法：运行如下命令</p>
-
-<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/libxml2
-</code></pre>
-
-<p>Note: 请根据自己的系统版本信息调整上述路径，例如，当我的系统升级到最新的版本10.11后，上面SDK的路径就应该从<code>MacOSX10.10.sdk</code>调整为
-<code>MacOSX10.11.sdk</code>.完成的命令如下：</p>
-
-<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
-Building native extensions with: '--use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2'
-</code></pre>
-
-<p>然后继续执行bundle install即可.
-参考：
-<a href="http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/">http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/</a></p>
-
-<h2>四 运行RestKit Test Server</h2>
-
-<p>按照RestKit原有的文档，执行命令<code>rake server</code>可以启动服务器；但实际操作中发现会报错，原因是server要求的rake版本是1.3.2; 而我系统上激活的rake版本为1.4.2; 这时换用如下命令可以正常启动服务器:</p>
-
-<pre><code>bundle exec rake server
-</code></pre>
-
-<h2>五 检查测试服务器是否运行</h2>
-
-<p>浏览器中输入：
-<a href="http://localhost:4567/">http://localhost:4567/</a></p>
-
-<h2>参考文档：</h2>
-
-<p><a href="http://blog.csdn.net/maojudong/article/details/7920578">http://blog.csdn.net/maojudong/article/details/7920578</a></p>
+    <title type="html"><![CDATA[Xcode 7免费真机调试]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/"/>
+    <updated>2015-11-27T14:33:55+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Mac实用小工具 CheatSheet]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/"/>
-    <updated>2015-11-10T20:18:49+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet</id>
-    <content type="html"><![CDATA[<p>CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，使用起来相当方便；直接从官网下载安装即可，安装后，长按command键可以弹出当前程序下的快捷键列表，对于我这种懒得记那么多快捷键的人非常有用。</p>
-
-<p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
-
-<p><img src="../images/CheatSheet.png" alt="image" /></p>
-
-<p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
+    <title type="html"><![CDATA[那些我问过的、答过的、见过的iOS面试题（一）]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/"/>
+    <updated>2015-11-27T14:33:18+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-([?]-)</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[使用homebrew安装工具]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/"/>
-    <updated>2015-11-10T20:06:29+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju</id>
-    <content type="html"><![CDATA[<p>可以参考自己写的RestKit测试服务器启动问题.</p>
-
-<p>参考文章：</p>
-
-<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
-2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
-3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
+    <title type="html"><![CDATA[iOS开源库 之 Sample Code]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/"/>
+    <updated>2015-11-27T14:31:44+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[工作问题记录 一]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/"/>
-    <updated>2015-11-09T20:20:44+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi</id>
-    <content type="html"><![CDATA[<p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
-
-<p>一  使用RestKit的时候Crash</p>
-
-<p>参考：
-<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
-
-<p>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</p>
-
-<p>参考：
-<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
-
-<p>三 Framework签名问题</p>
-
-<p>参考：
-<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
+    <title type="html"><![CDATA[iOS开源库 之 网络请求]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/"/>
+    <updated>2015-11-27T14:31:27+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[iOS每周文章选读 第一周]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/"/>
-    <updated>2015-11-09T19:58:05+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou</id>
-    <content type="html"><![CDATA[<p>自己平时读得多，写得少，所以就想办法将自己最近看过的好文章慢慢整理起来，方便自己后续查阅和复习，也可以向公司的新人推荐这些文章，而且现在每周也需要向组里推荐好文章来学习，所以作此记录，既然坚持写那么难，那么就得坚持读了；当然，其实InfoQ的iOS技术开发周报已经是很好的文章合集了。</p>
+    <title type="html"><![CDATA[App Store审核拒绝理由]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/"/>
+    <updated>2015-11-27T14:28:17+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/app-storeshen-he-ju-jue-li-you</id>
+    <content type="html"><![CDATA[<p>这几天在ASO100的微信公众号上看到<a href="%E5%9C%B0%E5%9D%80%E6%89%BE%E4%B8%8D%E5%88%B0">2015年App Store审核被拒的23个理由</a>, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。</p>
 
-<h2>一 <a href="http://xiangwangfeng.com/2015/05/20/%E7%A7%BB%E5%8A%A8IM%E5%BC%80%E5%8F%91%E9%82%A3%E4%BA%9B%E4%BA%8B/">移动IM开发那些事</a></h2>
+<p>1 App中出现安卓字样；一般是活动页面；
+2 App中活动页面奖品中出现iPhone等；
+3 App中活动页面没有返回按钮；
+这个问题出现的原因是，活动页面一般使用H5来做，然后有的H5带了Header, 有的没有带；客户端通过URL参数来判断是否要加导航栏头部，然后万一运营上了个活动页面，自己没有带H5 Header, 配置又不正确的话，就悲剧了；
+4 应用内提供了检查更新机制；
+吐槽：话说尽管苹果审核指南明确规定了所有应用都应该通过AppStore更新，但其实很多应用都在设置页面提供了检查更新的机制，然后在2015年的某一天，突然这个就成为了被拒的理由了，即使同样的功能已经存在一年多了。。。。
+5 推荐其他应用
+别家的应用是一定不能推荐的，自家的应用不清楚，不过我看大家基本都在推，好像问题不太大。
+6 求好评
+具体不记得了，一般在设置页面放一栏是没啥问题的，但是好像某种弹出界面以比较强的提示要求给好评的话，会过不了审核
+7 彩票类栏目没有提供用户协议
+嗯，这个也是一个某个功能存在了很久，突然就因为这个被拒了。。。。
+8 提供用户注册功能的应用必须提供隐私协议
+同上，之前好好的过审，苹果艳照门之后就一定要提供隐私协议了
+9 社区模块没有提供举报功能
+吐槽：不说啥，社区水很深，据说社区里面的帖子里面要是有“安卓”字样都可能被拒
+10 在status bar上显示自己的信息
+吐槽：这个是听兄弟部门的哥们说的，以前大家都会在status bar上显示一些提示信息，比如说下载进度、同步进度或者active状态下收到的push消息等等，但是兄弟部门的哥们说iOS 9之后，不让加了，因为这个被拒了一次，据说是因为status bar上苹果自己要在那上面显示信息了。。。
+11 非用户创造的数据没有放在/tmp下也没有打上do not back up属性，会被拒，因为苹果认为只有用户创造的数据才允许被iCloud backup备份
+可以参见下面两个链接：
+<a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">https://developer.apple.com/library/ios/qa/qa1719/_index.html</a>
+<a href="https://developer.apple.com/icloud/documentation/data-storage/index.html">https://developer.apple.com/icloud/documentation/data-storage/index.html</a></p>
 
-<p>最近公司内部老是有网易云信的广告，后续有时间可以研究一下。</p>
+<p>上次其他组因为这个原因被拒是因为下载的H5资源包放在Documents目录下没有加do not back up属性.</p>
 
-<p>这篇文章主要是介绍了移动IM开发相关的一些知识点，尤其是技术方案的选择。一些小公司可能会直接用云信或者环信提供的IM服务，不过，稍微大一些的公司还是都会自己去做IM开发相关的事情，比如蘑菇街啊，英坦网络技术等，都有自己做移动IM。如果需要做移动IM或者说公司产品需要设计私有协议进行网络通信的话，还是可以从里面得到很多启发，至少不会踩很多坑了。</p>
+<p>12 H5资源包升级的时候卡住界面了&hellip;.
+其实是个bug, 不过也提醒我们，这种资源包升级的事情明显可以在审核过程中避免或者在测试过程中出现的，应该尽早处理掉.</p>
 
-<p>对于我个人而言，MessagePack, MQTT和XMPP都有接触过，不过都没啥深入的学习，以后有空还是可以好好研究一下。</p>
+<p>有些想不起来了，想起来了后面再加：）</p>
 
-<h2>二 <a href="http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a></h2>
+<p>小结：
+1 审核期间运营上活动一定要注意沟通，一般运营都不明白审核规则，有些甚至上了活动之后自己都不会去测试；当然，有些公司会直接在后台做一些配置确保当前递交版本不会出现新的活动页面；
+2 可能因为网络原因导致出错的主要功能要在审核前格外注意.</p>
 
-<p>RunLoop 是 iOS 和 OSX 开发中非常基础的一个概念，这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的。</p>
+<p>当然，你还可以在<a href="https://github.com/jcccn/Why-Reject">苹果审核拒绝理由</a> 下面看到更多奇葩理由。</p>
 
-<h2>三 <a href="https://github.com/ChenYilong/ParseSourceCodeStudy/blob/master/01_Parse%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF/Parse%E7%9A%84%E5%BA%95%E5%B1%82%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.md#gcd%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E5%83%8Foperationqueue%E9%82%A3%E6%A0%B7%E7%BB%88%E6%AD%A2%E4%BB%BB%E5%8A%A1">Parse源码浅析系列（一）&mdash;Parse的底层多线程处理思路：GCD高级用法</a></h2>
+<p>为了保证审核通过，还是要仔细研究苹果官方的审核指南，不过其实大家很多时候都没有严格按照审核指南来做，很多时候甚至是想一些办法来绕过审核的。苹果的审核由于是人工审核，有的时候也会有一些奇葩的事情发生，经常会出现多年不修改的功能，突然某个版本就过不了审核了；尤其是在苹果发布新版本的Xcode，iOS或者出了一些隐私泄漏的大事的时候，审核都会收紧。</p>
 
-<p>GCD的简单使用方法，相信大部分iOS开发者都会，但是高级用法就不一定了；看过的不少开源库，对于GCD的使用都有很多值得学习的地方。</p>
-
-<h2>四 <a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></h2>
-
-<p>很久以前的文章了，温故而知新.</p>
-
-<h2>五 <a href="http://blog.devtang.com/blog/2015/11/02/mvc-and-mvvm/">被误解的 MVC 和被神化的 MVVM</a></h2>
-
-<p>唐巧最新的文章，主要是介绍了一下作者自己对MVC和MVVM的一些理解，以及对应用新技术的一些看法，并且给出一些实际开发工程中的建议。其实，相关的道理都是浅显易懂，但是在实际的开发过程中，要使得架构层次清晰、便于维护和扩展又不是一件容易的事情，大家可以从这篇文章中汲取对自己有益的部分，并在实际开发过程中慢慢体会并且逐步应用一些实用的技巧。</p>
-
-<h2>六 <a href="http://blog.ibireme.com/">iOS 处理图片的一些小 Tip</a></h2>
-
-<p>图片处理相关</p>
-
-<h2>七 <a href="http://blog.sunnyxx.com/2015/06/12/objc-new-features-in-2015/">2015 Objective-C 新特性</a></h2>
-
-<p>描述了Objective-C的一些新特性，Lightweight Generics还是挺有用的，现在有开始用到自己的代码中。</p>
+<p>建议新产品第一次上线前，有专人能够根据审核规则进行一次详细的Review, 这样大家能够形成共识，避免下次出现问题, 至少不会把未完成的功能加上去或者说出现“敬请期待”等等。</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[使用Octopress搭建博客流程]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/"/>
-    <updated>2015-11-02T20:11:23+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng</id>
-    <content type="html"><![CDATA[<h2>常见操作</h2>
+    <title type="html"><![CDATA[Cocoa新的依赖管理工具 Carthage]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/"/>
+    <updated>2015-11-27T14:27:51+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage</id>
+    <content type="html"><![CDATA[<p>之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。</p>
 
-<p>以下操作都是在octopress目录下进行.</p>
+<p>不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS 8以及以后.</p>
 
-<h3>添加新文章</h3>
-
-<p>1 执行如下命令</p>
-
-<pre><code>rake new_post["title"] 
+<pre><code>Note that Carthage only supports dynamic frameworks, which are only available on iOS 8 or later (or any version of OS X).
 </code></pre>
 
-<p>可以在 source/_posts 目录下创建一篇新博文, 文章是采用<a href="http://wowubuntu.com/markdown/">Markdown语法</a>进行书写的, 直接使用Markdown的免费编辑器来书写就好了；我暂时用的是Mou, 不过在编辑比较长的文章后会有卡顿，以后慢慢会尝试别人推荐的Sublime Text 3 + MarkdownEditing进行书写。</p>
+<p>github地址：</p>
 
-<p>2 执行如下命令进行预览</p>
+<p><a href="https://github.com/Carthage/Carthage">https://github.com/Carthage/Carthage</a></p>
 
-<pre><code>rake preview 
-</code></pre>
+<p>由于自己主要还是在用Cocoapods和git submodule，所以还是推荐两篇文章自己去看吧，也算是给自己的一个备忘:</p>
 
-<p>然后在浏览器中输入<a href="http://localhost:4000/">http://localhost:4000/</a> 就可以预览.</p>
-
-<h3>生成与发布</h3>
-
-<p>执行如下命令生成页面与发布页面.</p>
-
-<pre><code>rake generate # 生成页面
-rake deploy   # 发布到站点
-</code></pre>
-
-<p>从执行的时候命令行输出的信息可以看出，生成页面的命令实际上是在public目录生成html页面，而deploy命令实际上就是将public页面中的数据push到你的git仓库的master分支上，而我们日常编辑的文章原始内容就与source分支对应。</p>
-
-<p>因此，为了保存本地的更改，那么可以提交自己的源文件，并且push到远程source分支上.</p>
-
-<pre><code>git add .
-git commit
-git push origin source
-</code></pre>
-
-<p>同样，如果你像我一样，看到别人漂亮的排版后想参考对方的源文件，那么可以从github上找到对方对应的仓库，切换到source分支然后参考对方的源文件, 比如_config.yml是怎么写的啊，等等&hellip;</p>
-
-<h3>添加友情链接</h3>
-
-<p>在_config.yml文件中的default_asides栏中添加一项，然后在对应目录下添加一个html文件.</p>
-
-<p>例如我自己的_config.yml文件中对应的内容为：</p>
-
-<pre><code>default_asides: [asides/about.html, asides/recent_posts.html, asides/friendly_link.html]
-</code></pre>
-
-<p>那么在source->_includes->asides文件夹下要保证有这几个文件，html文件里面的内容无非就是添加一个标题和链接，比如:</p>
-
-<pre><code>&lt;section&gt;
-  &lt;h1&gt;友情链接&lt;/h1&gt;
-  &lt;ul id="friendly_link"&gt;
-    &lt;li class="post"&gt;
-      &lt;a href="http://blog.devtang.com"&gt;唐巧的技术博客&lt;/a&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/section&gt;
-</code></pre>
-
-<h3>添加导航栏上的链接</h3>
-
-<h3>添加分类</h3>
-
-<h2>代码着色</h2>
-
-<p>TODO</p>
-
-<h2>评论系统</h2>
-
-<h2>参考链接</h2>
-
-<p>如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.</p>
-
-<p>1 <a href="http://southpeak.github.io/">南峰子的技术博客</a> <br/>
-2 <a href="http://blog.leichunfeng.com/">雷纯锋的技术博客</a></p>
-
-<p>其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验.</p>
-
-<p>3 <a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a><br/>
-4 <a href="http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/">使用 Octopress+GitHub Pages 搭建个人博客</a>   <br/>
-5 <a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">唐巧的技术博客</a></p>
+<p><a href="http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager">Carthage：Xcode项目的GitHub依赖管理器</a>
+<a href="http://www.isaced.com/post-265.html">Cocoa 新的依赖管理工具：Carthage</a></p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[My First Post for Testing Octopress]]></title>
-    <link href="http://agger0207.github.io/blog/2015/10/31/my-first-post-for-testing-octopresee/"/>
-    <updated>2015-10-31T15:46:15+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/10/31/my-first-post-for-testing-octopresee</id>
-    <content type="html"><![CDATA[<p>It is a test file</p>
+    <title type="html"><![CDATA[Git Submodule基本使用方法]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/git-submoduleji-ben-shi-yong-fang-fa/"/>
+    <updated>2015-11-27T14:27:11+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/git-submoduleji-ben-shi-yong-fang-fa</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CocoaPods使用问题总结]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie/"/>
+    <updated>2015-11-27T14:26:58+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CocoaPods基本使用]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/cocoapodsji-ben-shi-yong/"/>
+    <updated>2015-11-27T14:26:42+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/cocoapodsji-ben-shi-yong</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[常用Git命令]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/chang-yong-gitming-ling/"/>
+    <updated>2015-11-27T14:26:30+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/chang-yong-gitming-ling</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[运行时报错 This Application Is Modifying the Autolayout Engine From a Background Thread]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/"/>
+    <updated>2015-11-27T14:25:41+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine</id>
+    <content type="html"><![CDATA[<p>下了个老的Swift的Demo, 在iOS 9模拟器上运行时报错</p>
 
-<p>这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。</p>
+<pre><code>This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes. This will cause an exception in a future release.
+</code></pre>
 
-<p>主要参考教程是<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>, 另外blog的一些配置参考了<a href="http://southpeak.github.io/">南峰子的技术博客</a>, 这也是我非常推荐的一个iOS相关的技术博客，后续我会逐步完善自己的blog内容，例如样式排版什么的.</p>
+<p>从错误信息中可以看出，在后台线程中修改了UI. 搜了下，NSURLSession的问题，iOS 9上，NSURLSession的回调并不是在主线程中了，那个Demo在回调中直接去修改了界面，所以会报这个错。对应的Objective-C方法如下：</p>
 
-<p>随便贴个代码试试看:</p>
+<pre><code>- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler;
+</code></pre>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">getPropertyList:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">theClass</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">dic</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableDictionary</span> <span class="n">dictionary</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">outCount</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">objc_property_t</span> <span class="o">*</span><span class="n">properties</span> <span class="o">=</span> <span class="n">class_copyPropertyList</span><span class="p">(</span><span class="n">theClass</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outCount</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">outCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">objc_property_t</span> <span class="n">property</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">propertyNameString</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">property_getName</span><span class="p">(</span><span class="n">property</span><span class="p">)</span> <span class="nl">encoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
-</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">propertyAttributeString</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">property_getAttributes</span><span class="p">(</span><span class="n">property</span><span class="p">)</span> <span class="nl">encoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="bp">NSMutableString</span> <span class="o">*</span><span class="n">filedTypeString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableString</span> <span class="nl">stringWithString</span><span class="p">:</span><span class="n">propertyAttributeString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">NSRange</span> <span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="n">filedTypeString</span> <span class="nl">rangeOfString</span><span class="p">:</span><span class="s">@&quot;,&quot;</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">filedTypeString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSMutableString</span> <span class="o">*</span><span class="p">)[</span><span class="n">filedTypeString</span> <span class="nl">substringToIndex</span><span class="p">:</span><span class="n">range</span><span class="p">.</span><span class="n">location</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="p">[</span><span class="n">dic</span> <span class="nl">setObject</span><span class="p">:</span><span class="n">filedTypeString</span> <span class="nl">forKey</span><span class="p">:</span><span class="n">propertyNameString</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">dic</span> <span class="n">allKeys</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>解决方案:</p>
 
+<p>在block中需要更新UI时，利用GCD切换到主线程即可；</p>
 
-<p></p>
+<pre><code>// Swift    
+dispatch_async(dispatch_get_main_queue(), {
+    // code here
+})
+</code></pre>
 
-<p>参考资料：</p>
+<p>从StackOverFlow上的回答来看， NSURLConnection也存在这个问题，而且仅仅在iOS 9 SDK上才出现，改天看看AFNetworking的改动确认一下：</p>
 
-<p><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>
-<a href="http://southpeak.github.io/">南峰子的技术博客</a></p>
+<p>附链接：</p>
+
+<p><a href="http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error">Getting a “This application is modifying the autolayout engine” error?</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scene Is Unreachable Due to Lack of Entry Points and Does Not Have an Identifier for Runtime Access]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/"/>
+    <updated>2015-11-27T14:24:38+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode Error: Use of Undeclared Type]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/xcode-error-use-of-undeclared-type/"/>
+    <updated>2015-11-27T14:23:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/xcode-error-use-of-undeclared-type</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 获取一个类的所有子类]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/"/>
+    <updated>2015-11-27T14:23:20+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/ios-huo-qu-[?]-ge-lei-de-suo-you-zi-lei</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
