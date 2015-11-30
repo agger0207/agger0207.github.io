@@ -213,7 +213,15 @@ dispatch_async(dispatch_get_main_queue(), {
   </header>
 
 
-  <div class="entry-content">
+  <div class="entry-content"><p>如果在使用Storyboard中出现如下警告：</p>
+
+<pre><code>warning: Unsupported Configuration: Scene is unreachable due to lack of entry points and does not have an identifier for runtime access via -instantiateViewControllerWithIdentifier:
+</code></pre>
+
+<p>那么说明为了访问该Scene需要给其设置一个StoryboardID,一般设置一个Storyboard ID即可.</p>
+
+<p>如下图:
+<img src="/images/StoryboardID.jpg" alt="img" /></p>
 </div>
   
   

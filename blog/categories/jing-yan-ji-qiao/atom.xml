@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 经验技巧 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/jing-yan-ji-qiao/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-30T19:23:57+08:00</updated>
+  <updated>2015-11-30T20:31:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -59,6 +59,23 @@
 <p>为了保证审核通过，还是要仔细研究苹果官方的审核指南，不过其实大家很多时候都没有严格按照审核指南来做，很多时候甚至是想一些办法来绕过审核的。苹果的审核由于是人工审核，有的时候也会有一些奇葩的事情发生，经常会出现多年不修改的功能，突然某个版本就过不了审核了；尤其是在苹果发布新版本的Xcode，iOS或者出了一些隐私泄漏的大事的时候，审核都会收紧。</p>
 
 <p>建议新产品第一次上线前，有专人能够根据审核规则进行一次详细的Review, 这样大家能够形成共识，避免下次出现问题, 至少不会把未完成的功能加上去或者说出现“敬请期待”等等。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scene Is Unreachable Due to Lack of Entry Points and Does Not Have an Identifier for Runtime Access]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/"/>
+    <updated>2015-11-27T14:24:38+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access</id>
+    <content type="html"><![CDATA[<p>如果在使用Storyboard中出现如下警告：</p>
+
+<pre><code>warning: Unsupported Configuration: Scene is unreachable due to lack of entry points and does not have an identifier for runtime access via -instantiateViewControllerWithIdentifier:
+</code></pre>
+
+<p>那么说明为了访问该Scene需要给其设置一个StoryboardID,一般设置一个Storyboard ID即可.</p>
+
+<p>如下图:
+<img src="/images/StoryboardID.jpg" alt="img" /></p>
 ]]></content>
   </entry>
   

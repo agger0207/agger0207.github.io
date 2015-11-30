@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ios | 穷小子Agger的技术博客]]></title>
+  <title><![CDATA[Category: Ios, | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-30T19:23:57+08:00</updated>
+  <updated>2015-11-30T20:31:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,229 +14,106 @@
 
   
   <entry>
-    <title type="html"><![CDATA[YYModel源码略读]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi/"/>
-    <updated>2015-11-20T20:13:42+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi</id>
-    <content type="html"><![CDATA[<p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
+    <title type="html"><![CDATA[iOS开源库 之 网络请求]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/"/>
+    <updated>2015-11-27T14:31:27+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu</id>
+    <content type="html"><![CDATA[<p>iOS一般都是HTTP/HTTPS网络请求，相应的有多个开源库来支持iOS客户端HTTP请求; 比较知名和常用的主要有如下几个：</p>
 
-<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
+<h2>一 ASIHttpRequest</h2>
 
-<p>例如其中的YYClassInfo类的定义如下：</p>
+<p>比较老的开源网络库，现在已经不再维护了；ASIHttpRequest基于CFNetworking而不是NSURLConnection, 所以性能会更好；功能上会比AFNetworking更强大，但是使用起来不如AFNetworking那么方便，而且对于新的iOS版本没有提供支持；现在应该还有一些比较老的项目仍然在使用。</p>
 
-<pre><code>@interface YYClassInfo : NSObject
+<p>项目地址：<a href="https://github.com/pokeb/asi-http-request">https://github.com/pokeb/asi-http-request</a></p>
 
-@property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, assign, readonly) Class superCls;
-@property (nonatomic, assign, readonly) Class metaCls;
-@property (nonatomic, assign, readonly) BOOL isMeta;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
+<p>ASI VS AFNetworking是之前大家经常讨论的话题，而且确实在支持的功能上也有一些不同，比如ASI支持同步请求，支持自定义Proxy设置(AFNetworking在iOS 7.0之前不支持),不过随着ASI不再维护，慢慢的也就没有这个比较了，可以参看下面的文章了解二者的差异.</p>
 
-@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
-@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
-@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
+<p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a></p>
 
-+ (instancetype)classInfoWithClass:(Class)cls;
+<h2>二 AFNetworking</h2>
 
-+ (instancetype)classInfoWithClassName:(NSString *)className;
+<p>github地址：<a href="https://github.com/AFNetworking/AFNetworking">https://github.com/AFNetworking/AFNetworking</a></p>
 
-@end
-</code></pre>
+<p>现在知名度最高、应用最广泛的开源网络库，使用起来非常简单；接口清晰明了；此外，还有很多在此基础上做的扩展，后面提到的RestKit和YTKNetworking其实下面都是在用AFNetworking做请求的发送；事实上，现存的绝大多数APP中，如果仅仅是支持HTTP协议的话，除了自己用苹果的API(NSURLSession或者NSURLConnection)外，基本就是用AFNetworking了.</p>
 
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<strong>class_copyPropertyList</strong>， <strong>class_copyMethodList</strong>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
+<p>AFNetworking现在到了3.0版本，3.0版本去除了NSURLConnection那套接口，只有NSURLSession的接口，只支持iOS 7以上；
+另外，作者还开发了Swift版本<a href="https://github.com/Alamofire/Alamofire">Alamofire</a>. 可以查看RayWenderlich提供的教程<a href="http://www.raywenderlich.com/85080/beginning-alamofire-tutorial">alamofire-tutorial</a>或者该教程的翻译版本<a href="http://www.cocoachina.com/ios/20141202/10390.html">Alamofire网络库基础教程：使用 Alamofire 轻松实现 Swift 网络请求</a>获得更多信息.</p>
 
-<p>另，使用<strong>class_copyPropertyList</strong>时候需要注意，<strong>class_copyPropertyList</strong>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
+<p>AFNetworking本身也是很值得学习的库，里面对于NSOperation的使用、网络请求相关的处理都很值得学习，这里有一篇关于AFNetworking源码解读的文章:<a href="http://blog.cnbang.net/tech/2320/">AFNetworking2.0源码解析</a>，不过并没有涉及到NSURLSession部分。
+另外，由于AFNetworking的作者Mattt Thompson本身是<a href="http://nshipster.com">NSHipter</a>的发起人，所以也可以看作者自己写的介绍文章<a href="http://nshipster.cn/afnetworking-2/">AFNetworking 2.0</a>，体会架构的优化与了解功能的变更. 另附<a href="http://nshipster.cn/">NSHipter中文版本</a>.</p>
 
-<pre><code>Any properties declared by superclasses are not included. 
-</code></pre>
+<p>各个大版本的变迁：
+<a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-3.0-Migration-Guide">AFNetworking 3.0 Migration Guide</a></p>
 
-<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
+<p><a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-2.0-Migration-Guide">AFNetworking 2.0 Migration Guide</a></p>
 
-<pre><code>// Create all property metas.
-NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-YYClassInfo *curClassInfo = classInfo;
-while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
-    for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
-        if (!propertyInfo.name) continue;
-        if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
-        if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
-        _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
-                                                                propertyInfo:propertyInfo
-                                                                     generic:genericMapper[propertyInfo.name]];
-        if (!meta || !meta-&gt;_name) continue;
-        if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
-        if (allPropertyMetas[meta-&gt;_name]) continue;
-        allPropertyMetas[meta-&gt;_name] = meta;
-    }
-    curClassInfo = curClassInfo.superClassInfo;
-}
-if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
-</code></pre>
+<h2>三 RestKit</h2>
 
-<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
+<p>项目地址：<a href="https://github.com/RestKit/RestKit">https://github.com/RestKit/RestKit</a></p>
 
-<p>另，在YYClassPropertyInfo的- (instancetype)initWithProperty:(objc_property_t)property方法中可以看到下面的代码：</p>
+<p>RestKit is a modern Objective-C framework for implementing RESTful web services clients on iOS and Mac OS X. It provides a powerful object mapping engine that seamlessly integrates with Core Data and a simple set of networking primitives for mapping HTTP requests and responses built on top of AFNetworking.</p>
 
-<pre><code>objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-for (unsigned int i = 0; i &lt; attrCount; i++) {
-    switch (attrs[i].name[0]) {
-        case 'T': { // Type encoding
-            if (attrs[i].value) {
-                _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                type = YYEncodingGetType(attrs[i].value);
-                if (type &amp; YYEncodingTypeObject) {
-                    size_t len = strlen(attrs[i].value);
-                    if (len &gt; 3) {
-                        char name[len - 2];
-                        name[len - 3] = '\0';
-                        memcpy(name, attrs[i].value + 2, len - 3);
-                        _cls = objc_getClass(name);
-                    }
-                }
-            }
-        } break;
-        case 'V': { // Instance variable
-            if (attrs[i].value) {
-                _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'R': {
-            type |= YYEncodingTypePropertyReadonly;
-        } break;
-        case 'C': {
-            type |= YYEncodingTypePropertyCopy;
-        } break;
-        case '&amp;': {
-            type |= YYEncodingTypePropertyRetain;
-        } break;
-        case 'N': {
-            type |= YYEncodingTypePropertyNonatomic;
-        } break;
-        case 'D': {
-            type |= YYEncodingTypePropertyDynamic;
-        } break;
-        case 'W': {
-            type |= YYEncodingTypePropertyWeak;
-        } break;
-        case 'P': {
-            type |= YYEncodingTypePropertyGarbage;
-        } break;
-        case 'G': {
-            type |= YYEncodingTypePropertyCustomGetter;
-            if (attrs[i].value) {
-                _getter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'S': {
-            type |= YYEncodingTypePropertyCustomSetter;
-            if (attrs[i].value) {
-                _setter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        default:
-            break;
-    }
-}
-</code></pre>
+<p>RestKit主要是在网络请求的发送之外额外提供了对象映射的功能，可以将服务器返回的结果(无论是JSON还是XML)自动映射成为Model对象，并且集成了CoreData的支持；它利用RequestDescriptor和ResponseDescriptor来描述请求与Model的对应关系，这样对于配置好后的RKObjectManager, 可以自动的对请求的结果进行映射；所以其强大之处就在于这个对象的映射功能，避免繁杂的JSON映射啊什么的.</p>
 
-<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties</a></p>
+<p>不过好像RestKit在国内的应用不多，我个人觉得是有这么几个原因：
+1 RestKit底下其实还是用AFNetworking来发送请求，而且还使用的是老的AFNetworking 1.x的版本；由于其与AFNetworking耦合比较紧，替换成为AFNetworking 2.x以上版本非常麻烦；RestKit的开发者本来计划是要升级到AFNetworking 2.x的，不过弄了一两年也没搞完，现在的方向貌似是直接抛弃AFNetworking，直接自己通过NSURLSession来发送网络请求，但是具体啥时候能够做完就不知道了；
+2 RestKit的设计、实现和使用都偏复杂，很多地方都会看到对这一点的抱怨；对于中小型应用，AFNetworking + Mantle 完全可以做掉 RestKit的工作，还更简单；想单独的替换/升级Mantle或者AFNetworking都方便很多；
+3 国内好像CoreData用得应该不太多，RestKit强大的ObjectMapping+CoreData的集成没有多少用武之地.
+4 中小型项目用RestKit嫌麻烦，大型项目要用RestKit倒是好，但是一般这种级别的项目或者公司都会希望能够集成自己的私有TCP协议，这个要集成起来也够头疼.</p>
 
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a></p>
+<p>我个人也不是太喜欢RestKit, 还是AFNetworking + Mantle会更简单，即使要支持Object Mapping, 在一些JSON&lt;>Model转换库的基础上做做也还好，毕竟，大多数时候，不需要考虑一些奇怪的JSON返回内容，可以约束服务器开发人员返回更友好更易快速解析的JSON内容，而不是一些不规范的、异构的内容.</p>
+
+<h2>四 MKNetworkKit</h2>
+
+<p>Github地址：<a href="https://github.com/MugunthKumar/MKNetworkKit">https://github.com/MugunthKumar/MKNetworkKit</a>
+介绍文章：<a href="http://www.cnblogs.com/scorpiozj/p/3222803.html">http://www.cnblogs.com/scorpiozj/p/3222803.html</a>
+License:MIT License</p>
+
+<p>主要特性：
+超轻量级
+整个应用共享单一队列
+正确的显示网络连接的标志
+Auto queue sizing 自动队列大小
+Auto caching 自动缓存
+Operation freezing 操作冻结
+Image Caching 图片缓存
+Performance 性能
+Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
+
+<p>个人感觉
+1 功能偏简单；库本身的设计上感觉没有什么特别的；主要就是封装了一个Operation和一个调度的Engine; Engine中涉及一些配置和调度；
+2 使用的时候需要自己去写MKNetworkEngine的子类; 当然，一个应用一般是访问同一个服务器，所以只需要在同一个Engine类中开放不同的API接口；每个接口里面去创建一个MKNetworkOperation;
+3 一般来说，不需要子类化MKNetworkOperation类
+4 创建MKNetworkOperation时参数要自己组装；所以实际使用的时候，还是需要在这之上封装一个网络层出来；
+5 坦白说，MKNetworkKit的代码风格都比较差，包括空行和空格什么的，可读性不那么好，没有其他几个知名库那样赏心悦目.</p>
+
+<h2>五 YTKNetwork</h2>
+
+<p>YTKNetwork 是猿题库 iOS 研发团队基于 AFNetworking 封装的 iOS 网络库，其实现了一套 High Level 的 API，提供了更高层次的网络访问抽象。
+项目地址: <a href="https://github.com/yuantiku/YTKNetwork">https://github.com/yuantiku/YTKNetwork</a></p>
+
+<p>总体还是基于AFNetworking 2.x的，做了一些上层封装，集成了Cache功能，让网络层请求写起来更加简单。我觉得大多数情况下，使用这个库足够了，方便又清晰.</p>
+
+<p>不过，我觉得实际使用的过程中，要是能够加上JSON-Model的映射功能，使用起来会更爽；另外，这套请求还是基于AFNetworking 2.x老的那套接口，也就是AFURLSessionManager那一套，底下还是NSURLConnection, 估计后面也会迁移到AFNetworking 3.x上使用NSURLSession吧！</p>
+
+<p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ARC与MRC下 Block的区别]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/"/>
-    <updated>2015-11-20T19:34:23+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie</id>
-    <content type="html"><![CDATA[<p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
+    <title type="html"><![CDATA[Scene Is Unreachable Due to Lack of Entry Points and Does Not Have an Identifier for Runtime Access]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/"/>
+    <updated>2015-11-27T14:24:38+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access</id>
+    <content type="html"><![CDATA[<p>如果在使用Storyboard中出现如下警告：</p>
 
-<p>详细可以参见唐巧的文章</p>
+<pre><code>warning: Unsupported Configuration: Scene is unreachable due to lack of entry points and does not have an identifier for runtime access via -instantiateViewControllerWithIdentifier:
+</code></pre>
 
-<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[每周文章选读 第二周]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/"/>
-    <updated>2015-11-20T18:35:26+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou</id>
-    <content type="html"><![CDATA[<h2>一 <a href="http://www.infoq.com/cn/articles/design-patterns-in-swift?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=articles_link&amp;utm_content=link_text">Swift中的设计模式</a></h2>
+<p>那么说明为了访问该Scene需要给其设置一个StoryboardID,一般设置一个Storyboard ID即可.</p>
 
-<p>InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式，那么高阶函数的使用就可以直接替换掉原有的命令模式(Command模式)。同理，Swift中的一些新语言特性也能够帮我们更好的理解策略模式，抽象工厂模式，适配器模式等。</p>
-
-<p>所以语言上对设计模式有原生的支持后，实际的编码过程就会更加容易。</p>
-
-<h2> 二 <a href="http://www.cnblogs.com/dsxniubility/p/4821184.html">整理iOS9适配中出现的坑</a></h2>
-
-<p>从github上的个人介绍来看，作者似乎是美团的，这篇文章主要就是记录了实际开发过程中适配iOS 9遇到的问题，主要包括：iOS 9默认使用HTTPS； Bitcode等等，很有实用价值，省得大家走弯路了。</p>
-
-<h2>三 <a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893">iOS 保持界面流畅的技巧</a></h2>
-
-<p>作者详细的分析了iOS界面构建中的各种性能问题以及对应的解决思路，尤其是对于列表界面。界面的优化很多时候都是用空间换时间，多做缓存，预先加载，提前进行异步绘制，避免离屏渲染等等都能有效的提升界面的流畅度，另外，我个人真心觉得要多用Instruments里面的Time Profiler、Core Animation、GPU Driver等来检测界面性能，找出真正的性能瓶颈然后有针对性的优化。</p>
-
-<p><a href="https://github.com/facebook/AsyncDisplayKit">AsyncDisplayKit</a>我之前没有用过，这篇文章有提到，有空可以研究一下。</p>
-
-<h2>四 <a href="http://xujim.github.io/ios/2014/12/07/AsyncDisplayKit_inside.html">AsyncDisplayKit技术分析</a></h2>
-
-<p>上面刚刚提到了AsyncDisplayKit, 我自己就又找到一篇介绍的技术文章，有空可以结合源代码看看:)</p>
-
-<h2>五 <a href="http://blog.cnbang.net/tech/2578/">iOS图片加载速度极限优化—FastImageCache解析</a></h2>
-
-<p>又是一篇关于性能优化的文章，主要是对于<a href="https://github.com/path/FastImageCache">FastImageCache</a>的分析，介绍FastImageCache是如何对含有大量图片的列表进行性能优化的。FastImageCache的滑动确实很流畅，我有个很旧的iPhone 4, 滑动的时候FPS还能有差不多50左右。</p>
-
-<h2>六 <a href="http://draveness.me/dknightversion-de-shi-xian-wei-ios-ying-yong-tian-jia-ye-jian-mo-shi/">DKNightVersion 的实现 &mdash; 如何为 iOS 应用添加夜间模式</a></h2>
-
-<p>主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。</p>
-
-<p>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></p>
-
-<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS每周文章选读 第一周]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/"/>
-    <updated>2015-11-09T19:58:05+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou</id>
-    <content type="html"><![CDATA[<p>自己平时读得多，写得少，所以就想办法将自己最近看过的好文章慢慢整理起来，方便自己后续查阅和复习，也可以向公司的新人推荐这些文章，而且现在每周也需要向组里推荐好文章来学习，所以作此记录，既然坚持写那么难，那么就得坚持读了；当然，其实InfoQ的iOS技术开发周报已经是很好的文章合集了。</p>
-
-<h2>一 <a href="http://xiangwangfeng.com/2015/05/20/%E7%A7%BB%E5%8A%A8IM%E5%BC%80%E5%8F%91%E9%82%A3%E4%BA%9B%E4%BA%8B/">移动IM开发那些事</a></h2>
-
-<p>最近公司内部老是有网易云信的广告，后续有时间可以研究一下。</p>
-
-<p>这篇文章主要是介绍了移动IM开发相关的一些知识点，尤其是技术方案的选择。一些小公司可能会直接用云信或者环信提供的IM服务，不过，稍微大一些的公司还是都会自己去做IM开发相关的事情，比如蘑菇街啊，英坦网络技术等，都有自己做移动IM。如果需要做移动IM或者说公司产品需要设计私有协议进行网络通信的话，还是可以从里面得到很多启发，至少不会踩很多坑了。</p>
-
-<p>对于我个人而言，MessagePack, MQTT和XMPP都有接触过，不过都没啥深入的学习，以后有空还是可以好好研究一下。</p>
-
-<h2>二 <a href="http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a></h2>
-
-<p>RunLoop 是 iOS 和 OSX 开发中非常基础的一个概念，这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的。</p>
-
-<h2>三 <a href="https://github.com/ChenYilong/ParseSourceCodeStudy/blob/master/01_Parse%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF/Parse%E7%9A%84%E5%BA%95%E5%B1%82%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.md#gcd%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E5%83%8Foperationqueue%E9%82%A3%E6%A0%B7%E7%BB%88%E6%AD%A2%E4%BB%BB%E5%8A%A1">Parse源码浅析系列（一）&mdash;Parse的底层多线程处理思路：GCD高级用法</a></h2>
-
-<p>GCD的简单使用方法，相信大部分iOS开发者都会，但是高级用法就不一定了；看过的不少开源库，对于GCD的使用都有很多值得学习的地方。</p>
-
-<h2>四 <a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></h2>
-
-<p>很久以前的文章了，温故而知新.</p>
-
-<h2>五 <a href="http://blog.devtang.com/blog/2015/11/02/mvc-and-mvvm/">被误解的 MVC 和被神化的 MVVM</a></h2>
-
-<p>唐巧最新的文章，主要是介绍了一下作者自己对MVC和MVVM的一些理解，以及对应用新技术的一些看法，并且给出一些实际开发工程中的建议。其实，相关的道理都是浅显易懂，但是在实际的开发过程中，要使得架构层次清晰、便于维护和扩展又不是一件容易的事情，大家可以从这篇文章中汲取对自己有益的部分，并在实际开发过程中慢慢体会并且逐步应用一些实用的技巧。</p>
-
-<h2>六 <a href="http://blog.ibireme.com/">iOS 处理图片的一些小 Tip</a></h2>
-
-<p>图片处理相关</p>
-
-<h2>七 <a href="http://blog.sunnyxx.com/2015/06/12/objc-new-features-in-2015/">2015 Objective-C 新特性</a></h2>
-
-<p>描述了Objective-C的一些新特性，Lightweight Generics还是挺有用的，现在有开始用到自己的代码中。</p>
+<p>如下图:
+<img src="/images/StoryboardID.jpg" alt="img" /></p>
 ]]></content>
   </entry>
   
