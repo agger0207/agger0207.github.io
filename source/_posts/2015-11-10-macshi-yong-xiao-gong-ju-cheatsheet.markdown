@@ -10,6 +10,6 @@ CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，�
 
 下图是就是通过CheatSheet显示的Mou的快捷键:
 
-![image](../images/CheatSheet.png)
+![image](/images/CheatSheet.png)
 
 官网地址：[CheatSheet](http://www.cheatsheetapp.com/CheatSheet/)
