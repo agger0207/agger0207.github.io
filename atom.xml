@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-27T17:45:34+08:00</updated>
+  <updated>2015-11-30T19:23:57+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发者博客]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke/"/>
+    <updated>2015-11-30T16:05:03+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Facebook Pop使用指南（翻译）]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/"/>
+    <updated>2015-11-30T16:03:28+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发文章选读 之 第三周]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/"/>
+    <updated>2015-11-30T16:02:44+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发 之 数据持久化存储]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/"/>
+    <updated>2015-11-30T15:17:31+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发 之 界面布局]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/"/>
+    <updated>2015-11-30T15:17:05+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发 之 动画]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-dong-hua/"/>
+    <updated>2015-11-30T15:16:54+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-dong-hua</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ReactiveCocoa操作符介绍]]></title>
@@ -128,7 +182,25 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     <link href="http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li/"/>
     <updated>2015-11-27T14:36:21+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>主要想回忆一些自己工作的感受、经历，做一下总结，随便写写总比什么都不写好，毕竟年纪慢慢大了，记忆力慢慢衰退了，说不定哪一天就不记得自己干过什么了呢：）尽量多正面的回忆，少吐槽，当然，也不是写简历，要写简历直接去拉勾了：）</p>
+
+<p>先列提纲，再慢慢写吧！</p>
+
+<h2>一 Arcsoft</h2>
+
+<p>系统架构部门软件工程师</p>
+
+<h2>二 Nero</h2>
+
+<p>Nero BackItUp架构师</p>
+
+<h2>三 挖财</h2>
+
+<p>资深iOS开发工程师</p>
+
+<h2>四 网易</h2>
+
+<p>资深客户端开发工程师</p>
 ]]></content>
   </entry>
   
@@ -146,7 +218,19 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     <link href="http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/"/>
     <updated>2015-11-27T14:33:55+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>现在Xcode 7可以免费进行真机调试了，不需要任何开发者账号，只要有一个Apple ID就可以了。</p>
+
+<p>主要步骤如下：
+1 运行Xcode后，点击菜单中的Preferences, 进行Account标签，选择添加Apple Id
+2 输入AppId，登录；登录成功后会看到相关信息；
+3 选中账号信息，点击View Details, 在弹出的对话框中操作添加开发者证书
+4 打开要调试的项目，在Target的General的Team中可以看到刚才添加的Apple Id
+5 连上设备调试前可以看到Team旁有一个Issue, 点击Fix，profile就生成并且添加到项目中了
+6 可以到原来设置profile和证书的地方看看，一切都设置好了。然后就可以运行调试并且安装到真机上了。</p>
+
+<p>全程傻瓜式操作；晚点上图：）</p>
+
+<p>不过会不会有什么坑暂时还不知道，等遇到了再更新；至少现在是用得好好的，不需要开发者账号也可以愉快的真机调试.</p>
 ]]></content>
   </entry>
   
@@ -155,7 +239,50 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     <link href="http://agger0207.github.io/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/"/>
     <updated>2015-11-27T14:33:18+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-([?]-)</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>网上现在流传不少iOS面试题以及解答，再加上自己也整理过一些面试题给组里的人去做校招和社招的面试，正好列在下面，逐步完善和补充；有些还是我被人面试的时候回答过的，由简单到难慢慢列着吧.</p>
+
+<h2>一 Objective-C属性关键字</h2>
+
+<p>常见问题：
+1 有哪些属性关键字，各自的作用是什么？
+2 strong和weak的区别
+3 weak，assign的区别
+4 strong/retain和copy的区别
+5 什么情况下需要用copy?
+6 IBOutlet属性里面用weak, 如果用strong会有问题吗？如果有，会有什么问题？
+7 默认的属性关键字，尤其是针对内存管理上的默认属性关键字
+8 readonly有什么作用？
+9 使用atomic会有什么负面影响? atomic修饰属性后，一定是线程安全的吗？如果atomic修饰的是NSMutableArray呢？
+10 delegate为什么要用weak来修饰？如果用assign修饰的话会有问题吗？如何避免这一问题？
+11 深拷贝与浅拷贝相关</p>
+
+<p>一般挑几个大致问下就差不多了，遇到过好些不知道weak和assign的区别&hellip;.
+话说我一般不问getter和setter。。。。</p>
+
+<h2>二 基本知识</h2>
+
+<p>1 protocol是什么？可以定义property吗？如果可以，那么怎么做或者有什么需要注意的地方？
+2 category是什么？主要有什么作用？在什么情况下会考虑用到category?category可以替换掉原有的实现吗？写category需要注意些什么（比如命名上）？Category可以定义property吗？如果可以，那么怎么做？Category可以为类增加成员变量吗？</p>
+
+<h2>三 内存管理</h2>
+
+<p>1 内存管理机制
+2 循环引用的理解，遇到过哪些循环引用，如何解决
+3 AutoReleasePool的原理，放入AutoReleasePool中的对象会在什么时候真正释放，什么情况下需要手写AutoReleasePool块
+4 MRC转到ARC后需要注意的一些问题，在哪些情况下需要自己去做一些资源释放的问题
+5 CF对象的Release问题相关</p>
+
+<h2>四 不分类了</h2>
+
+<p>发现好难分类，不分类了，一顺写下来吧！</p>
+
+<p>1 View Controller的生命周期; loadView会在哪个过程中被调用到？viewWillLayoutSubviews和viewDidLayoutSubviews又会在哪个过程中被调用到？从A页面调到B页面，各自的ViewController中哪些方法会被调用到？
+如果是iOS 6以前就开始做了的，那么会问下UIViewDidUnload相关的问题，比如为什么现在UIViewDidUnload不需要处理了.
+2 Application的生命周期；一般需要做哪些处理；在各个阶段的回调处理时需要注意什么，比如，是否可以在启动的回调中做一些耗时操作等等;
+3 APNS基本流程；应用需要做哪些处理
+4 SetNeedsDisplay是做什么用的？drawRect呢？setNeedsLayout呢？</p>
+
+<p>待续</p>
 ]]></content>
   </entry>
   
@@ -164,7 +291,35 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/"/>
     <updated>2015-11-27T14:31:44+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<h2>一 使用Facebook的pop做的一些动画示例</h2>
+
+<p>1 <a href="https://github.com/schneiderandre/popping">schneiderandre/popping</a></p>
+
+<p>github地址：<a href="https://github.com/schneiderandre/popping">https://github.com/schneiderandre/popping</a>       <br/>
+说明：A collection of animation examples for iOS apps.</p>
+
+<p>2 <a href="https://github.com/victorBaro/PopPlayground">victorBaro/PopPlayground</a>                        <br/>
+github地址：<a href="https://github.com/victorBaro/PopPlayground">https://github.com/victorBaro/PopPlayground</a>       <br/>
+说明：Examples and Controls made entirely using Pop (Facebook&rsquo;s framework)</p>
+
+<p>3 <a href="https://github.com/callmeed/pop-playground">callmeed/pop-playground</a>     <br/>
+github地址：<a href="https://github.com/callmeed/pop-playground">https://github.com/callmeed/pop-playground</a>
+说明：Some example animations using Facebook&rsquo;s Pop animation library</p>
+
+<h2>二 针对iOS 7, 8, 9新特性的Sample Code</h2>
+
+<p>作者都是同一个人：）</p>
+
+<p><a href="https://github.com/shu223/iOS-9-Sampler">iOS-9-Sampler</a>                      <br/>
+<a href="https://github.com/shu223/iOS8-Sampler">iOS-8-Sampler</a>                       <br/>
+<a href="https://github.com/shu223/iOS7-Sampler">iOS-7-Sampler</a></p>
+
+<h2>三 SuperDemo</h2>
+
+<p><a href="https://github.com/bingxue314159/SuperDemo">bingxue314159/SuperDemo</a>            <br/>
+该作者平时积累的一些第三方库和控件使用方法.</p>
+
+<p>暂时只留意到这些，后续有找到新的会陆续添加；这些Sample Code对于快速理解新特性或者一些开源库还是很有帮助的，当然，首先还是要看下苹果官方或者第三方开源库作者自己提供的Demo啦。</p>
 ]]></content>
   </entry>
   
@@ -263,85 +418,19 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     <link href="http://agger0207.github.io/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie/"/>
     <updated>2015-11-27T14:26:58+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CocoaPods基本使用]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/cocoapodsji-ben-shi-yong/"/>
-    <updated>2015-11-27T14:26:42+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/cocoapodsji-ben-shi-yong</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[常用Git命令]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/chang-yong-gitming-ling/"/>
-    <updated>2015-11-27T14:26:30+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/chang-yong-gitming-ling</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[运行时报错 This Application Is Modifying the Autolayout Engine From a Background Thread]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/"/>
-    <updated>2015-11-27T14:25:41+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine</id>
-    <content type="html"><![CDATA[<p>下了个老的Swift的Demo, 在iOS 9模拟器上运行时报错</p>
+    <content type="html"><![CDATA[<p>1 CocoaPods中添加资源的支持</p>
 
-<pre><code>This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes. This will cause an exception in a future release.
-</code></pre>
+<p>2 CocoaPods中去除编译Warning</p>
 
-<p>从错误信息中可以看出，在后台线程中修改了UI. 搜了下，NSURLSession的问题，iOS 9上，NSURLSession的回调并不是在主线程中了，那个Demo在回调中直接去修改了界面，所以会报这个错。对应的Objective-C方法如下：</p>
+<p>3 添加Library</p>
 
-<pre><code>- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler;
-</code></pre>
+<p>4 集成git submodule</p>
 
-<p>解决方案:</p>
+<p>5 本地Pods</p>
 
-<p>在block中需要更新UI时，利用GCD切换到主线程即可；</p>
+<p>6 sub spec</p>
 
-<pre><code>// Swift    
-dispatch_async(dispatch_get_main_queue(), {
-    // code here
-})
-</code></pre>
-
-<p>从StackOverFlow上的回答来看， NSURLConnection也存在这个问题，而且仅仅在iOS 9 SDK上才出现，改天看看AFNetworking的改动确认一下：</p>
-
-<p>附链接：</p>
-
-<p><a href="http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error">Getting a “This application is modifying the autolayout engine” error?</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scene Is Unreachable Due to Lack of Entry Points and Does Not Have an Identifier for Runtime Access]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/"/>
-    <updated>2015-11-27T14:24:38+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcode Error: Use of Undeclared Type]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/xcode-error-use-of-undeclared-type/"/>
-    <updated>2015-11-27T14:23:53+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/xcode-error-use-of-undeclared-type</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS 获取一个类的所有子类]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/"/>
-    <updated>2015-11-27T14:23:20+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/ios-huo-qu-[?]-ge-lei-de-suo-you-zi-lei</id>
-    <content type="html"><![CDATA[
+<p>7 私有Pods</p>
 ]]></content>
   </entry>
   

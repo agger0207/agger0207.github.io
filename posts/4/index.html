@@ -9,8 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="基本操作 git clone git checkout git push git pull git commit git add git branch 分支相关操作 问题处理 1 切换到另一分支例如运行命令 git checkout develop 时提示： error: The &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +71,431 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/11/27/chang-yong-gitming-ling/">常用Git命令</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:26:30+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:26 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/chang-yong-gitming-ling/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>基本操作</h2>
+
+<p>git clone</p>
+
+<p>git checkout</p>
+
+<p>git push</p>
+
+<p>git pull</p>
+
+<p>git commit</p>
+
+<p>git add</p>
+
+<p>git branch</p>
+
+<h2>分支相关操作</h2>
+
+<h2>问题处理</h2>
+
+<p>1 切换到另一分支例如运行命令 <strong>git checkout develop</strong> 时提示：</p>
+
+<pre><code>error: The following untracked working tree files would be overwritten by checkout:
+...
+Please move or remove them before you can switch branches.
+Aborting
+</code></pre>
+
+<p>错误原因很清楚了，有untracked的文件未处理，如果这些文件是需要提交的，那么git commit后再切换分支;如果这些改动可能本来就不要的；那么直接执行下面命令先清理掉即可：</p>
+
+<pre><code>git clean -d -f
+</code></pre>
+
+<p>-d参数的含义是删除untracked目录与文件;-f含义是force, 强制执行。</p>
+
+<p>然后再执行 <strong>git checkout develop</strong> 就没问题了.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/">运行时报错 This Application Is Modifying the Autolayout Engine From a Background Thread</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:25:41+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:25 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>下了个老的Swift的Demo, 在iOS 9模拟器上运行时报错</p>
+
+<pre><code>This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes. This will cause an exception in a future release.
+</code></pre>
+
+<p>从错误信息中可以看出，在后台线程中修改了UI. 搜了下，NSURLSession的问题，iOS 9上，NSURLSession的回调并不是在主线程中了，那个Demo在回调中直接去修改了界面，所以会报这个错。对应的Objective-C方法如下：</p>
+
+<pre><code>- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler;
+</code></pre>
+
+<p>解决方案:</p>
+
+<p>在block中需要更新UI时，利用GCD切换到主线程即可；</p>
+
+<pre><code>// Swift    
+dispatch_async(dispatch_get_main_queue(), {
+    // code here
+})
+</code></pre>
+
+<p>从StackOverFlow上的回答来看， NSURLConnection也存在这个问题，而且仅仅在iOS 9 SDK上才出现，改天看看AFNetworking的改动确认一下：</p>
+
+<p>附链接：</p>
+
+<p><a href="http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error">Getting a “This application is modifying the autolayout engine” error?</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/">Scene Is Unreachable Due to Lack of Entry Points and Does Not Have an Identifier for Runtime Access</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:24:38+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:24 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/xcode-error-use-of-undeclared-type/">Xcode Error: Use of Undeclared Type</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:23:53+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:23 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/xcode-error-use-of-undeclared-type/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决：</p>
+
+<p>如下图：</p>
+
+<p><img src="/image/XcodeTarget.jpg" alt="img" /></p>
+
+<p>出错的时候，所有Target是全选的。</p>
+
+<p>我后来新建了个文件试下，默认所有的Target都是选中的，当时没注意，一路Next下去了；后来突然想起前几天好像装了个Xcode插件叫做<strong>AllTargets</strong>的，这个插件就是当添加文件到工程的时候会自动帮助选上所有的Target，后来想想，这个功能没啥用，赶紧将这个插件删除了，然后就不会有这个问题啦:)</p>
+
+<p><strong>AllTargets</strong>如下图所示：</p>
+
+<p><img src="/image/XcodeAllTargets.jpg" alt="img" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/">iOS 获取一个类的所有子类</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:23:20+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:23 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>利用Objetive-C runtime提供的方法objc_getClassList可以获取到当前源码中所有注册的类的信息，该方法的官方文档如下:</p>
+
+<pre><code>/** 
+ * Obtains the list of registered class definitions.
+ * 
+ * @param buffer An array of \c Class values. On output, each \c Class value points to
+ *  one class definition, up to either \e bufferCount or the total number of registered classes,
+ *  whichever is less. You can pass \c NULL to obtain the total number of registered class
+ *  definitions without actually retrieving any class definitions.
+ * @param bufferCount An integer value. Pass the number of pointers for which you have allocated space
+ *  in \e buffer. On return, this function fills in only this number of elements. If this number is less
+ *  than the number of registered classes, this function returns an arbitrary subset of the registered classes.
+ * 
+ * @return An integer value indicating the total number of registered classes.
+ * 
+ * @note The Objective-C runtime library automatically registers all the classes defined in your source code.
+ *  You can create class definitions at runtime and register them with the \c objc_addClass function.
+ * 
+ * @warning You cannot assume that class objects you get from this function are classes that inherit from \c NSObject,
+ *  so you cannot safely call any methods on such classes without detecting that the method is implemented first.
+ */
+OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
+    __OSX_AVAILABLE_STARTING(__MAC_10_0, __IPHONE_2_0);
+</code></pre>
+
+<p>获取一个类的直接子类的主要思路就是，先获取到类的个数，然后分配足够的空间获取类的信息，接下来遍历所有的类并且比较基类从而判断是否该类的直接子类，代码如下所示：</p>
+
+<pre><code>+ (NSArray *)directSubclassesOfClass:(Class)baseClass {
+    int numClasses;
+    Class *classes = NULL;
+    numClasses = objc_getClassList(NULL, 0);
+
+    NSMutableArray *classNameList = [NSMutableArray array];
+    if (numClasses &gt; 0) {
+        classes = (__unsafe_unretained Class *)malloc(sizeof(Class) * numClasses);
+        numClasses = objc_getClassList(classes, numClasses);
+        for (int i = 0; i &lt; numClasses; i++) {
+            if (class_getSuperclass(classes[i]) == baseClass){
+                NSString *className = NSStringFromClass(classes[i]);
+                NSLog(@"%@", className);
+                if ([className length] &gt; 0) {
+                    [classNameList addObject:className];
+                }
+            }
+        }
+
+        free(classes);
+    }
+
+    return classNameList;
+}
+</code></pre>
+
+<p>但是上面的方法是不能获取到子类的子类的，只能获取到直接子类；我尝试将判断条件</p>
+
+<pre><code>if (class_getSuperclass(classes[i]) == baseClass)
+</code></pre>
+
+<p>替换成为</p>
+
+<pre><code>if ([iterClass isSubclassOfClass:baseClass])
+</code></pre>
+
+<p>结果Crash了。</p>
+
+<p>原因是：1 官方文档中明确说明，<strong>&ldquo;You cannot assume that class objects you get from this function are classes that inherit from \c NSObject&rdquo;</strong>, 也就是获取到的类可能根本就不是NSObject的子类，而isSubclassOfClass是NSObject的类方法；
+2 在这个过程中，会执行+initialzie方法，在这个过程中部分系统类会提示找不到selector而crash；（具体原因没有去研究过，因为第一条原因就决定了不能这样用了）</p>
+
+<p>那么只能循环一下继续找基类来获取所有子类：</p>
+
+<pre><code>+ (NSArray *)subclassesOfClass:(Class)baseClass {
+    int numClasses;
+    Class *classes = NULL;
+    numClasses = objc_getClassList(NULL, 0);
+
+    NSMutableArray *classNameList = [NSMutableArray array];
+    if (numClasses &gt; 0) {
+        classes = (__unsafe_unretained Class *)malloc(sizeof(Class) * numClasses);
+        numClasses = objc_getClassList(classes, numClasses);
+        for (int i = 0; i &lt; numClasses; i++) {
+            Class iterClass = classes[i];
+            if (nil == iterClass) {
+                continue;
+            }
+
+            Class superClass = class_getSuperclass(iterClass);
+            while (nil != superClass) {
+                if (superClass == baseClass){
+                    [classNameList addObject:iterClass];
+                    break;
+                }
+
+                superClass = class_getSuperclass(superClass);
+            }
+        }
+
+        free(classes);
+    }
+
+    return classNameList;
+}
+</code></pre>
+
+<p>当然，一般情况不太会有这种需求，即使有这种需求的时候，都是需要找某个自己写的特殊类的子类，也一般有别的方法来解决，但是用来写写测试代码还是很方便的，比如我自己封装了一个网络请求的库，所有的请求都从基类的request派生都有同样的调用方式，于是可以用这种方法来快速测试某个项目中所有的请求在默认设置下是否会出错。</p>
+
+<p>另外，获取所有类的这个方法在第三方日志库CocoaLumberjack中也有用到，下面是其中一段源码：</p>
+
+<pre><code>+ (NSArray *)registeredClasses {
+
+    // We're going to get the list of all registered classes.
+    // The Objective-C runtime library automatically registers all the classes defined in your source code.
+    //
+    // To do this we use the following method (documented in the Objective-C Runtime Reference):
+    //
+    // int objc_getClassList(Class *buffer, int bufferLen)
+    //
+    // We can pass (NULL, 0) to obtain the total number of
+    // registered class definitions without actually retrieving any class definitions.
+    // This allows us to allocate the minimum amount of memory needed for the application.
+
+    NSUInteger numClasses = 0;
+    Class *classes = NULL;
+
+    while (numClasses == 0) {
+
+        numClasses = (NSUInteger)MAX(objc_getClassList(NULL, 0), 0);
+
+        // numClasses now tells us how many classes we have (but it might change)
+        // So we can allocate our buffer, and get pointers to all the class definitions.
+
+        NSUInteger bufferSize = numClasses;
+
+        classes = numClasses ? (Class *)malloc(sizeof(Class) * bufferSize) : NULL;
+        if (classes == NULL) {
+            return nil; //no memory or classes?
+        }
+
+        numClasses = (NSUInteger)MAX(objc_getClassList(classes, (int)bufferSize),0);
+
+        if (numClasses &gt; bufferSize || numClasses == 0) {
+            //apparently more classes added between calls (or a problem); try again
+            free(classes);
+            numClasses = 0;
+        }
+    }
+
+    // We can now loop through the classes, and test each one to see if it is a DDLogging class.
+
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:numClasses];
+
+    for (NSUInteger i = 0; i &lt; numClasses; i++) {
+        Class class = classes[i];
+
+        if ([self isRegisteredClass:class]) {
+            [result addObject:class];
+        }
+    }
+
+    free(classes);
+
+    return result;
+}   
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/xcode-7-ui-testing/">Xcode 7 UI Testing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:22:16+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:22 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/xcode-7-ui-testing/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/11/27/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a></h1>
     
     
@@ -92,384 +516,6 @@
 
 
   <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/">Xcode插件管理器Alcatraz</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:20:53+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:20 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/">每周文章选读 第三周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:19:24+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:19 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这周偷懒，随便选了些以前读过的老文章</p>
-
-<h2>一 <a href="http://www.raywenderlich.com/46988/ios-design-patterns">iOS Design Patterns</a></h2>
-
-<p>raywenderlich出品的文章都很不错，主要就是介绍iOS开发中常用的那些设计模式，以及在什么场景下使用；内容充实，解释清楚，而且结合了iOS开发自身的特点。</p>
-
-<h2>二 <a href="http://www.raywenderlich.com/73602/dynamic-table-view-cell-height-auto-layout">Dynamic Table View Cell Height and Auto Layout</a></h2>
-
-<p>也是raywenderlich出品的文章， 介绍如何利用Auto Layout来动态调整UITableViewCell的高度, 核心就是先创建一个Cell之后，通过AutoLayout自动计算出高度来。话说动态调整TableViewCell的高度，一直都是个挺火的topic。我记得sunnyxxx有专门做个第三方库来快速的动态调整UITableViewCell的高度的，改天挑出来一起放在这里。</p>
-
-<p>说点感触，看过好些raywenderlich的文章，确实写得很详细啊，感觉那些作者花了不少时间在上面。</p>
-
-<h2>三 <a href="https://www.mikeash.com/pyblog/friday-qa-2009-05-22-objective-c-class-loading-and-initialization.html">Objective-C Class Loading and Initialization</a></h2>
-
-<p>讲+load和+initialize这两个方法的，一些文章里面提到必问的面试题里面就有这个题，不过我好像没问过别人这个问题，也没被人问过，囧&hellip;</p>
-
-<h2>四 <a href="http://onevcat.com/2015/08/watchos2/">WWDC15 Session笔记 - 30 分钟开发一个简单的 watchOS 2 app</a></h2>
-
-<p>30分钟根本不够好吗？而且遇到个坑爹的问题，偶尔会提示说Operation Could not be completed&hellip;.</p>
-
-<h2>五 <a href="http://onevcat.com/2014/07/ios-ui-unique/?mc_cid=023329096e&amp;mc_eid=5b294811da">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></h2>
-
-<p>喵神的WWDC Session笔记系列都很值得看。。。。</p>
-
-<h2>六 <a href="http://www.cocoachina.com/cms/wap.php?action=article&amp;id=9717">理解iOS 8中的Self Sizing Cells和Dynamic Type</a></h2>
-
-<p>动态计算UITableViewCell的行高，仅支持iOS 8以及以上</p>
-
-<h2>七 <a href="http://nshipster.cn/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a></h2>
-
-<p>Interface Builder相关.</p>
-
-<p>其实，今天好多内容都是和界面以及Interface Builder相关的。。。。不过我觉得，用代码写界面和用IB搭建界面都得非常熟练才比较有意思</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/">YYModel源码略读</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T20:13:42+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>8:13 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
-
-<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
-
-<p>例如其中的YYClassInfo类的定义如下：</p>
-
-<pre><code>@interface YYClassInfo : NSObject
-
-@property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, assign, readonly) Class superCls;
-@property (nonatomic, assign, readonly) Class metaCls;
-@property (nonatomic, assign, readonly) BOOL isMeta;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
-
-@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
-@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
-@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
-
-+ (instancetype)classInfoWithClass:(Class)cls;
-
-+ (instancetype)classInfoWithClassName:(NSString *)className;
-
-@end
-</code></pre>
-
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<strong>class_copyPropertyList</strong>， <strong>class_copyMethodList</strong>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
-
-<p>另，使用<strong>class_copyPropertyList</strong>时候需要注意，<strong>class_copyPropertyList</strong>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
-
-<pre><code>Any properties declared by superclasses are not included. 
-</code></pre>
-
-<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
-
-<pre><code>// Create all property metas.
-NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-YYClassInfo *curClassInfo = classInfo;
-while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
-    for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
-        if (!propertyInfo.name) continue;
-        if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
-        if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
-        _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
-                                                                propertyInfo:propertyInfo
-                                                                     generic:genericMapper[propertyInfo.name]];
-        if (!meta || !meta-&gt;_name) continue;
-        if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
-        if (allPropertyMetas[meta-&gt;_name]) continue;
-        allPropertyMetas[meta-&gt;_name] = meta;
-    }
-    curClassInfo = curClassInfo.superClassInfo;
-}
-if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
-</code></pre>
-
-<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
-
-<p>另，在YYClassPropertyInfo的- (instancetype)initWithProperty:(objc_property_t)property方法中可以看到下面的代码：</p>
-
-<pre><code>objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-for (unsigned int i = 0; i &lt; attrCount; i++) {
-    switch (attrs[i].name[0]) {
-        case 'T': { // Type encoding
-            if (attrs[i].value) {
-                _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                type = YYEncodingGetType(attrs[i].value);
-                if (type &amp; YYEncodingTypeObject) {
-                    size_t len = strlen(attrs[i].value);
-                    if (len &gt; 3) {
-                        char name[len - 2];
-                        name[len - 3] = '\0';
-                        memcpy(name, attrs[i].value + 2, len - 3);
-                        _cls = objc_getClass(name);
-                    }
-                }
-            }
-        } break;
-        case 'V': { // Instance variable
-            if (attrs[i].value) {
-                _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'R': {
-            type |= YYEncodingTypePropertyReadonly;
-        } break;
-        case 'C': {
-            type |= YYEncodingTypePropertyCopy;
-        } break;
-        case '&amp;': {
-            type |= YYEncodingTypePropertyRetain;
-        } break;
-        case 'N': {
-            type |= YYEncodingTypePropertyNonatomic;
-        } break;
-        case 'D': {
-            type |= YYEncodingTypePropertyDynamic;
-        } break;
-        case 'W': {
-            type |= YYEncodingTypePropertyWeak;
-        } break;
-        case 'P': {
-            type |= YYEncodingTypePropertyGarbage;
-        } break;
-        case 'G': {
-            type |= YYEncodingTypePropertyCustomGetter;
-            if (attrs[i].value) {
-                _getter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'S': {
-            type |= YYEncodingTypePropertyCustomSetter;
-            if (attrs[i].value) {
-                _setter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        default:
-            break;
-    }
-}
-</code></pre>
-
-<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties</a></p>
-
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/">Nvm安装node后bash仍然提示找不到的问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T19:57:05+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:57 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
-
-<p>后来通过下面的命令解决了这个问题：</p>
-
-<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
-</code></pre>
-
-<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
-
-<p>用homebrew直接安装的话没这个问题。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/">Cocoapods和Git Submodules结合使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T19:41:59+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:41 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
-
-<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
-
-<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
-
-<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
-
-<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
-
-<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
-</code></pre>
-
-<p>Done.</p>
-
-<p>参考资料：<br/>
-1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/">ARC与MRC下 Block的区别</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T19:34:23+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:34 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
-
-<p>详细可以参见唐巧的文章</p>
-
-<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
 </div>
   
   
@@ -501,6 +547,30 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发者博客</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
       </li>
     
@@ -514,30 +584,6 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
     
       <li class="post">
         <a href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/">让人崩溃的bug</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/">我的工作经历</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/">Xcode 7免费真机调试</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/">那些我问过的、答过的、见过的iOS面试题（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/">iOS开源库 之 Sample Code</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a>
       </li>
     
   </ul>

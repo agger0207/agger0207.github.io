@@ -72,6 +72,302 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/11/27/markdownbian-ji-ji-qiao/">Markdown编辑技巧</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:37:53+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:37 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/markdownbian-ji-ji-qiao/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/">工作经历回忆 之 快速性能改进</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:37:29+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:37 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近唐巧老师在他的个人博客上开始普及算法相关知识，其中提到熟悉算法和数据结构知识能够帮助我们更好的评估性能问题所在，能够认识到问题的规模对于实际性能的影响，并且举了一个由于问题的规模太小根本就不需要做算法改进的例子，这个我倒是有些体会，也见过一些将代码写得难看加不安全仅仅自以为可以提升性能的做法（比如去掉空指针的判断以为减少了性能开销，其实性能没有节省多少但是带来了crash的风险）；加上自己以前也做过一些性能优化方面的工作，能够很好的认识到，性能优化并不等同于算法优化，所以想回忆一些之前做的一些性能改进的实例，也算是对自己过往工作的一个总结。由于我其实一直是做客户端相关的工作，所以涉及到算法比较少，这些优化经验大部分也和算法优化关系不大, 或者说，这是在介绍自己如何在不改进算法的基础上做的一些性能改进，其实想法都比较简单。</p>
+
+<h2>一 多线程改进数据备份还原性能</h2>
+
+<p>问题描述：做磁盘/文件数据备份，性能慢
+一般误解：由于一般过程是，读取数据&ndash;>压缩&ndash;>写入目标文件；所以想到可能是改进压缩算法
+实际解决：性能太慢其实仅仅是因为所有的操作都是在一条线程中完成的，即使不压缩，也足够慢呀；所以改进策略就是采用多线程的解决方案，读，压缩，并行即可；无论对于文件备份还是磁盘备份都适合；
+进一步优化：
+1）多线程压缩；并行后压缩成为真正的瓶颈所在，那么这个时候就可以提高压缩性能了；而比换一个压缩算法更好的方式是，同时用多个线程进行的数据压缩；
+2）对部分文件避免压缩：如果是做文件备份，对于图片、视频数据，压缩得不偿失，压缩率低，压缩时间长，不压缩就好了
+3）读写线程改善；对同一块磁盘的读写并行，不仅不会提高性能，反而会降低性能；而对不同磁盘的读写并行，是可以提高性能的</p>
+
+<h2>二 遍历磁盘文件树的性能改进</h2>
+
+<p>问题描述：做某个分区的文件备份，需要建立分区的文件树，然后看这些文件是否需要备份，并且需要和已备份的文件树比较，来支持增量备份等一系列的功能；
+改进方案：
+1 递归改非递归；
+如果使用者不分区，那么一个分区里面十几万的文件很正常，这个时候递归遍历并且比较的时候，函数调用会有很多额外的开销，所以仅仅是递归改非递归就可以大大提高这部分性能；
+2 避免多次遍历与多次比较；（这个其实是原来的代码写得有问题^_^)
+3 利用文件系统的特性：
+Windows上有个很火的工具，叫做Everything, 号称是速度最快的文件名搜索工具；其实就是因为在NTFS系统下，所有文件目录和文件的meta信息都存放在一个叫做MFT文件里面，只需要获取到这里面的信息，就可以快速获取到NTFS分区里面的文件树信息了，是不是快了很多？</p>
+
+<p>还有一些，时间久远，不太想得起来了，后面慢慢加 :)</p>
+
+<h2>三 随机存取备份文件改进文件提取性能</h2>
+
+<p>问题描述：需要从磁盘备份数据里面找到某个文件然后还原出来。。。
+之前的版本：从备份文件里面展示出所有文件大概需要一个多小时，然后找到这个文件后还原，大概需要两个小时，而且内存和CPU都占满了
+原因：之前是不支持随机存取，然后要展示所有的文件，差不多需要把整个磁盘备份解压缩一遍，然后找到文件还原的时候需要解压缩两遍，囧。。。
+改进：以NTFS文件系统为例啦，有个MFT(Master File Table)文件，它里面每一项呢，都代表一个文件，然后MFT呢，本身也是一个特殊的文件，其实大家可以把它想象成为一本书的目录啦，只不过有个特殊的是，这个目录(MFT)的内容，并不是固定在某一个区域里的，而是可能分散在分区的任何一处的。所以之前的做法相当于是，先把整本书翻了一遍，然后将目录信息取出来了；然后找到某个文件的时候呢，又把整本书翻了一遍找到某个文件对应的目录信息，然后呢，再把整本书翻了一遍取到这个文件的信息。忘了说了，NTFS文件系统的特殊性还包括，这个文件的后半部分在磁盘上的位置可能更前，这样的话，可能还得从头把这本书翻一遍。
+解决方案：其实就是允许随机存取备份生成的文件；对备份前的磁盘分块，通过改进文件格式，在已备份信息中记录类似MFT的信息，例如，所有待备份的都以2MB的大小分块，那么只要能够从备份生成的文件中快速找到要还原的文件是分布在哪些2MB块里面，就可以找到这些信息在备份文件里的偏移量，只需要解压缩这部分数据就可以了。比如说，先取目录信息(MFT)的时候，只需要取这个MFT文件对应的offset的内容进行解压缩，甚至可以做到，只取第一层目录；然后每个文件都能够找到它的对应内容处在备份文件的哪一块，再也不需要从头开始解压缩了。</p>
+
+<p>其实，上面这些基本上都不需要什么特殊的算法知识，很多时候都是具体分析瓶颈在那里，尤其是在数据规模大的时候；而常见的性能改进方法，无非就是多线程、缓存、随机存取等等。</p>
+
+<p>待续&hellip;.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/">让人崩溃的bug</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:36:39+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:36 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>一 iOS使用不规范造成的首页白屏</h2>
+
+<p>WebView页面被遮挡，然后被Remove掉的时候，页面内容没有渲染出来</p>
+
+<h2>二 人家的bug</h2>
+
+<p>H5页面的bug, iOS开发工程师来帮忙调, 最怕的是Android还没问题(其实是Andorid也有问题，负负得正)</p>
+
+<h2>三 人家的bug: Andorid内存溢出</h2>
+
+<h2>四 花费时间最长的两个bug</h2>
+
+<p>1 磁盘还原后某个文件内容不正确
+2 磁盘还原后系统无法启动</p>
+
+<h2>五 多线程</h2>
+
+<p>多线程永远都是最头痛的问题, 死锁，Crash等等</p>
+
+<h2>六 按键精灵</h2>
+
+<h2>七 无法重现</h2>
+
+<h2>八 客户报过来的</h2>
+
+<p>有dump就不怕:)</p>
+
+<p>之前CodeProject上有文章介绍在VC 6.0下如何根据crash日志定位到具体的代码行，在VS2010下其实也可用，不过有的时候对应不到代码行，只能到函数，这个时候，函数写的短小精悍的好处就出来了：）</p>
+
+<h2>九 内存泄漏</h2>
+
+<h2>十 已经改好了</h2>
+
+<p>总结：代码Review, 静态代码分析，XCode Instruments能够很好的避免bug的出现;</p>
+
+<p>待完善 （年纪大了，很多都已经不记得了，不过iOS相对来说更简单一些，至少多线程的问题少很多；代码量相对比较少也可以通过代码比对的方式来修正错误；一般如果是自己团队开发造成的bug都可以通过规范代码的方式来避免，除非crash在系统控件内部且无法重现）</p>
+
+<p>吐槽：很多开发同学只要不是自己负责代码的bug就一概忽略；自己重现不了的bug一概忽略；其实，很多稍微调试一下或者稍微看看代码就能够知道问题所在；或者搜索下错误信息；或者搜索下最近代码改动；或者看下相关功能的代码；绝大部分都能够定位到原因；少数不能定位到具体原因，也能够限制在少部分代码块中，而这部分代码块如果写法规范点，基本上就没啥问题了。
+当然，我也遇到过不靠谱的测试，由于网络问题的原因，中国这边无法测试，然后对方测试后给出个bug, 就只有一个出错界面，操作步骤和日志也没有，而且还经常把记录好的错误日志清除掉，再也重现不了。。。。</p>
+
+<p>当然，不排除部分问题确实很难查。对于出现的问题，我总记得之前的架构师说过的一句话：“Let me debug it !”</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/">我的工作经历</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:36:21+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:36 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要想回忆一些自己工作的感受、经历，做一下总结，随便写写总比什么都不写好，毕竟年纪慢慢大了，记忆力慢慢衰退了，说不定哪一天就不记得自己干过什么了呢：）尽量多正面的回忆，少吐槽，当然，也不是写简历，要写简历直接去拉勾了：）</p>
+
+<p>先列提纲，再慢慢写吧！</p>
+
+<h2>一 Arcsoft</h2>
+
+<p>系统架构部门软件工程师</p>
+
+<h2>二 Nero</h2>
+
+<p>Nero BackItUp架构师</p>
+
+<h2>三 挖财</h2>
+
+<p>资深iOS开发工程师</p>
+
+<h2>四 网易</h2>
+
+<p>资深客户端开发工程师</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:35:06+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:35 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/">Xcode 7免费真机调试</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:33:55+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:33 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在Xcode 7可以免费进行真机调试了，不需要任何开发者账号，只要有一个Apple ID就可以了。</p>
+
+<p>主要步骤如下：
+1 运行Xcode后，点击菜单中的Preferences, 进行Account标签，选择添加Apple Id
+2 输入AppId，登录；登录成功后会看到相关信息；
+3 选中账号信息，点击View Details, 在弹出的对话框中操作添加开发者证书
+4 打开要调试的项目，在Target的General的Team中可以看到刚才添加的Apple Id
+5 连上设备调试前可以看到Team旁有一个Issue, 点击Fix，profile就生成并且添加到项目中了
+6 可以到原来设置profile和证书的地方看看，一切都设置好了。然后就可以运行调试并且安装到真机上了。</p>
+
+<p>全程傻瓜式操作；晚点上图：）</p>
+
+<p>不过会不会有什么坑暂时还不知道，等遇到了再更新；至少现在是用得好好的，不需要开发者账号也可以愉快的真机调试.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/">那些我问过的、答过的、见过的iOS面试题（一）</a></h1>
     
     
@@ -91,253 +387,50 @@
   </header>
 
 
-  <div class="entry-content">
-</div>
-  
-  
+  <div class="entry-content"><p>网上现在流传不少iOS面试题以及解答，再加上自己也整理过一些面试题给组里的人去做校招和社招的面试，正好列在下面，逐步完善和补充；有些还是我被人面试的时候回答过的，由简单到难慢慢列着吧.</p>
 
+<h2>一 Objective-C属性关键字</h2>
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/">iOS开源库 之 Sample Code</a></h1>
-    
-    
-      <p class="meta">
-        
+<p>常见问题：
+1 有哪些属性关键字，各自的作用是什么？
+2 strong和weak的区别
+3 weak，assign的区别
+4 strong/retain和copy的区别
+5 什么情况下需要用copy?
+6 IBOutlet属性里面用weak, 如果用strong会有问题吗？如果有，会有什么问题？
+7 默认的属性关键字，尤其是针对内存管理上的默认属性关键字
+8 readonly有什么作用？
+9 使用atomic会有什么负面影响? atomic修饰属性后，一定是线程安全的吗？如果atomic修饰的是NSMutableArray呢？
+10 delegate为什么要用weak来修饰？如果用assign修饰的话会有问题吗？如何避免这一问题？
+11 深拷贝与浅拷贝相关</p>
 
+<p>一般挑几个大致问下就差不多了，遇到过好些不知道weak和assign的区别&hellip;.
+话说我一般不问getter和setter。。。。</p>
 
+<h2>二 基本知识</h2>
 
+<p>1 protocol是什么？可以定义property吗？如果可以，那么怎么做或者有什么需要注意的地方？
+2 category是什么？主要有什么作用？在什么情况下会考虑用到category?category可以替换掉原有的实现吗？写category需要注意些什么（比如命名上）？Category可以定义property吗？如果可以，那么怎么做？Category可以为类增加成员变量吗？</p>
 
-<time class='entry-date' datetime='2015-11-27T14:31:44+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:31 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
+<h2>三 内存管理</h2>
 
+<p>1 内存管理机制
+2 循环引用的理解，遇到过哪些循环引用，如何解决
+3 AutoReleasePool的原理，放入AutoReleasePool中的对象会在什么时候真正释放，什么情况下需要手写AutoReleasePool块
+4 MRC转到ARC后需要注意的一些问题，在哪些情况下需要自己去做一些资源释放的问题
+5 CF对象的Release问题相关</p>
 
-  <div class="entry-content">
-</div>
-  
-  
+<h2>四 不分类了</h2>
 
+<p>发现好难分类，不分类了，一顺写下来吧！</p>
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a></h1>
-    
-    
-      <p class="meta">
-        
+<p>1 View Controller的生命周期; loadView会在哪个过程中被调用到？viewWillLayoutSubviews和viewDidLayoutSubviews又会在哪个过程中被调用到？从A页面调到B页面，各自的ViewController中哪些方法会被调用到？
+如果是iOS 6以前就开始做了的，那么会问下UIViewDidUnload相关的问题，比如为什么现在UIViewDidUnload不需要处理了.
+2 Application的生命周期；一般需要做哪些处理；在各个阶段的回调处理时需要注意什么，比如，是否可以在启动的回调中做一些耗时操作等等;
+3 APNS基本流程；应用需要做哪些处理
+4 SetNeedsDisplay是做什么用的？drawRect呢？setNeedsLayout呢？</p>
 
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:31:27+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:31 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/">App Store审核拒绝理由</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:28:17+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:28 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这几天在ASO100的微信公众号上看到<a href="%E5%9C%B0%E5%9D%80%E6%89%BE%E4%B8%8D%E5%88%B0">2015年App Store审核被拒的23个理由</a>, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。</p>
-
-<p>1 App中出现安卓字样；一般是活动页面；
-2 App中活动页面奖品中出现iPhone等；
-3 App中活动页面没有返回按钮；
-这个问题出现的原因是，活动页面一般使用H5来做，然后有的H5带了Header, 有的没有带；客户端通过URL参数来判断是否要加导航栏头部，然后万一运营上了个活动页面，自己没有带H5 Header, 配置又不正确的话，就悲剧了；
-4 应用内提供了检查更新机制；
-吐槽：话说尽管苹果审核指南明确规定了所有应用都应该通过AppStore更新，但其实很多应用都在设置页面提供了检查更新的机制，然后在2015年的某一天，突然这个就成为了被拒的理由了，即使同样的功能已经存在一年多了。。。。
-5 推荐其他应用
-别家的应用是一定不能推荐的，自家的应用不清楚，不过我看大家基本都在推，好像问题不太大。
-6 求好评
-具体不记得了，一般在设置页面放一栏是没啥问题的，但是好像某种弹出界面以比较强的提示要求给好评的话，会过不了审核
-7 彩票类栏目没有提供用户协议
-嗯，这个也是一个某个功能存在了很久，突然就因为这个被拒了。。。。
-8 提供用户注册功能的应用必须提供隐私协议
-同上，之前好好的过审，苹果艳照门之后就一定要提供隐私协议了
-9 社区模块没有提供举报功能
-吐槽：不说啥，社区水很深，据说社区里面的帖子里面要是有“安卓”字样都可能被拒
-10 在status bar上显示自己的信息
-吐槽：这个是听兄弟部门的哥们说的，以前大家都会在status bar上显示一些提示信息，比如说下载进度、同步进度或者active状态下收到的push消息等等，但是兄弟部门的哥们说iOS 9之后，不让加了，因为这个被拒了一次，据说是因为status bar上苹果自己要在那上面显示信息了。。。
-11 非用户创造的数据没有放在/tmp下也没有打上do not back up属性，会被拒，因为苹果认为只有用户创造的数据才允许被iCloud backup备份
-可以参见下面两个链接：
-<a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">https://developer.apple.com/library/ios/qa/qa1719/_index.html</a>
-<a href="https://developer.apple.com/icloud/documentation/data-storage/index.html">https://developer.apple.com/icloud/documentation/data-storage/index.html</a></p>
-
-<p>上次其他组因为这个原因被拒是因为下载的H5资源包放在Documents目录下没有加do not back up属性.</p>
-
-<p>12 H5资源包升级的时候卡住界面了&hellip;.
-其实是个bug, 不过也提醒我们，这种资源包升级的事情明显可以在审核过程中避免或者在测试过程中出现的，应该尽早处理掉.</p>
-
-<p>有些想不起来了，想起来了后面再加：）</p>
-
-<p>小结：
-1 审核期间运营上活动一定要注意沟通，一般运营都不明白审核规则，有些甚至上了活动之后自己都不会去测试；当然，有些公司会直接在后台做一些配置确保当前递交版本不会出现新的活动页面；
-2 可能因为网络原因导致出错的主要功能要在审核前格外注意.</p>
-
-<p>当然，你还可以在<a href="https://github.com/jcccn/Why-Reject">苹果审核拒绝理由</a> 下面看到更多奇葩理由。</p>
-
-<p>为了保证审核通过，还是要仔细研究苹果官方的审核指南，不过其实大家很多时候都没有严格按照审核指南来做，很多时候甚至是想一些办法来绕过审核的。苹果的审核由于是人工审核，有的时候也会有一些奇葩的事情发生，经常会出现多年不修改的功能，突然某个版本就过不了审核了；尤其是在苹果发布新版本的Xcode，iOS或者出了一些隐私泄漏的大事的时候，审核都会收紧。</p>
-
-<p>建议新产品第一次上线前，有专人能够根据审核规则进行一次详细的Review, 这样大家能够形成共识，避免下次出现问题, 至少不会把未完成的功能加上去或者说出现“敬请期待”等等。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/">Cocoa新的依赖管理工具 Carthage</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:27:51+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:27 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。</p>
-
-<p>不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS 8以及以后.</p>
-
-<pre><code>Note that Carthage only supports dynamic frameworks, which are only available on iOS 8 or later (or any version of OS X).
-</code></pre>
-
-<p>github地址：</p>
-
-<p><a href="https://github.com/Carthage/Carthage">https://github.com/Carthage/Carthage</a></p>
-
-<p>由于自己主要还是在用Cocoapods和git submodule，所以还是推荐两篇文章自己去看吧，也算是给自己的一个备忘:</p>
-
-<p><a href="http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager">Carthage：Xcode项目的GitHub依赖管理器</a>
-<a href="http://www.isaced.com/post-265.html">Cocoa 新的依赖管理工具：Carthage</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/git-submoduleji-ben-shi-yong-fang-fa/">Git Submodule基本使用方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:27:11+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:27 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/git-submoduleji-ben-shi-yong-fang-fa/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie/">CocoaPods使用问题总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:26:58+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:26 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
+<p>待续</p>
 </div>
   
   
@@ -369,6 +462,30 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发者博客</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
       </li>
     
@@ -382,30 +499,6 @@
     
       <li class="post">
         <a href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/">让人崩溃的bug</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/">我的工作经历</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/">Xcode 7免费真机调试</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/">那些我问过的、答过的、见过的iOS面试题（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/">iOS开源库 之 Sample Code</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a>
       </li>
     
   </ul>

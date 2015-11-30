@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="常见操作 以下操作都是在octopress目录下进行. 添加新文章 1 执行如下命令 rake new_post["title"] 可以在 source/_posts 目录下创建一篇新博文, 文章是采用Markdown语法进行书写的, 直接使用Markdown的免费编辑器来书写就好了； &hellip;">
+  <meta name="description" content="自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下 s.dependency "AFNetworking", "~&gt; 2.5" 再加上我们为了避免每个人都pods update一下， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,393 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">Pods: Unable to Satisfy the Following Requirements</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-12T18:06:36+08:00'><span class='date'>2015 年11 月12 日</span> <span class='time'>6:06 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
+
+<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
+</code></pre>
+
+<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
+
+<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
+
+<pre><code>s.dependency "AFNetworking", "2.6.2"
+</code></pre>
+
+<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
+
+<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
+
+<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
+
+<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/">RestKit测试服务器搭建</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-10T20:38:03+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:38 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>用途</h2>
+
+<p>RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。本文档主要针对服务器的配置与启动列出实际的解决方案。</p>
+
+<h2>一 在用户目录安装Ruby</h2>
+
+<p>默认情况下，系统中已经安装了Ruby; 但如果直接使用系统的Ruby执行命令"gem install bundler"会报错，提示无权限。</p>
+
+<pre><code>While executing gem ... (Gem::FilePermissionError)
+You don't have write permissions for the /Library/Ruby/Gems/2.0.0 directory.
+</code></pre>
+
+<p>尽管使用命令"sudo gem install bundler"可以获得权限安装bundler, 但会影响系统自定义安装的Ruby. 故推荐在用户目录安装Ruby. 步骤如下：</p>
+
+<h3>1 使用brew安装ruby</h3>
+
+<pre><code>brew install ruby    
+</code></pre>
+
+<p>在这之前可以使用命令"ruby &ndash;version"查看系统安装的ruby版本或者使用命令"which ruby"查看系统安装的ruby路径.</p>
+
+<p>Note: brew安装有的时候会过慢，可以参考<code>http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html</code>提供的方式更换合适的镜像.</p>
+
+<h3>2 修改环境变量</h3>
+
+<p>到自己目录下的.profile 或者 .bashrc 或者  .bash_profile</p>
+
+<pre><code>/Users/agger/.profile   
+</code></pre>
+
+<p>用emacs或是vim打开 （更改前请备份好这个文件，避免误操作）在文件的末尾加入</p>
+
+<pre><code># for brew install
+export PATH=/usr/local/bin:$PATH
+</code></pre>
+
+<p>然后重启终端，就可以用到了新的ruby了    . 此时执行which ruby会发现路径和系统安装的ruby路径不相同.</p>
+
+<p>一点说明：实际操作中我机器上原本是没有这个.profile的，于是直接新建了这个文件并加入那段代码.</p>
+
+<h2>二 安装bundler</h2>
+
+<h3>1 执行如下命令安装bundler</h3>
+
+<pre><code>gem install bundler
+</code></pre>
+
+<h3>2 执行如下命令查看bundler是否安装成功</h3>
+
+<pre><code>gem list --local
+</code></pre>
+
+<h2>三 通过Bundle安装其他组件</h2>
+
+<h3>1 修改gemfile</h3>
+
+<p>在安装之前，需要修改RestKit目录下的gemfile; 将下面这行</p>
+
+<pre><code>source "https://rubygems.org"
+</code></pre>
+
+<p>修改为：</p>
+
+<pre><code>source "https://ruby.taobao.org/"
+</code></pre>
+
+<p>否则会不断提示安装步骤；</p>
+
+<p>Note: 之前的地址<code>http://ruby.taobao.org</code>无法访问，需要更新为<code>https://ruby.taobao.org</code>.</p>
+
+<h3>2 安装</h3>
+
+<p>执行命令<code>bundle install</code>安装gemfile指定的组件.</p>
+
+<h3>3 执行命令<code>bundle</code>查看使用的组件.</h3>
+
+<h3>4 可能发生的错误与解决方法</h3>
+
+<p>1 执行命令<code>bundle</code>时报错"Could not find rake-10.3.2 in any of the sources"
+解决方法：bundle install可以自动安装上rake-10.3.2; 执行完毕后可以在gem list &ndash;local中查看rake对应版本是否可以安装上.</p>
+
+<p>2 bundle install的时候报错：
+An error occurred while installing i18n (0.7.0), and Bundler cannot continue.
+Make sure that <code>gem install i18n -v '0.7.0'</code> succeeds before bundling.</p>
+
+<p>运行<code>gem install i18n -v '0.7.0'</code>即可; 一般如果gemfile按照上面的步骤做过修改是不会报这个错误的.</p>
+
+<p>3 报错：Make sure that <code>gem install nokogiri -v '1.6.6.2'</code> succeeds before bundling
+解决方法：运行如下命令</p>
+
+<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/libxml2
+</code></pre>
+
+<p>Note: 请根据自己的系统版本信息调整上述路径，例如，当我的系统升级到最新的版本10.11后，上面SDK的路径就应该从<code>MacOSX10.10.sdk</code>调整为
+<code>MacOSX10.11.sdk</code>.完成的命令如下：</p>
+
+<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
+Building native extensions with: '--use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2'
+</code></pre>
+
+<p>然后继续执行bundle install即可.
+参考：
+<a href="http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/">http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/</a></p>
+
+<h2>四 运行RestKit Test Server</h2>
+
+<p>按照RestKit原有的文档，执行命令<code>rake server</code>可以启动服务器；但实际操作中发现会报错，原因是server要求的rake版本是1.3.2; 而我系统上激活的rake版本为1.4.2; 这时换用如下命令可以正常启动服务器:</p>
+
+<pre><code>bundle exec rake server
+</code></pre>
+
+<h2>五 检查测试服务器是否运行</h2>
+
+<p>浏览器中输入：
+<a href="http://localhost:4567/">http://localhost:4567/</a></p>
+
+<h2>参考文档：</h2>
+
+<p><a href="http://blog.csdn.net/maojudong/article/details/7920578">http://blog.csdn.net/maojudong/article/details/7920578</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/">Mac实用小工具 CheatSheet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-10T20:18:49+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:18 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，使用起来相当方便；直接从官网下载安装即可，安装后，长按command键可以弹出当前程序下的快捷键列表，对于我这种懒得记那么多快捷键的人非常有用。</p>
+
+<p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
+
+<p><img src="/images/CheatSheet.png" alt="image" /></p>
+
+<p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/">使用homebrew安装工具</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-10T20:06:29+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:06 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>可以参考自己写的RestKit测试服务器启动问题.</p>
+
+<p>参考文章：</p>
+
+<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
+2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
+3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/">工作问题记录 一</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-09T20:20:44+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>8:20 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
+
+<p>一  使用RestKit的时候Crash</p>
+
+<p>参考：
+<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
+
+<p>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</p>
+
+<p>参考：
+<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
+
+<p>三 Framework签名问题</p>
+
+<p>参考：
+<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/">iOS每周文章选读 第一周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-09T19:58:05+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>7:58 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自己平时读得多，写得少，所以就想办法将自己最近看过的好文章慢慢整理起来，方便自己后续查阅和复习，也可以向公司的新人推荐这些文章，而且现在每周也需要向组里推荐好文章来学习，所以作此记录，既然坚持写那么难，那么就得坚持读了；当然，其实InfoQ的iOS技术开发周报已经是很好的文章合集了。</p>
+
+<h2>一 <a href="http://xiangwangfeng.com/2015/05/20/%E7%A7%BB%E5%8A%A8IM%E5%BC%80%E5%8F%91%E9%82%A3%E4%BA%9B%E4%BA%8B/">移动IM开发那些事</a></h2>
+
+<p>最近公司内部老是有网易云信的广告，后续有时间可以研究一下。</p>
+
+<p>这篇文章主要是介绍了移动IM开发相关的一些知识点，尤其是技术方案的选择。一些小公司可能会直接用云信或者环信提供的IM服务，不过，稍微大一些的公司还是都会自己去做IM开发相关的事情，比如蘑菇街啊，英坦网络技术等，都有自己做移动IM。如果需要做移动IM或者说公司产品需要设计私有协议进行网络通信的话，还是可以从里面得到很多启发，至少不会踩很多坑了。</p>
+
+<p>对于我个人而言，MessagePack, MQTT和XMPP都有接触过，不过都没啥深入的学习，以后有空还是可以好好研究一下。</p>
+
+<h2>二 <a href="http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a></h2>
+
+<p>RunLoop 是 iOS 和 OSX 开发中非常基础的一个概念，这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的。</p>
+
+<h2>三 <a href="https://github.com/ChenYilong/ParseSourceCodeStudy/blob/master/01_Parse%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF/Parse%E7%9A%84%E5%BA%95%E5%B1%82%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.md#gcd%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E5%83%8Foperationqueue%E9%82%A3%E6%A0%B7%E7%BB%88%E6%AD%A2%E4%BB%BB%E5%8A%A1">Parse源码浅析系列（一）&mdash;Parse的底层多线程处理思路：GCD高级用法</a></h2>
+
+<p>GCD的简单使用方法，相信大部分iOS开发者都会，但是高级用法就不一定了；看过的不少开源库，对于GCD的使用都有很多值得学习的地方。</p>
+
+<h2>四 <a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></h2>
+
+<p>很久以前的文章了，温故而知新.</p>
+
+<h2>五 <a href="http://blog.devtang.com/blog/2015/11/02/mvc-and-mvvm/">被误解的 MVC 和被神化的 MVVM</a></h2>
+
+<p>唐巧最新的文章，主要是介绍了一下作者自己对MVC和MVVM的一些理解，以及对应用新技术的一些看法，并且给出一些实际开发工程中的建议。其实，相关的道理都是浅显易懂，但是在实际的开发过程中，要使得架构层次清晰、便于维护和扩展又不是一件容易的事情，大家可以从这篇文章中汲取对自己有益的部分，并在实际开发过程中慢慢体会并且逐步应用一些实用的技巧。</p>
+
+<h2>六 <a href="http://blog.ibireme.com/">iOS 处理图片的一些小 Tip</a></h2>
+
+<p>图片处理相关</p>
+
+<h2>七 <a href="http://blog.sunnyxx.com/2015/06/12/objc-new-features-in-2015/">2015 Objective-C 新特性</a></h2>
+
+<p>描述了Objective-C的一些新特性，Lightweight Generics还是挺有用的，现在有开始用到自己的代码中。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -179,97 +566,9 @@ git push origin source
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/31/my-first-post-for-testing-octopresee/">My First Post for Testing Octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-31T15:46:15+08:00'><span class='date'>2015 年10 月31 日</span> <span class='time'>3:46 pm</span></time>
-        
-        
-           | <a href="/blog/2015/10/31/my-first-post-for-testing-octopresee/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It is a test file</p>
-
-<p>这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。</p>
-
-<p>主要参考教程是<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>, 另外blog的一些配置参考了<a href="http://southpeak.github.io/">南峰子的技术博客</a>, 这也是我非常推荐的一个iOS相关的技术博客，后续我会逐步完善自己的blog内容，例如样式排版什么的.</p>
-
-<p>随便贴个代码试试看:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">getPropertyList:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">theClass</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">dic</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableDictionary</span> <span class="n">dictionary</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">outCount</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">objc_property_t</span> <span class="o">*</span><span class="n">properties</span> <span class="o">=</span> <span class="n">class_copyPropertyList</span><span class="p">(</span><span class="n">theClass</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outCount</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">outCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">objc_property_t</span> <span class="n">property</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">propertyNameString</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">property_getName</span><span class="p">(</span><span class="n">property</span><span class="p">)</span> <span class="nl">encoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
-</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">propertyAttributeString</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">property_getAttributes</span><span class="p">(</span><span class="n">property</span><span class="p">)</span> <span class="nl">encoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="bp">NSMutableString</span> <span class="o">*</span><span class="n">filedTypeString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableString</span> <span class="nl">stringWithString</span><span class="p">:</span><span class="n">propertyAttributeString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">NSRange</span> <span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="n">filedTypeString</span> <span class="nl">rangeOfString</span><span class="p">:</span><span class="s">@&quot;,&quot;</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">filedTypeString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSMutableString</span> <span class="o">*</span><span class="p">)[</span><span class="n">filedTypeString</span> <span class="nl">substringToIndex</span><span class="p">:</span><span class="n">range</span><span class="p">.</span><span class="n">location</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="p">[</span><span class="n">dic</span> <span class="nl">setObject</span><span class="p">:</span><span class="n">filedTypeString</span> <span class="nl">forKey</span><span class="p">:</span><span class="n">propertyNameString</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">dic</span> <span class="n">allKeys</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>参考资料：</p>
-
-<p><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>
-<a href="http://southpeak.github.io/">南峰子的技术博客</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/7">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -291,6 +590,30 @@ git push origin source
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发者博客</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
       </li>
     
@@ -304,30 +627,6 @@ git push origin source
     
       <li class="post">
         <a href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/">让人崩溃的bug</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/">我的工作经历</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/">Xcode 7免费真机调试</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/">那些我问过的、答过的、见过的iOS面试题（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/">iOS开源库 之 Sample Code</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a>
       </li>
     
   </ul>

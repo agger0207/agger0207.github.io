@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="一 Swift中的设计模式 InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式， &hellip;">
+  <meta name="description" content="Xcode插件管理器Alcatraz可以帮助搜索、查看和安装各类Xcode插件，这样不需要每次再去每个插件的主页上去找安装帮助文档了，极大的简化了Xcode插件的安装与管理. Alcatraz本身就是一个Xcode的插件，所以按照正常的插件安装方法就可以了。 直接从项目主页上拷贝过来的 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,416 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/">Xcode插件管理器Alcatraz</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:20:53+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:20 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Xcode插件管理器Alcatraz可以帮助搜索、查看和安装各类Xcode插件，这样不需要每次再去每个插件的主页上去找安装帮助文档了，极大的简化了Xcode插件的安装与管理.</p>
+
+<p>Alcatraz本身就是一个Xcode的插件，所以按照正常的插件安装方法就可以了。</p>
+
+<p>直接从项目主页上拷贝过来的</p>
+
+<p>Installation</p>
+
+<p>To install, open up your terminal and paste this:</p>
+
+<pre><code>curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh
+</code></pre>
+
+<p>or download the repository from Github and build it in Xcode. You&rsquo;ll need to restart Xcode after the installation.</p>
+
+<p>Alcatraz requires Xcode Command Line Tools, which can be installed in Xcode via Preferences > Downloads.</p>
+
+<p>简单翻译一下：
+两种安装方法，一种方法是直接在命令行中执行那个命令就可以了；
+第二种方法是从github上clone代码到本地，然后在Xcode中编译，接着重新启动Xcode就可以了，这个时候会有提示是否要load bundles，选择load就可以了。
+第二种方法其实就是绝大多数插件比如VVDocumeter的手动安装方法。</p>
+
+<p>安装好之后，在Xcode的Window菜单中就可以看到“Package Manager”这个菜单项，点开后就可以去里面搜索安装管理其他插件了。</p>
+
+<p>Xcode菜单项:</p>
+
+<p><img src="/images/PackageManager.jpg" alt="image" /></p>
+
+<p>Alcatraz管理页面:</p>
+
+<p><img src="/images/PackageManagerUI.jpg" alt="image" /></p>
+
+<p>地址：<a href="https://github.com/alcatraz/Alcatraz">https://github.com/alcatraz/Alcatraz</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/">每周文章选读 第三周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:19:24+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:19 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这周偷懒，随便选了些以前读过的老文章</p>
+
+<h2>一 <a href="http://www.raywenderlich.com/46988/ios-design-patterns">iOS Design Patterns</a></h2>
+
+<p>raywenderlich出品的文章都很不错，主要就是介绍iOS开发中常用的那些设计模式，以及在什么场景下使用；内容充实，解释清楚，而且结合了iOS开发自身的特点。</p>
+
+<h2>二 <a href="http://www.raywenderlich.com/73602/dynamic-table-view-cell-height-auto-layout">Dynamic Table View Cell Height and Auto Layout</a></h2>
+
+<p>也是raywenderlich出品的文章， 介绍如何利用Auto Layout来动态调整UITableViewCell的高度, 核心就是先创建一个Cell之后，通过AutoLayout自动计算出高度来。话说动态调整TableViewCell的高度，一直都是个挺火的topic。我记得sunnyxxx有专门做个第三方库来快速的动态调整UITableViewCell的高度的，改天挑出来一起放在这里。</p>
+
+<p>说点感触，看过好些raywenderlich的文章，确实写得很详细啊，感觉那些作者花了不少时间在上面。</p>
+
+<h2>三 <a href="https://www.mikeash.com/pyblog/friday-qa-2009-05-22-objective-c-class-loading-and-initialization.html">Objective-C Class Loading and Initialization</a></h2>
+
+<p>讲+load和+initialize这两个方法的，一些文章里面提到必问的面试题里面就有这个题，不过我好像没问过别人这个问题，也没被人问过，囧&hellip;</p>
+
+<h2>四 <a href="http://onevcat.com/2015/08/watchos2/">WWDC15 Session笔记 - 30 分钟开发一个简单的 watchOS 2 app</a></h2>
+
+<p>30分钟根本不够好吗？而且遇到个坑爹的问题，偶尔会提示说Operation Could not be completed&hellip;.</p>
+
+<h2>五 <a href="http://onevcat.com/2014/07/ios-ui-unique/?mc_cid=023329096e&amp;mc_eid=5b294811da">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></h2>
+
+<p>喵神的WWDC Session笔记系列都很值得看。。。。</p>
+
+<h2>六 <a href="http://www.cocoachina.com/cms/wap.php?action=article&amp;id=9717">理解iOS 8中的Self Sizing Cells和Dynamic Type</a></h2>
+
+<p>动态计算UITableViewCell的行高，仅支持iOS 8以及以上</p>
+
+<h2>七 <a href="http://nshipster.cn/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a></h2>
+
+<p>Interface Builder相关.</p>
+
+<p>其实，今天好多内容都是和界面以及Interface Builder相关的。。。。不过我觉得，用代码写界面和用IB搭建界面都得非常熟练才比较有意思</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/">YYModel源码略读</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T20:13:42+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>8:13 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
+
+<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
+
+<p>例如其中的YYClassInfo类的定义如下：</p>
+
+<pre><code>@interface YYClassInfo : NSObject
+
+@property (nonatomic, assign, readonly) Class cls;
+@property (nonatomic, assign, readonly) Class superCls;
+@property (nonatomic, assign, readonly) Class metaCls;
+@property (nonatomic, assign, readonly) BOOL isMeta;
+@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
+
+@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
+@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
+@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
+
++ (instancetype)classInfoWithClass:(Class)cls;
+
++ (instancetype)classInfoWithClassName:(NSString *)className;
+
+@end
+</code></pre>
+
+<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<strong>class_copyPropertyList</strong>， <strong>class_copyMethodList</strong>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
+
+<p>另，使用<strong>class_copyPropertyList</strong>时候需要注意，<strong>class_copyPropertyList</strong>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
+
+<pre><code>Any properties declared by superclasses are not included. 
+</code></pre>
+
+<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
+
+<pre><code>// Create all property metas.
+NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
+YYClassInfo *curClassInfo = classInfo;
+while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
+    for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
+        if (!propertyInfo.name) continue;
+        if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
+        if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
+        _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
+                                                                propertyInfo:propertyInfo
+                                                                     generic:genericMapper[propertyInfo.name]];
+        if (!meta || !meta-&gt;_name) continue;
+        if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
+        if (allPropertyMetas[meta-&gt;_name]) continue;
+        allPropertyMetas[meta-&gt;_name] = meta;
+    }
+    curClassInfo = curClassInfo.superClassInfo;
+}
+if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
+</code></pre>
+
+<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
+
+<p>另，在YYClassPropertyInfo的- (instancetype)initWithProperty:(objc_property_t)property方法中可以看到下面的代码：</p>
+
+<pre><code>objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
+for (unsigned int i = 0; i &lt; attrCount; i++) {
+    switch (attrs[i].name[0]) {
+        case 'T': { // Type encoding
+            if (attrs[i].value) {
+                _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
+                type = YYEncodingGetType(attrs[i].value);
+                if (type &amp; YYEncodingTypeObject) {
+                    size_t len = strlen(attrs[i].value);
+                    if (len &gt; 3) {
+                        char name[len - 2];
+                        name[len - 3] = '\0';
+                        memcpy(name, attrs[i].value + 2, len - 3);
+                        _cls = objc_getClass(name);
+                    }
+                }
+            }
+        } break;
+        case 'V': { // Instance variable
+            if (attrs[i].value) {
+                _ivarName = [NSString stringWithUTF8String:attrs[i].value];
+            }
+        } break;
+        case 'R': {
+            type |= YYEncodingTypePropertyReadonly;
+        } break;
+        case 'C': {
+            type |= YYEncodingTypePropertyCopy;
+        } break;
+        case '&amp;': {
+            type |= YYEncodingTypePropertyRetain;
+        } break;
+        case 'N': {
+            type |= YYEncodingTypePropertyNonatomic;
+        } break;
+        case 'D': {
+            type |= YYEncodingTypePropertyDynamic;
+        } break;
+        case 'W': {
+            type |= YYEncodingTypePropertyWeak;
+        } break;
+        case 'P': {
+            type |= YYEncodingTypePropertyGarbage;
+        } break;
+        case 'G': {
+            type |= YYEncodingTypePropertyCustomGetter;
+            if (attrs[i].value) {
+                _getter = [NSString stringWithUTF8String:attrs[i].value];
+            }
+        } break;
+        case 'S': {
+            type |= YYEncodingTypePropertyCustomSetter;
+            if (attrs[i].value) {
+                _setter = [NSString stringWithUTF8String:attrs[i].value];
+            }
+        } break;
+        default:
+            break;
+    }
+}
+</code></pre>
+
+<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
+<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties</a></p>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/">Nvm安装node后bash仍然提示找不到的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:57:05+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:57 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
+
+<p>后来通过下面的命令解决了这个问题：</p>
+
+<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
+</code></pre>
+
+<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
+
+<p>用homebrew直接安装的话没这个问题。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/">Cocoapods和Git Submodules结合使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:41:59+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:41 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
+
+<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
+
+<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
+
+<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
+
+<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
+
+<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
+</code></pre>
+
+<p>Done.</p>
+
+<p>参考资料：<br/>
+1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/">ARC与MRC下 Block的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:34:23+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:34 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
+
+<p>详细可以参见唐巧的文章</p>
+
+<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -128,393 +538,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">Pods: Unable to Satisfy the Following Requirements</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-12T18:06:36+08:00'><span class='date'>2015 年11 月12 日</span> <span class='time'>6:06 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
-
-<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
-</code></pre>
-
-<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
-
-<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
-
-<pre><code>s.dependency "AFNetworking", "2.6.2"
-</code></pre>
-
-<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
-
-<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
-
-<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
-
-<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/">RestKit测试服务器搭建</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-10T20:38:03+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:38 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>用途</h2>
-
-<p>RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。本文档主要针对服务器的配置与启动列出实际的解决方案。</p>
-
-<h2>一 在用户目录安装Ruby</h2>
-
-<p>默认情况下，系统中已经安装了Ruby; 但如果直接使用系统的Ruby执行命令"gem install bundler"会报错，提示无权限。</p>
-
-<pre><code>While executing gem ... (Gem::FilePermissionError)
-You don't have write permissions for the /Library/Ruby/Gems/2.0.0 directory.
-</code></pre>
-
-<p>尽管使用命令"sudo gem install bundler"可以获得权限安装bundler, 但会影响系统自定义安装的Ruby. 故推荐在用户目录安装Ruby. 步骤如下：</p>
-
-<h3>1 使用brew安装ruby</h3>
-
-<pre><code>brew install ruby    
-</code></pre>
-
-<p>在这之前可以使用命令"ruby &ndash;version"查看系统安装的ruby版本或者使用命令"which ruby"查看系统安装的ruby路径.</p>
-
-<p>Note: brew安装有的时候会过慢，可以参考<code>http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html</code>提供的方式更换合适的镜像.</p>
-
-<h3>2 修改环境变量</h3>
-
-<p>到自己目录下的.profile 或者 .bashrc 或者  .bash_profile</p>
-
-<pre><code>/Users/agger/.profile   
-</code></pre>
-
-<p>用emacs或是vim打开 （更改前请备份好这个文件，避免误操作）在文件的末尾加入</p>
-
-<pre><code># for brew install
-export PATH=/usr/local/bin:$PATH
-</code></pre>
-
-<p>然后重启终端，就可以用到了新的ruby了    . 此时执行which ruby会发现路径和系统安装的ruby路径不相同.</p>
-
-<p>一点说明：实际操作中我机器上原本是没有这个.profile的，于是直接新建了这个文件并加入那段代码.</p>
-
-<h2>二 安装bundler</h2>
-
-<h3>1 执行如下命令安装bundler</h3>
-
-<pre><code>gem install bundler
-</code></pre>
-
-<h3>2 执行如下命令查看bundler是否安装成功</h3>
-
-<pre><code>gem list --local
-</code></pre>
-
-<h2>三 通过Bundle安装其他组件</h2>
-
-<h3>1 修改gemfile</h3>
-
-<p>在安装之前，需要修改RestKit目录下的gemfile; 将下面这行</p>
-
-<pre><code>source "https://rubygems.org"
-</code></pre>
-
-<p>修改为：</p>
-
-<pre><code>source "https://ruby.taobao.org/"
-</code></pre>
-
-<p>否则会不断提示安装步骤；</p>
-
-<p>Note: 之前的地址<code>http://ruby.taobao.org</code>无法访问，需要更新为<code>https://ruby.taobao.org</code>.</p>
-
-<h3>2 安装</h3>
-
-<p>执行命令<code>bundle install</code>安装gemfile指定的组件.</p>
-
-<h3>3 执行命令<code>bundle</code>查看使用的组件.</h3>
-
-<h3>4 可能发生的错误与解决方法</h3>
-
-<p>1 执行命令<code>bundle</code>时报错"Could not find rake-10.3.2 in any of the sources"
-解决方法：bundle install可以自动安装上rake-10.3.2; 执行完毕后可以在gem list &ndash;local中查看rake对应版本是否可以安装上.</p>
-
-<p>2 bundle install的时候报错：
-An error occurred while installing i18n (0.7.0), and Bundler cannot continue.
-Make sure that <code>gem install i18n -v '0.7.0'</code> succeeds before bundling.</p>
-
-<p>运行<code>gem install i18n -v '0.7.0'</code>即可; 一般如果gemfile按照上面的步骤做过修改是不会报这个错误的.</p>
-
-<p>3 报错：Make sure that <code>gem install nokogiri -v '1.6.6.2'</code> succeeds before bundling
-解决方法：运行如下命令</p>
-
-<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/libxml2
-</code></pre>
-
-<p>Note: 请根据自己的系统版本信息调整上述路径，例如，当我的系统升级到最新的版本10.11后，上面SDK的路径就应该从<code>MacOSX10.10.sdk</code>调整为
-<code>MacOSX10.11.sdk</code>.完成的命令如下：</p>
-
-<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
-Building native extensions with: '--use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2'
-</code></pre>
-
-<p>然后继续执行bundle install即可.
-参考：
-<a href="http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/">http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/</a></p>
-
-<h2>四 运行RestKit Test Server</h2>
-
-<p>按照RestKit原有的文档，执行命令<code>rake server</code>可以启动服务器；但实际操作中发现会报错，原因是server要求的rake版本是1.3.2; 而我系统上激活的rake版本为1.4.2; 这时换用如下命令可以正常启动服务器:</p>
-
-<pre><code>bundle exec rake server
-</code></pre>
-
-<h2>五 检查测试服务器是否运行</h2>
-
-<p>浏览器中输入：
-<a href="http://localhost:4567/">http://localhost:4567/</a></p>
-
-<h2>参考文档：</h2>
-
-<p><a href="http://blog.csdn.net/maojudong/article/details/7920578">http://blog.csdn.net/maojudong/article/details/7920578</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/">Mac实用小工具 CheatSheet</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-10T20:18:49+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:18 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，使用起来相当方便；直接从官网下载安装即可，安装后，长按command键可以弹出当前程序下的快捷键列表，对于我这种懒得记那么多快捷键的人非常有用。</p>
-
-<p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
-
-<p><img src="../images/CheatSheet.png" alt="image" /></p>
-
-<p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/">使用homebrew安装工具</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-10T20:06:29+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:06 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>可以参考自己写的RestKit测试服务器启动问题.</p>
-
-<p>参考文章：</p>
-
-<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
-2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
-3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/">工作问题记录 一</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-09T20:20:44+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>8:20 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
-
-<p>一  使用RestKit的时候Crash</p>
-
-<p>参考：
-<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
-
-<p>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</p>
-
-<p>参考：
-<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
-
-<p>三 Framework签名问题</p>
-
-<p>参考：
-<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/">iOS每周文章选读 第一周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-09T19:58:05+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>7:58 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自己平时读得多，写得少，所以就想办法将自己最近看过的好文章慢慢整理起来，方便自己后续查阅和复习，也可以向公司的新人推荐这些文章，而且现在每周也需要向组里推荐好文章来学习，所以作此记录，既然坚持写那么难，那么就得坚持读了；当然，其实InfoQ的iOS技术开发周报已经是很好的文章合集了。</p>
-
-<h2>一 <a href="http://xiangwangfeng.com/2015/05/20/%E7%A7%BB%E5%8A%A8IM%E5%BC%80%E5%8F%91%E9%82%A3%E4%BA%9B%E4%BA%8B/">移动IM开发那些事</a></h2>
-
-<p>最近公司内部老是有网易云信的广告，后续有时间可以研究一下。</p>
-
-<p>这篇文章主要是介绍了移动IM开发相关的一些知识点，尤其是技术方案的选择。一些小公司可能会直接用云信或者环信提供的IM服务，不过，稍微大一些的公司还是都会自己去做IM开发相关的事情，比如蘑菇街啊，英坦网络技术等，都有自己做移动IM。如果需要做移动IM或者说公司产品需要设计私有协议进行网络通信的话，还是可以从里面得到很多启发，至少不会踩很多坑了。</p>
-
-<p>对于我个人而言，MessagePack, MQTT和XMPP都有接触过，不过都没啥深入的学习，以后有空还是可以好好研究一下。</p>
-
-<h2>二 <a href="http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a></h2>
-
-<p>RunLoop 是 iOS 和 OSX 开发中非常基础的一个概念，这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的。</p>
-
-<h2>三 <a href="https://github.com/ChenYilong/ParseSourceCodeStudy/blob/master/01_Parse%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF/Parse%E7%9A%84%E5%BA%95%E5%B1%82%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.md#gcd%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E5%83%8Foperationqueue%E9%82%A3%E6%A0%B7%E7%BB%88%E6%AD%A2%E4%BB%BB%E5%8A%A1">Parse源码浅析系列（一）&mdash;Parse的底层多线程处理思路：GCD高级用法</a></h2>
-
-<p>GCD的简单使用方法，相信大部分iOS开发者都会，但是高级用法就不一定了；看过的不少开源库，对于GCD的使用都有很多值得学习的地方。</p>
-
-<h2>四 <a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></h2>
-
-<p>很久以前的文章了，温故而知新.</p>
-
-<h2>五 <a href="http://blog.devtang.com/blog/2015/11/02/mvc-and-mvvm/">被误解的 MVC 和被神化的 MVVM</a></h2>
-
-<p>唐巧最新的文章，主要是介绍了一下作者自己对MVC和MVVM的一些理解，以及对应用新技术的一些看法，并且给出一些实际开发工程中的建议。其实，相关的道理都是浅显易懂，但是在实际的开发过程中，要使得架构层次清晰、便于维护和扩展又不是一件容易的事情，大家可以从这篇文章中汲取对自己有益的部分，并在实际开发过程中慢慢体会并且逐步应用一些实用的技巧。</p>
-
-<h2>六 <a href="http://blog.ibireme.com/">iOS 处理图片的一些小 Tip</a></h2>
-
-<p>图片处理相关</p>
-
-<h2>七 <a href="http://blog.sunnyxx.com/2015/06/12/objc-new-features-in-2015/">2015 Objective-C 新特性</a></h2>
-
-<p>描述了Objective-C的一些新特性，Lightweight Generics还是挺有用的，现在有开始用到自己的代码中。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/6">&larr; Older</a>
@@ -539,6 +562,30 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发者博客</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
       </li>
     
@@ -552,30 +599,6 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
     
       <li class="post">
         <a href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/">让人崩溃的bug</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/">我的工作经历</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/">Xcode 7免费真机调试</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/">那些我问过的、答过的、见过的iOS面试题（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/">iOS开源库 之 Sample Code</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a>
       </li>
     
   </ul>

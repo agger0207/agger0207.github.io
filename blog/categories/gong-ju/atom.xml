@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-27T17:45:34+08:00</updated>
+  <updated>2015-11-30T19:23:57+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -217,7 +217,7 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
 
 <p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
 
-<p><img src="../images/CheatSheet.png" alt="image" /></p>
+<p><img src="/images/CheatSheet.png" alt="image" /></p>
 
 <p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
 ]]></content>
