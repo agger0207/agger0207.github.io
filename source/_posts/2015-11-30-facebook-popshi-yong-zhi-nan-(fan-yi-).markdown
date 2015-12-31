@@ -41,15 +41,14 @@ categories: iOS, 开源库
 
 ## 第一步 选择一种动画类型 
 
-
-### POPBasicAnimation
+### POPBasicAnimation （基本动画）
 ```objective-c
 POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
 basicAnimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 // kCAMediaTimingFunctionLinear  kCAMediaTimingFunctionEaseIn  kCAMediaTimingFunctionEaseOut  kCAMediaTimingFunctionEaseInEaseOut
 ```
 
-### POPSpringAnimation
+### POPSpringAnimation (弹簧动画)
 ```objective-c
 POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
 springAnimation.velocity=@(1000);       // change of value units per second
@@ -57,21 +56,23 @@ springAnimation.springBounciness=14;    // value between 0-20 default at 4
 springAnimation.springSpeed=3;     // value between 0-20 default at 4
 ```
 
-### POPDecayAnimation
+### POPDecayAnimation  (衰减动画)
 ```objective-c
 POPDecayAnimation *decayAnimation=[POPDecayAnimation animation];
 decayAnimation.velocity=@(233); //change of value units per second
 decayAnimation.deceleration=.833; //range of 0 to 1
 ```
 
-### Example
+### 例如
 ```objective-c
 POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
 ```
 
-## Step 2 Decide if you will animate a view property or layer property
+## Step 2 选择是需要在view的属性上做动画还是Layer的属性上做动画
 
-### View Properties
+### View 的属性
+下列枚举值与UIView的属性对应, 例如 alpha, color, bounds, center, frame, size等等;
+
 ##### Alpha - kPOPViewAlpha
 ##### Color - kPOPViewBackgroundColor
 ##### Size - kPOPViewBounds
@@ -81,7 +82,9 @@ POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
 ##### Size(Scale) - kPOPViewSize
 
 
-### Layer Properties
+### Layer的属性
+下列枚举值与CALayer的属性对应，例如opaque等等
+
 ##### Color - kPOPLayerBackgroundColor
 ##### Size - kPOPLayerBounds
 ##### Size - kPOPLayerScaleXY
@@ -93,12 +96,15 @@ POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
 ##### Rotation - kPOPLayerRotation
 ##### Color - kPOPLayerBackgroundColor
 
-### Example
+### 例如
 ```objective-c
 POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+// 选择在View的Frame属性上应用动画
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
 ```
 
-#### Note: Works on any Layer property or any object that inherits from UIView such as UIToolbar | UIPickerView | UIDatePicker | UIScrollView |  UITextView | UIImageView | UITableViewCell | UIStepper | UIProgressView | UIActivityIndicatorView | UISwitch | UISlider | UITextField | UISegmentedControl | UIButton | UIView | UITableView
+#### 注意: 这些属性在任意的Layer属性或者UIView的属性上都可以生效，例如 UIToolbar | UIPickerView | UIDatePicker | UIScrollView |  UITextView | UIImageView | UITableViewCell | UIStepper | UIProgressView | UIActivityIndicatorView | UISwitch | UISlider | UITextField | UISegmentedControl | UIButton | UIView | UITableView
+(意思是：可以对任意UIView的子类以及其layer应用动画)
 
 
 ## Step 3 Find your property below then add and set .toValue
@@ -253,7 +259,7 @@ basicAnimation.name=@"WhatEverAnimationNameYouWant";
 basicAnimation.delegate=self;
 ```
 
-## Step 5 Add animation to View
+## Step 5 向view添加动画
 ```objective-c
  [self.tableView pop_addAnimation:basicAnimation forKey:@"WhatEverNameYouWant"];
 ```
