@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Facebook Pop使用指南（翻译）"
-date: 2015-11-30 16:03:28 +0800
+date: 2015-12-02 16:03:28 +0800
 comments: true
-categories: iOS, 开源库
+categories: iOS 开源库
 ---
 
 原文链接：
