@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T00:01:07+08:00</updated>
+  <updated>2016-01-02T00:54:06+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -846,11 +846,23 @@ Aborting
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Git Submodule基本使用方法]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/"/>
-    <updated>2015-11-28T14:27:11+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa</id>
-    <content type="html"><![CDATA[
+    <title type="html"><![CDATA[Xcode Error: Use of Undeclared Type]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type/"/>
+    <updated>2015-11-29T14:23:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type</id>
+    <content type="html"><![CDATA[<p>前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决：</p>
+
+<p>如下图：</p>
+
+<p><img src="http://agger0207.github.io/image/XcodeTarget.jpg" alt="img" /></p>
+
+<p>出错的时候，所有Target是全选的。</p>
+
+<p>我后来新建了个文件试下，默认所有的Target都是选中的，当时没注意，一路Next下去了；后来突然想起前几天好像装了个Xcode插件叫做<strong>AllTargets</strong>的，这个插件就是当添加文件到工程的时候会自动帮助选上所有的Target，后来想想，这个功能没啥用，赶紧将这个插件删除了，然后就不会有这个问题啦:)</p>
+
+<p><strong>AllTargets</strong>如下图所示：</p>
+
+<p><img src="http://agger0207.github.io/image/XcodeAllTargets.jpg" alt="img" /></p>
 ]]></content>
   </entry>
   

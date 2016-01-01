@@ -74,7 +74,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/">每周文章选读 第三周</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/">iOS开发每周文章选读 第三周</a></h1>
     
     
       <p class="meta">
@@ -511,15 +511,13 @@
 
 <ol>
 <li>在ARC开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</li>
-<li><p>在ARC下<code>__block id x</code>是会retain 对象x的，而MRC下这样写不会retain x, 所以MRC下<strong>block关键字可以用于打破block使用时的循环引用，而ARC下还是要用</strong>weak, 原文如下：</p>
-
-<pre><code> In manual reference counting mode, __block id x; has the effect of not retaining x. In ARC mode, __block id x; defaults to retaining x (just like all other values). To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x;. As the name __unsafe_unretained implies, however, having a non-retained variable is dangerous (because it can dangle) and is therefore discouraged. Two better options are to either use __weak (if you don’t need to support iOS 4 or OS X v10.6), or set the __block value to nil to break the retain cycle.
-</code></pre></li>
+<li>在ARC下<code>__block id x</code>是会retain 对象x的，而MRC下这样写不会retain x, 所以MRC下<strong>block关键字可以用于打破block使用时的循环引用，而ARC下还是要用</strong>weak, 原文如下：</li>
 </ol>
 
 
-<p>出自<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Mac Developer LibraryDeveloperSearch
-Transitioning to ARC Release Notes</a>.</p>
+<p><code>In manual reference counting mode, __block id x; has the effect of not retaining x. In ARC mode, __block id x; defaults to retaining x (just like all other values). To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x;. As the name __unsafe_unretained implies, however, having a non-retained variable is dangerous (because it can dangle) and is therefore discouraged. Two better options are to either use __weak (if you don’t need to support iOS 4 or OS X v10.6), or set the __block value to nil to break the retain cycle.</code></p>
+
+<p>出自<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a>.</p>
 
 <p>其余详细的对于block的剖析可以参见唐巧的文章:</p>
 
@@ -536,7 +534,7 @@ Transitioning to ARC Release Notes</a>.</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/">每周文章选读 第二周</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/">iOS开发每周文章选读 第二周</a></h1>
     
     
       <p class="meta">
@@ -585,7 +583,7 @@ Transitioning to ARC Release Notes</a>.</p>
 
 <h2>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></h2>
 
-<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍.</p>
+<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍, MagicRecord是用来简化CoreData使用的一个开源库，在github上star数也是相当多哦!</p>
 </div>
   
   

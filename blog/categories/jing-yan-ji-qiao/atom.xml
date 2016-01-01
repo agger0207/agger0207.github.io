@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 经验技巧 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/jing-yan-ji-qiao/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T00:01:07+08:00</updated>
+  <updated>2016-01-02T00:54:06+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -117,11 +117,34 @@ $ ls -a
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Xcode Error: Use of Undeclared Type]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type/"/>
+    <updated>2015-11-29T14:23:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type</id>
+    <content type="html"><![CDATA[<p>前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决：</p>
+
+<p>如下图：</p>
+
+<p><img src="/image/XcodeTarget.jpg" alt="img" /></p>
+
+<p>出错的时候，所有Target是全选的。</p>
+
+<p>我后来新建了个文件试下，默认所有的Target都是选中的，当时没注意，一路Next下去了；后来突然想起前几天好像装了个Xcode插件叫做<strong>AllTargets</strong>的，这个插件就是当添加文件到工程的时候会自动帮助选上所有的Target，后来想想，这个功能没啥用，赶紧将这个插件删除了，然后就不会有这个问题啦:)</p>
+
+<p><strong>AllTargets</strong>如下图所示：</p>
+
+<p><img src="/image/XcodeAllTargets.jpg" alt="img" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[工作经历回忆 之 快速性能改进]]></title>
     <link href="http://agger0207.github.io/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/"/>
     <updated>2015-11-27T14:37:29+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin</id>
-    <content type="html"><![CDATA[<p>最近唐巧老师在他的个人博客上开始普及算法相关知识，其中提到熟悉算法和数据结构知识能够帮助我们更好的评估性能问题所在，能够认识到问题的规模对于实际性能的影响，并且举了一个由于问题的规模太小根本就不需要做算法改进的例子，这个我倒是有些体会，也见过一些将代码写得难看加不安全仅仅自以为可以提升性能的做法（比如去掉空指针的判断以为减少了性能开销，其实性能没有节省多少但是带来了crash的风险）；加上自己以前也做过一些性能优化方面的工作，能够很好的认识到，性能优化并不等同于算法优化，所以想回忆一些之前做的一些性能改进的实例，也算是对自己过往工作的一个总结。由于我其实一直是做客户端相关的工作，所以涉及到算法比较少，这些优化经验大部分也和算法优化关系不大, 或者说，这是在介绍自己如何在不改进算法的基础上做的一些性能改进，其实想法都比较简单。</p>
+    <content type="html"><![CDATA[<p>最近唐巧老师在他的个人博客上开始普及算法相关知识，其中提到熟悉算法和数据结构知识能够帮助我们更好的评估性能问题所在，能够认识到问题的规模对于实际性能的影响，并且举了一个由于问题的规模太小根本就不需要做算法改进的例子，这个我倒是有些体会，也见过一些将代码写得难看加不安全仅仅自以为可以提升性能的做法（比如去掉空指针的判断以为减少了性能开销，其实性能没有节省多少但是带来了crash的风险）；加上自己以前也做过一些性能优化方面的工作，能够很好的认识到，性能优化并不等同于算法优化，所以想回忆一些之前做的一些性能改进的实例，也算是对自己过往工作的一个总结。</p>
+
+<p>由于我其实一直是做客户端相关的工作，所以涉及到算法比较少，这些优化经验大部分也和算法优化关系不大, 或者说，这是在介绍自己如何在不改进算法的基础上做的一些性能改进，其实想法都比较简单。</p>
 
 <h2>一 多线程改进数据备份还原性能</h2>
 
@@ -143,7 +166,7 @@ $ ls -a
 3 利用文件系统的特性：
 Windows上有个很火的工具，叫做Everything, 号称是速度最快的文件名搜索工具；其实就是因为在NTFS系统下，所有文件目录和文件的meta信息都存放在一个叫做MFT文件里面，只需要获取到这里面的信息，就可以快速获取到NTFS分区里面的文件树信息了，是不是快了很多？</p>
 
-<p>还有一些，时间久远，不太想得起来了，后面慢慢加 :)</p>
+<p>还有一些，时间久远，不太想得起来了，后面想起来了再慢慢补充 :)</p>
 
 <h2>三 随机存取备份文件改进文件提取性能</h2>
 
@@ -156,55 +179,6 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
 <p>其实，上面这些基本上都不需要什么特殊的算法知识，很多时候都是具体分析瓶颈在那里，尤其是在数据规模大的时候；而常见的性能改进方法，无非就是多线程、缓存、随机存取等等。</p>
 
 <p>待续&hellip;.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[让人崩溃的bug]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/rang-ren-beng-kui-de-bug/"/>
-    <updated>2015-11-27T14:36:39+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/rang-ren-beng-kui-de-bug</id>
-    <content type="html"><![CDATA[<h2>一 iOS使用不规范造成的首页白屏</h2>
-
-<p>WebView页面被遮挡，然后被Remove掉的时候，页面内容没有渲染出来</p>
-
-<h2>二 人家的bug</h2>
-
-<p>H5页面的bug, iOS开发工程师来帮忙调, 最怕的是Android还没问题(其实是Andorid也有问题，负负得正)</p>
-
-<h2>三 人家的bug: Andorid内存溢出</h2>
-
-<h2>四 花费时间最长的两个bug</h2>
-
-<p>1 磁盘还原后某个文件内容不正确
-2 磁盘还原后系统无法启动</p>
-
-<h2>五 多线程</h2>
-
-<p>多线程永远都是最头痛的问题, 死锁，Crash等等</p>
-
-<h2>六 按键精灵</h2>
-
-<h2>七 无法重现</h2>
-
-<h2>八 客户报过来的</h2>
-
-<p>有dump就不怕:)</p>
-
-<p>之前CodeProject上有文章介绍在VC 6.0下如何根据crash日志定位到具体的代码行，在VS2010下其实也可用，不过有的时候对应不到代码行，只能到函数，这个时候，函数写的短小精悍的好处就出来了：）</p>
-
-<h2>九 内存泄漏</h2>
-
-<h2>十 已经改好了</h2>
-
-<p>总结：代码Review, 静态代码分析，XCode Instruments能够很好的避免bug的出现;</p>
-
-<p>待完善 （年纪大了，很多都已经不记得了，不过iOS相对来说更简单一些，至少多线程的问题少很多；代码量相对比较少也可以通过代码比对的方式来修正错误；一般如果是自己团队开发造成的bug都可以通过规范代码的方式来避免，除非crash在系统控件内部且无法重现）</p>
-
-<p>吐槽：很多开发同学只要不是自己负责代码的bug就一概忽略；自己重现不了的bug一概忽略；其实，很多稍微调试一下或者稍微看看代码就能够知道问题所在；或者搜索下错误信息；或者搜索下最近代码改动；或者看下相关功能的代码；绝大部分都能够定位到原因；少数不能定位到具体原因，也能够限制在少部分代码块中，而这部分代码块如果写法规范点，基本上就没啥问题了。
-当然，我也遇到过不靠谱的测试，由于网络问题的原因，中国这边无法测试，然后对方测试后给出个bug, 就只有一个出错界面，操作步骤和日志也没有，而且还经常把记录好的错误日志清除掉，再也重现不了。。。。</p>
-
-<p>当然，不排除部分问题确实很难查。对于出现的问题，我总记得之前的架构师说过的一句话：“Let me debug it !”</p>
 ]]></content>
   </entry>
   

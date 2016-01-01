@@ -243,6 +243,50 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/11/29/xcode-error-use-of-undeclared-type/">Xcode Error: Use of Undeclared Type</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-29T14:23:53+08:00'><span class='date'>2015 年11 月29 日</span> <span class='time'>2:23 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/29/xcode-error-use-of-undeclared-type/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决：</p>
+
+<p>如下图：</p>
+
+<p><img src="/image/XcodeTarget.jpg" alt="img" /></p>
+
+<p>出错的时候，所有Target是全选的。</p>
+
+<p>我后来新建了个文件试下，默认所有的Target都是选中的，当时没注意，一路Next下去了；后来突然想起前几天好像装了个Xcode插件叫做<strong>AllTargets</strong>的，这个插件就是当添加文件到工程的时候会自动帮助选上所有的Target，后来想想，这个功能没啥用，赶紧将这个插件删除了，然后就不会有这个问题啦:)</p>
+
+<p><strong>AllTargets</strong>如下图所示：</p>
+
+<p><img src="/image/XcodeAllTargets.jpg" alt="img" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/">Git Submodule基本使用方法</a></h1>
     
     
@@ -256,38 +300,6 @@
         
         
            | <a href="/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/28/cocoapodsji-ben-shi-yong/">CocoaPods基本使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-28T14:26:42+08:00'><span class='date'>2015 年11 月28 日</span> <span class='time'>2:26 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/28/cocoapodsji-ben-shi-yong/#comments">Comments</a>
         
       </p>
     
