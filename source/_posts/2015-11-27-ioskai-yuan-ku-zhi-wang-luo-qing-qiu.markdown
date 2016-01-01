@@ -43,10 +43,11 @@ RestKit is a modern Objective-C framework for implementing RESTful web services 
 RestKit主要是在网络请求的发送之外额外提供了对象映射的功能，可以将服务器返回的结果(无论是JSON还是XML)自动映射成为Model对象，并且集成了CoreData的支持；它利用RequestDescriptor和ResponseDescriptor来描述请求与Model的对应关系，这样对于配置好后的RKObjectManager, 可以自动的对请求的结果进行映射；所以其强大之处就在于这个对象的映射功能，避免繁杂的JSON映射啊什么的.
 
 不过好像RestKit在国内的应用不多，我个人觉得是有这么几个原因：
-1 RestKit底下其实还是用AFNetworking来发送请求，而且还使用的是老的AFNetworking 1.x的版本；由于其与AFNetworking耦合比较紧，替换成为AFNetworking 2.x以上版本非常麻烦；RestKit的开发者本来计划是要升级到AFNetworking 2.x的，不过弄了一两年也没搞完，现在的方向貌似是直接抛弃AFNetworking，直接自己通过NSURLSession来发送网络请求，但是具体啥时候能够做完就不知道了；
-2 RestKit的设计、实现和使用都偏复杂，很多地方都会看到对这一点的抱怨；对于中小型应用，AFNetworking + Mantle 完全可以做掉 RestKit的工作，还更简单；想单独的替换/升级Mantle或者AFNetworking都方便很多；
-3 国内好像CoreData用得应该不太多，RestKit强大的ObjectMapping+CoreData的集成没有多少用武之地.
-4 中小型项目用RestKit嫌麻烦，大型项目要用RestKit倒是好，但是一般这种级别的项目或者公司都会希望能够集成自己的私有TCP协议，这个要集成起来也够头疼.
+
+1. RestKit底下其实还是用AFNetworking来发送请求，而且还使用的是老的AFNetworking 1.x的版本；由于其与AFNetworking耦合比较紧，替换成为AFNetworking 2.x以上版本非常麻烦；RestKit的开发者本来计划是要升级到AFNetworking 2.x的，不过弄了一两年也没搞完，现在的方向貌似是直接抛弃AFNetworking，直接自己通过NSURLSession来发送网络请求，但是具体啥时候能够做完就不知道了；
+2. RestKit的设计、实现和使用都偏复杂，很多地方都会看到对这一点的抱怨；对于中小型应用，AFNetworking + Mantle 完全可以做掉 RestKit的工作，还更简单；想单独的替换/升级Mantle或者AFNetworking都方便很多；
+3. 国内好像CoreData用得应该不太多，RestKit强大的ObjectMapping+CoreData的集成没有多少用武之地.
+4. 中小型项目用RestKit嫌麻烦，大型项目要用RestKit倒是好，但是一般这种级别的项目或者公司都会希望能够集成自己的私有TCP协议，这个要集成起来也够头疼.
 
 我个人也不是太喜欢RestKit, 还是AFNetworking + Mantle会更简单，即使要支持Object Mapping, 在一些JSON<>Model转换库的基础上做做也还好，毕竟，大多数时候，不需要考虑一些奇怪的JSON返回内容，可以约束服务器开发人员返回更友好更易快速解析的JSON内容，而不是一些不规范的、异构的内容.
 
@@ -55,23 +56,25 @@ Github地址：https://github.com/MugunthKumar/MKNetworkKit
 介绍文章：http://www.cnblogs.com/scorpiozj/p/3222803.html
 License:MIT License
 
-主要特性：
-超轻量级
-整个应用共享单一队列
-正确的显示网络连接的标志
-Auto queue sizing 自动队列大小
-Auto caching 自动缓存
-Operation freezing 操作冻结
-Image Caching 图片缓存
-Performance 性能
-Full support for Objective-C ARC 全面支持Ojbective-C ARC
+主要特: 
 
-个人感觉
-1 功能偏简单；库本身的设计上感觉没有什么特别的；主要就是封装了一个Operation和一个调度的Engine; Engine中涉及一些配置和调度；
-2 使用的时候需要自己去写MKNetworkEngine的子类; 当然，一个应用一般是访问同一个服务器，所以只需要在同一个Engine类中开放不同的API接口；每个接口里面去创建一个MKNetworkOperation;
-3 一般来说，不需要子类化MKNetworkOperation类
-4 创建MKNetworkOperation时参数要自己组装；所以实际使用的时候，还是需要在这之上封装一个网络层出来；
-5 坦白说，MKNetworkKit的代码风格都比较差，包括空行和空格什么的，可读性不那么好，没有其他几个知名库那样赏心悦目.
+* 超轻量级
+* 整个应用共享单一队列
+* 正确的显示网络连接的标志
+* Auto queue sizing 自动队列大小
+* Auto caching 自动缓存
+* Operation freezing 操作冻结
+* Image Caching 图片缓存
+* Performance 性能
+* Full support for Objective-C ARC 全面支持Ojbective-C ARC
+
+个人感觉:
+
+1. 功能偏简单；库本身的设计上感觉没有什么特别的；主要就是封装了一个Operation和一个调度的Engine; Engine中涉及一些配置和调度；
+2. 使用的时候需要自己去写MKNetworkEngine的子类; 当然，一个应用一般是访问同一个服务器，所以只需要在同一个Engine类中开放不同的API接口；每个接口里面去创建一个MKNetworkOperation;
+3. 一般来说，不需要子类化MKNetworkOperation类
+4. 创建MKNetworkOperation时参数要自己组装；所以实际使用的时候，还是需要在这之上封装一个网络层出来；
+5. 坦白说，MKNetworkKit的代码风格都比较差，包括空行和空格什么的，可读性不那么好，没有其他几个知名库那样赏心悦目.
 
 
 ## 五 YTKNetwork 

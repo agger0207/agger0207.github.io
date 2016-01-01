@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "每周文章选读 第二周"
+title: "iOS开发每周文章选读 第二周"
 date: 2015-11-20 18:35:26 +0800
 comments: true
 categories: iOS
@@ -38,7 +38,7 @@ InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，�
 
 ## 七 [浅析MagicalRecord](http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/)
 
-网易同事写的，还没来得及仔细看，主要是对[MagicalRecord](https://github.com/magicalpanda/MagicalRecord)的一些介绍.
+网易同事写的，还没来得及仔细看，主要是对[MagicalRecord](https://github.com/magicalpanda/MagicalRecord)的一些介绍, MagicRecord是用来简化CoreData使用的一个开源库，在github上star数也是相当多哦!
 
 
 
