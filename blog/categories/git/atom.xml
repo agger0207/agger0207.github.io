@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T23:14:32+08:00</updated>
+  <updated>2016-01-02T00:01:07+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -76,6 +76,127 @@ Always verify that the rewritten version is correct: The original refs, if diffe
 <li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2">Git 工具 - 重写历史</a></li>
 <li><a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a></li>
 <li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[github上Contributions丢失的问题]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/"/>
+    <updated>2016-01-01T14:09:54+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了，而github是通过user email来对应到实际的用户的；解决这个问题一般通过命令</p>
+
+<pre><code>$ git config --global user.email "xxxx@xxxx.com"
+</code></pre>
+
+<p>其中的email地址需要和自己github profile的email地址一样;</p>
+
+<p>而如果希望不在commit中暴露自己的email地址的话，可以用如下命令</p>
+
+<pre><code>$ git config --global user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>其中<code>username</code>是自己的github用户明名，这样既可以同自己的profile关联起来，自己在profile中将email地址不对外开放的话，别人也看到你的email地址。</p>
+
+<p>但是<code>git config --global</code>这个命令是全局生效的，也就是所有git的提交都会使用这个email, 如果自己还使用了另外一个email提交代码，比如说一般公司内网都会搭建gitbucket之类，自己同时还在内网提交代码，那么所用的账户对应的email可能是不一样的，那么就需要对具体某个local repo来设置email了，命令如下：</p>
+
+<pre><code>$ git config --local user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>这样就可以对当前的repo设置一个email, 在当前repo下所有commit都会和这个email关联起来，其实这样也挺麻烦的，按道理说应该可以配置得更加智能些，毕竟这些config信息都是存在配置文件上的，改天自己实践过后再来更新这篇文章吧！话说我发现我的某个分支好像又是存在问题的，commit的作者显示不正确，看来改天又要去检查下啦。。。。</p>
+
+<p>参考资料:</p>
+
+<ul>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">Why are my contributions not showing up on my profile?</a></li>
+<li><a href="https://help.github.com/articles/keeping-your-email-address-private/">Keeping your email address private</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[在两台机器上同时用octopress写博客的问题]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/"/>
+    <updated>2016-01-01T13:37:15+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>问题描述:
+之前是在晚上在公司机器上来发布文章，但是同时也会在自己家里写文章，我们知道，octopress日常操作的实际就是blog所在的git仓库的source分支，例如我自己的blog对应的仓库实际上就是<code>https://github.com/agger0207/agger0207.github.io</code>, 平时写好文章后提交到git上，保持同步就好了。</p>
+
+<p>今天在家里执行<code>rake deploy</code>的时候就发现报错了；错误信息与解决过程看下面.</p>
+
+<p>错误1:</p>
+
+<pre><code>## Deploying branch to Github Pages 
+## Pulling any updates from Github Pages 
+cd _deploy
+rake aborted!
+Errno::ENOENT: No such file or directory @ dir_chdir - _deploy
+</code></pre>
+
+<p>提示是找不到<code>_deploy</code>文件夹，看了下，还真没有，感情自己一直没在家里的机器上deploy过，搜索了下，如果有不同的本地仓库的时候就会存在这种问题，执行如下命令，就会生成_deploy文件夹啦!</p>
+
+<pre><code>$ rake setup_github_pages
+</code></pre>
+
+<p>错误2：</p>
+
+<p>继续<code>rake deploy</code>, 继续报错：</p>
+
+<pre><code>On branch master
+nothing to commit, working directory clean
+
+## Pushing generated _deploy website
+To https://github.com/agger0207/agger0207.github.io
+ ! [rejected]        master -&gt; master (non-fast-forward)
+error: failed to push some refs to 'https://github.com/agger0207/agger0207.github.io'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+
+<p>错误提示是说无法向自己博客所在远程仓库的<code>master</code>分支push, 因为当前本地的版本没有更新到最新版本. 了解git的同学都知道，要push到远程分支，首先需要将最新的改动pull下来，否则不让提交的。而octopress实际发布的过程实际上就是会将本地的改动push到blog所在git仓库的master分支(也就是我们日常通过编写markdown文档的过程其实并不是直接去改动blog的呈现，而是在改动后，通过<code>rake generate</code>生成网页，然后deploy的时候将生成的页面信息push到远程的master分支上).</p>
+
+<p>google了一下，原来<code>_deploy</code>文件夹下的内容就是从<code>master</code>分支下取下来的内容，大家可以看下，<code>_deploy</code>目录下的是不是正好和github上<code>master</code>分支一样呢？</p>
+
+<p>执行命令:</p>
+
+<pre><code>$ cd _deploy
+$ ls -a 
+</code></pre>
+
+<p>可以看到结果：</p>
+
+<pre><code>.       assets      favicon.png javascripts sitemap.xml
+..      atom.xml    images      posts       stylesheets
+.git        blog        index.html  robots.txt  
+</code></pre>
+
+<p>.git的存在证明了这就是一个本地的git仓库嘛；</p>
+
+<p>剩下的就好办了，只需要与master同步即可：</p>
+
+<pre><code>$ git pull origin master    
+</code></pre>
+
+<p>pull失败，提示有冲突，不要紧，执行下面的命令恢复到和master分支一样就可以了，反正这里面的内容都是自动生成的.</p>
+
+<pre><code>$ git reset --hard origin/master
+</code></pre>
+
+<p>然后搞定，回到上一层目录，执行<code>rake deploy</code>就OK.</p>
+
+<p>小结：
+解决下来，发现这个问题其实还蛮有意思的；原来<code>_deploy</code>文件夹就是对应的git repo的master branch。其实octopress的这些操作核心就是ruby和git; 如果没有猜错，之前解决<code>_deploy</code>文件夹不存在时所执行的命令就是创建一个本地的仓库并且设置对应的remote url, 不过我对ruby不太熟，要不然可以研究下里面的rakefile确认一下。而octopress对于git仓库的处理就是，编辑的内容对应的是source branch, 而<code>_deploy</code>对应master branch, 和git submodule有点类似，只不过子文件夹下对应的remote repo是同一个repo的不同branch,  而git submodule一般都是不同的submodule放在不同的仓库下。</p>
+
+<p>参考资料：</p>
+
+<ul>
+<li><a href="https://github.com/imathis/octopress/issues/334">No such file or directory - _deploy</a></li>
+<li><a href="http://stackoverflow.com/questions/19619280/octopress-pushing-error-to-github">Octopress pushing error to GitHub</a></li>
 </ul>
 
 ]]></content>

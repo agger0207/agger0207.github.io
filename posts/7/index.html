@@ -57,6 +57,9 @@
   
 <ul class="main-navigation">
   <li><a href="/">首页</a></li>
+  <li><a href="/blog/categories/ios">iOS</a></li>
+  <li><a href="/blog/categories/kai-yuan-ku">开源库</a></li>
+  <li><a href="/blog/categories/jing-yan-ji-qiao">经验技巧</a></li>
   <li><a href="/blog/categories/gong-ju">工具</a></li>
   <li><a href="/blog/archives">所有文章</a></li>
 </ul>
@@ -496,17 +499,36 @@ git push origin source
 
 <h3>添加导航栏上的链接</h3>
 
+<p>在<code>source/_includes/custom/navigation.html</code>里可以设置导航栏上显示的内容和链接，例如，如果想要在导航栏上显示<code>首页</code>, <code>工具</code>, <code>所有文章</code>这几项，那么<code>navigation.html</code>的内容应该类似下面这样子:</p>
+
+<pre><code>&lt;ul class="main-navigation"&gt;
+  &lt;li&gt;&lt;a href="/"&gt;首页&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="/blog/categories/gong-ju"&gt;工具&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="/blog/archives"&gt;所有文章&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>链接怎么知道呢？在<code>_deploy</code>目录下实际放着的就是这个博客对应的网页文件，在<code>blog/categories</code>目录下就是所有的分类，那么这个url其实就是和文件的相对路径对应的了。</p>
+
 <h3>添加分类</h3>
 
-<p>TODO: 使用多说的评论系统</p>
+<p>新生成的Markdown文件中，有<code>categories:</code>内容，直接在后面写上分类的名字即可；如果一篇文章属于多个分类，那么多个分类之间用空格隔开即可。</p>
 
-<h2>代码着色</h2>
+<h3>代码着色</h3>
 
 <p>直接用Markdown的语法即可为代码着色。</p>
+
+<h3>编辑格式调整</h3>
+
+<p>基本就是普通的Markdown编辑，后面会写一篇介绍如何使用Markdown的文档；实在不行，参照别人git上的源码整整或者google一下，方便又快捷。</p>
 
 <h2>评论系统</h2>
 
 <p>TODO: 使用多说的评论系统</p>
+
+<h2>如何加快访问速度</h2>
+
+<p>TODO</p>
 
 <h2>参考链接</h2>
 

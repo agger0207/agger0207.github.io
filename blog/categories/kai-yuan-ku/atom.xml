@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 开源库 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/kai-yuan-ku/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T23:14:32+08:00</updated>
+  <updated>2016-01-02T00:01:07+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何通过代码修改Xcode工程文件]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/"/>
+    <updated>2016-01-01T14:22:42+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ReactiveCocoa操作符介绍]]></title>
@@ -450,138 +459,6 @@ Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
 <p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
 
 <p>全文完。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[YYModel源码略读]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi/"/>
-    <updated>2015-11-20T20:13:42+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/yymodelyuan-ma-jie-xi</id>
-    <content type="html"><![CDATA[<p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
-
-<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
-
-<p>例如其中的YYClassInfo类的定义如下：</p>
-
-<pre><code class="Objective-C">@interface YYClassInfo : NSObject
-
-@property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, assign, readonly) Class superCls;
-@property (nonatomic, assign, readonly) Class metaCls;
-@property (nonatomic, assign, readonly) BOOL isMeta;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
-
-@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
-@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
-@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
-
-+ (instancetype)classInfoWithClass:(Class)cls;
-
-+ (instancetype)classInfoWithClassName:(NSString *)className;
-
-@end
-</code></pre>
-
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<code>class_copyPropertyList</code>， <code>class_copyMethodList</code>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
-
-<p>另，使用<code>class_copyPropertyList</code>时候需要注意，<code>class_copyPropertyList</code>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
-
-<pre><code>Any properties declared by superclasses are not included. 
-</code></pre>
-
-<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
-
-<pre><code class="Objective-C">  // Create all property metas.
-  NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-  YYClassInfo *curClassInfo = classInfo;
-  while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
-      for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
-          if (!propertyInfo.name) continue;
-          if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
-          if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
-          _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
-                                                                  propertyInfo:propertyInfo
-                                                                       generic:genericMapper[propertyInfo.name]];
-          if (!meta || !meta-&gt;_name) continue;
-          if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
-          if (allPropertyMetas[meta-&gt;_name]) continue;
-          allPropertyMetas[meta-&gt;_name] = meta;
-      }
-      curClassInfo = curClassInfo.superClassInfo;
-  }
-  if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
-</code></pre>
-
-<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
-
-<p>另，在<code>YYClassPropertyInfo</code>的<code>- (instancetype)initWithProperty:(objc_property_t)property</code>方法中可以看到下面的代码：</p>
-
-<pre><code class="Objective-C">  objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-  for (unsigned int i = 0; i &lt; attrCount; i++) {
-      switch (attrs[i].name[0]) {
-          case 'T': { // Type encoding
-              if (attrs[i].value) {
-                  _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                  type = YYEncodingGetType(attrs[i].value);
-                  if (type &amp; YYEncodingTypeObject) {
-                      size_t len = strlen(attrs[i].value);
-                      if (len &gt; 3) {
-                          char name[len - 2];
-                          name[len - 3] = '\0';
-                          memcpy(name, attrs[i].value + 2, len - 3);
-                          _cls = objc_getClass(name);
-                      }
-                  }
-              }
-          } break;
-          case 'V': { // Instance variable
-              if (attrs[i].value) {
-                  _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-              }
-          } break;
-          case 'R': {
-              type |= YYEncodingTypePropertyReadonly;
-          } break;
-          case 'C': {
-              type |= YYEncodingTypePropertyCopy;
-          } break;
-          case '&amp;': {
-              type |= YYEncodingTypePropertyRetain;
-          } break;
-          case 'N': {
-              type |= YYEncodingTypePropertyNonatomic;
-          } break;
-          case 'D': {
-              type |= YYEncodingTypePropertyDynamic;
-          } break;
-          case 'W': {
-              type |= YYEncodingTypePropertyWeak;
-          } break;
-          case 'P': {
-              type |= YYEncodingTypePropertyGarbage;
-          } break;
-          case 'G': {
-              type |= YYEncodingTypePropertyCustomGetter;
-              if (attrs[i].value) {
-                  _getter = [NSString stringWithUTF8String:attrs[i].value];
-              }
-          } break;
-          case 'S': {
-              type |= YYEncodingTypePropertyCustomSetter;
-              if (attrs[i].value) {
-                  _setter = [NSString stringWithUTF8String:attrs[i].value];
-              }
-          } break;
-          default:
-              break;
-      }
-  }
-</code></pre>
-
-<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a>.</p>
 ]]></content>
   </entry>
   
