@@ -3,7 +3,7 @@ layout: post
 title: "Facebook Pop使用指南（翻译）"
 date: 2015-12-02 16:03:28 +0800
 comments: true
-categories: iOS 开源库
+categories: iOS 开源库 pop
 ---
 
 原文链接：
@@ -107,9 +107,9 @@ basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame]
 (意思是：可以对任意UIView的子类以及其layer应用动画)
 
 
-## Step 3 Find your property below then add and set .toValue
+## Step 3 找到对应的属性并且设置.toValue的值
 
-### View Properties
+### View属性
 ##### Alpha - kPOPViewAlpha
 ```objective-c
 POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
@@ -158,7 +158,7 @@ POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
 basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewSize];
 basicAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(30, 200)];
 ```
-### Layer Properties
+### Layer属性
 ##### Color - kPOPLayerBackgroundColor
 ```objective-c
 POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
@@ -221,21 +221,21 @@ POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
 basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerRotation];
 basicAnimation.toValue= @(M_PI/4); //2 M_PI is an entire rotation
 ```
-#### Note: Property Changes work for all 3 animation types - POPBasicAnimation POPSpringAnimation POPDecayAnimation
-### Example
+#### 注意: 属性的改变对于三种动画类型都有效 - POPBasicAnimation POPSpringAnimation POPDecayAnimation
+### 示例
 ```objective-c
 POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
 basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerRotation];
 basicAnimation.toValue= @(M_PI/4); //2 M_PI is an entire rotation
 ```
-## Step 4 Create Name & Delegate For Animation
+## Step 4 为动画指定名字和代理
 ```objective-c
 basicAnimation.name=@"WhatEverAnimationNameYouWant";
 basicAnimation.delegate=self;
 ```
-##### Declare Delegate Protocol `<POPAnimatorDelegate>`
+##### 代理协议 `<POPAnimatorDelegate>`
 
-### Delegate Methods
+### 委托方法
 `
 <POPAnimatorDelegate>
 `
@@ -250,7 +250,7 @@ basicAnimation.delegate=self;
 ```
 
 
-### Example
+### 示例
 ```objective-c
 POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
 basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
@@ -260,10 +260,13 @@ basicAnimation.delegate=self;
 ```
 
 ## Step 5 向view添加动画
+
+Note: 如果前面选择的是view的属性，那么应该针对view调用`pop_addAnimation`; 类似，如果前面选择的是layer的属性，那么应该对view的layer调用`pop_addAnimation`.
+
 ```objective-c
  [self.tableView pop_addAnimation:basicAnimation forKey:@"WhatEverNameYouWant"];
 ```
-### Example
+### 示例
 ```objective-c
   POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
   basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
@@ -273,3 +276,4 @@ basicAnimation.delegate=self;
   [self.tableView pop_addAnimation:basicAnimation forKey:@"WhatEverNameYouWant"];
 ```
 
+后记：其实翻译这个纯粹是偷懒，因为绝大部分都是代码，不需要翻译:) 不过算是个开头吧，然后真有兴趣的可以直接去原文链接看好了，是github上的一个仓库；另外，github上还有很多使用pop的动画例子可供参考.
