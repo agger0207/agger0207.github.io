@@ -620,9 +620,9 @@ $ ls -a
 
 <p>(意思是：可以对任意UIView的子类以及其layer应用动画)</p>
 
-<h2>Step 3 Find your property below then add and set .toValue</h2>
+<h2>Step 3 找到对应的属性并且设置.toValue的值</h2>
 
-<h3>View Properties</h3>
+<h3>View属性</h3>
 
 <h5>Alpha - kPOPViewAlpha</h5>
 
@@ -701,7 +701,7 @@ $ ls -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Layer Properties</h3>
+<h3>Layer属性</h3>
 
 <h5>Color - kPOPLayerBackgroundColor</h5>
 
@@ -802,9 +802,9 @@ $ ls -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>Note: Property Changes work for all 3 animation types - POPBasicAnimation POPSpringAnimation POPDecayAnimation</h4>
+<h4>注意: 属性的改变对于三种动画类型都有效 - POPBasicAnimation POPSpringAnimation POPDecayAnimation</h4>
 
-<h3>Example</h3>
+<h3>示例</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -815,7 +815,7 @@ $ ls -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Step 4 Create Name &amp; Delegate For Animation</h2>
+<h2>Step 4 为动画指定名字和代理</h2>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -824,9 +824,9 @@ $ ls -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h5>Declare Delegate Protocol <code>&lt;POPAnimatorDelegate&gt;</code></h5>
+<h5>代理协议 <code>&lt;POPAnimatorDelegate&gt;</code></h5>
 
-<h3>Delegate Methods</h3>
+<h3>委托方法</h3>
 
 <p><code>
 &lt;POPAnimatorDelegate&gt;
@@ -847,7 +847,7 @@ $ ls -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Example</h3>
+<h3>示例</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -864,12 +864,14 @@ $ ls -a
 
 <h2>Step 5 向view添加动画</h2>
 
+<p>Note: 如果前面选择的是view的属性，那么应该针对view调用<code>pop_addAnimation</code>; 类似，如果前面选择的是layer的属性，那么应该对view的layer调用<code>pop_addAnimation</code>.</p>
+
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='objective-c'><span class='line'> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nl">pop_addAnimation</span><span class="p">:</span><span class="n">basicAnimation</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;WhatEverNameYouWant&quot;</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Example</h3>
+<h3>示例</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -886,7 +888,7 @@ $ ls -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-
+<p>后记：其实翻译这个纯粹是偷懒，因为绝大部分都是代码，不需要翻译:) 不过算是个开头吧，然后真有兴趣的可以直接去原文链接看好了，是github上的一个仓库；另外，github上还有很多使用pop的动画例子可供参考.</p>
 </div>
   
   
