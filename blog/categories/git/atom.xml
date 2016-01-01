@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Git | 穷小子Agger的技术博客]]></title>
+  <title><![CDATA[Category: git | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T00:54:06+08:00</updated>
+  <updated>2016-01-02T02:06:00+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[修改git Commit历史]]></title>
+    <title type="html"><![CDATA[修改git commit历史]]></title>
     <link href="http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi/"/>
     <updated>2016-01-01T18:27:46+08:00</updated>
     <id>http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi</id>
@@ -247,7 +247,7 @@ Aborting
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Git Submodule基本使用方法]]></title>
+    <title type="html"><![CDATA[Git submodule基本使用方法]]></title>
     <link href="http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/"/>
     <updated>2015-11-28T14:27:11+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa</id>

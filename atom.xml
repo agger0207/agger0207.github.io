@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T00:54:06+08:00</updated>
+  <updated>2016-01-02T02:06:00+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -23,7 +23,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[修改git Commit历史]]></title>
+    <title type="html"><![CDATA[修改git commit历史]]></title>
     <link href="http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi/"/>
     <updated>2016-01-01T18:27:46+08:00</updated>
     <id>http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi</id>
@@ -846,7 +846,7 @@ Aborting
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Xcode Error: Use of Undeclared Type]]></title>
+    <title type="html"><![CDATA[Xcode Error: Use of undeclared type]]></title>
     <link href="http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type/"/>
     <updated>2015-11-29T14:23:53+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type</id>
