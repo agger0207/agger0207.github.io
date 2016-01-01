@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>我的工作经历 - 穷小子Agger的技术博客</title>
+  <title>修改git Commit历史 - 穷小子Agger的技术博客</title>
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="主要想回忆一些自己工作的感受、经历，做一下总结，随便写写总比什么都不写好，毕竟年纪慢慢大了，记忆力慢慢衰退了，说不定哪一天就不记得自己干过什么了呢：）尽量多正面的回忆，少吐槽，当然，也不是写简历，要写简历直接去拉勾了：） 先列提纲，再慢慢写吧！ 一 Arcsoft 系统架构部门软件工程师 二 &hellip;">
+  <meta name="description" content="例如，一个需求是，之前递交的时候本地设置的email地址都错了，那么需要把之前所有的提交的电子邮件地址改过来，也就是批量修改commit历史，而git commit --amend命令只能修改最近的一次提交，这个时候就可以用到git filter-branch命令了，示例如下： $ git &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li/">
+  <link rel="canonical" href="http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="穷小子Agger的技术博客" type="application/atom+xml">
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">我的工作经历</h1>
+      <h1 class="entry-title">修改git Commit历史</h1>
     
     
       <p class="meta">
@@ -77,7 +77,7 @@
 
 
 
-<time class='entry-date' datetime='2015-11-27T14:36:21+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:36 pm</span></time>
+<time class='entry-date' datetime='2016-01-01T18:27:46+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>6:27 pm</span></time>
         
         
            | <a href="#comments">Comments</a>
@@ -87,25 +87,66 @@
   </header>
 
 
-<div class="entry-content"><p>主要想回忆一些自己工作的感受、经历，做一下总结，随便写写总比什么都不写好，毕竟年纪慢慢大了，记忆力慢慢衰退了，说不定哪一天就不记得自己干过什么了呢：）尽量多正面的回忆，少吐槽，当然，也不是写简历，要写简历直接去拉勾了：）</p>
+<div class="entry-content"><p>例如，一个需求是，之前递交的时候本地设置的email地址都错了，那么需要把之前所有的提交的电子邮件地址改过来，也就是批量修改commit历史，而<code>git commit --amend</code>命令只能修改最近的一次提交，这个时候就可以用到git filter-branch命令了，示例如下：</p>
 
-<p>先列提纲，再慢慢写吧！</p>
+<pre><code>$ git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+        then
+                GIT_AUTHOR_NAME="agger0207";
+                GIT_AUTHOR_EMAIL="agger0207@users.noreply.github.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+</code></pre>
 
-<h2>一 Arcsoft</h2>
+<p>如果之前执行过一次，会报错，说无法backup之类，原因是会再一次rewrite .git目录下的<code>refs/original/</code>, 这时加个参数<code>-f</code>强制执行即可：</p>
 
-<p>系统架构部门软件工程师</p>
+<pre><code>git filter-branch -f --commit-filter '
+            if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+            then
+                    GIT_AUTHOR_NAME="agger0207";
+                    GIT_AUTHOR_EMAIL="agger0207@users.noreply.github.com";
+                    git commit-tree "$@";
+            else
+                    git commit-tree "$@";
+            fi' HEAD
+</code></pre>
 
-<h2>二 Nero</h2>
+<p>同理，也可以删除某个作者或者email地址对应的历史commit:</p>
 
-<p>Nero BackItUp架构师</p>
+<pre><code>git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+        then
+                skip_commit "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+</code></pre>
 
-<h2>三 挖财</h2>
+<p>如何判断某个提交是从哪个地址或者作者提交呢? github在自己的帮助文档<a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a>里明确提到，在commit对应的url下加上.patch就会显示递交的作者信息了，例如, 通过url<code>https://github.com/octocat/octocat.github.io/commit/67c0afc1da354d8571f51b6f0af8f2794117fd10.patch</code>就可以得到<code>octocat.github.io</code>这个rep的commit<code>67c0afc1da354d8571f51b6f0af8f2794117fd10</code>的提交信息如下:</p>
 
-<p>资深iOS开发工程师</p>
+<pre><code>From 67c0afc1da354d8571f51b6f0af8f2794117fd10 Mon Sep 17 00:00:00 2001
+From: The Octocat &lt;octocat@nowhere.com&gt;
+Date: Sun, 27 Apr 2014 15:36:39 +0530
+Subject: [PATCH] updated index for better welcome message
+</code></pre>
 
-<h2>四 网易</h2>
+<p>我实践的时候，前面进行的都很顺利，但是提交的时候<code>git push</code>会报错，git会认为有分支的发散，但是我试着先<code>git pull</code>在<code>git push</code>的话发现后来是多了很多commit而不是直接覆盖掉原有的commit; 后来尝试直接<code>git push -f</code>强制覆盖，貌似可以解决问题。然后看参考链接中的<a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a>也提到，除非清楚的知道要做什么，否则谨慎使用git filter-branch, 因为无法安全的push, 原文如下：</p>
 
-<p>资深客户端开发工程师</p>
+<pre><code>WARNING! The rewritten history will have different object names for all the objects and will not converge with the original branch. You will not be able to easily push and distribute the rewritten branch on top of the original branch. Please do not use this command if you do not know the full implications, and avoid using it anyway, if a simple single commit would suffice to fix your problem. (See the "RECOVERING FROM UPSTREAM REBASE" section in git-rebase(1) for further information about rewriting published history.)
+
+Always verify that the rewritten version is correct: The original refs, if different from the rewritten ones, will be stored in the namespace refs/original/.
+</code></pre>
+
+<h2>参考资料</h2>
+
+<ul>
+<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2">Git 工具 - 重写历史</a></li>
+<li><a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a></li>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a></li>
+</ul>
+
 </div>
 
 
@@ -121,8 +162,14 @@
 
 
 
-<time class='entry-date' datetime='2015-11-27T14:36:21+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:36 pm</span></time>
+<time class='entry-date' datetime='2016-01-01T18:27:46+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>6:27 pm</span></time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/gong-ju/'>工具</a>
+  
+</span>
 
 
     </p>
@@ -136,10 +183,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/" title="Previous Post: 日常积累的开发技巧（一）">&laquo; 日常积累的开发技巧（一）</a>
+        <a class="basic-alignment left" href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/" title="Previous Post: 如何通过代码修改Xcode工程文件">&laquo; 如何通过代码修改Xcode工程文件</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/11/27/rang-ren-beng-kui-de-bug/" title="Next Post: 让人崩溃的bug">让人崩溃的bug &raquo;</a>
       
     </p>
   </footer>
@@ -150,7 +195,7 @@
 <section>
     <h1>Comments</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-<div class="ds-thread" data-title="我的工作经历"></div>
+<div class="ds-thread" data-title="修改git Commit历史"></div>
 <script type="text/javascript">
     var duoshuoQuery = {short_name:"agger0207"};
     (function() {

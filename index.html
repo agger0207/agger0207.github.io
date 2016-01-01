@@ -9,8 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="例如，一个需求是，之前递交的时候本地设置的email地址都错了，那么需要把之前所有的提交的电子邮件地址改过来，也就是批量修改commit历史，而git commit --amend命令只能修改最近的一次提交，这个时候就可以用到git filter-branch命令了，示例如下： $ git &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,97 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/xiu-gai-git-commitli-shi/">修改git Commit历史</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-01T18:27:46+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>6:27 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/01/xiu-gai-git-commitli-shi/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>例如，一个需求是，之前递交的时候本地设置的email地址都错了，那么需要把之前所有的提交的电子邮件地址改过来，也就是批量修改commit历史，而<code>git commit --amend</code>命令只能修改最近的一次提交，这个时候就可以用到git filter-branch命令了，示例如下：</p>
+
+<pre><code>$ git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+        then
+                GIT_AUTHOR_NAME="agger0207";
+                GIT_AUTHOR_EMAIL="agger0207@users.noreply.github.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+</code></pre>
+
+<p>如果之前执行过一次，会报错，说无法backup之类，原因是会再一次rewrite .git目录下的<code>refs/original/</code>, 这时加个参数<code>-f</code>强制执行即可：</p>
+
+<pre><code>git filter-branch -f --commit-filter '
+            if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+            then
+                    GIT_AUTHOR_NAME="agger0207";
+                    GIT_AUTHOR_EMAIL="agger0207@users.noreply.github.com";
+                    git commit-tree "$@";
+            else
+                    git commit-tree "$@";
+            fi' HEAD
+</code></pre>
+
+<p>同理，也可以删除某个作者或者email地址对应的历史commit:</p>
+
+<pre><code>git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+        then
+                skip_commit "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+</code></pre>
+
+<p>如何判断某个提交是从哪个地址或者作者提交呢? github在自己的帮助文档<a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a>里明确提到，在commit对应的url下加上.patch就会显示递交的作者信息了，例如, 通过url<code>https://github.com/octocat/octocat.github.io/commit/67c0afc1da354d8571f51b6f0af8f2794117fd10.patch</code>就可以得到<code>octocat.github.io</code>这个rep的commit<code>67c0afc1da354d8571f51b6f0af8f2794117fd10</code>的提交信息如下:</p>
+
+<pre><code>From 67c0afc1da354d8571f51b6f0af8f2794117fd10 Mon Sep 17 00:00:00 2001
+From: The Octocat &lt;octocat@nowhere.com&gt;
+Date: Sun, 27 Apr 2014 15:36:39 +0530
+Subject: [PATCH] updated index for better welcome message
+</code></pre>
+
+<p>我实践的时候，前面进行的都很顺利，但是提交的时候<code>git push</code>会报错，git会认为有分支的发散，但是我试着先<code>git pull</code>在<code>git push</code>的话发现后来是多了很多commit而不是直接覆盖掉原有的commit; 后来尝试直接<code>git push -f</code>强制覆盖，貌似可以解决问题。然后看参考链接中的<a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a>也提到，除非清楚的知道要做什么，否则谨慎使用git filter-branch, 因为无法安全的push, 原文如下：</p>
+
+<pre><code>WARNING! The rewritten history will have different object names for all the objects and will not converge with the original branch. You will not be able to easily push and distribute the rewritten branch on top of the original branch. Please do not use this command if you do not know the full implications, and avoid using it anyway, if a simple single commit would suffice to fix your problem. (See the "RECOVERING FROM UPSTREAM REBASE" section in git-rebase(1) for further information about rewriting published history.)
+
+Always verify that the rewritten version is correct: The original refs, if different from the rewritten ones, will be stored in the namespace refs/original/.
+</code></pre>
+
+<h2>参考资料</h2>
+
+<ul>
+<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2">Git 工具 - 重写历史</a></li>
+<li><a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a></li>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -804,46 +894,6 @@ $ ls -a
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T16:05:03+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>4:05 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>值得一看的iOS开发者博客:</p>
-
-<p>推荐的文章：</p>
-
-<p>InfoQ: 可以订阅一下</p>
-
-<p>CocoaChina: 文章多，但是好文章不够，可以订阅一下；</p>
-
-<p>订阅的一些微信公众号：</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -864,6 +914,10 @@ $ ls -a
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/xiu-gai-git-commitli-shi/">修改git Commit历史</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/">如何通过代码修改Xcode工程文件</a>
@@ -899,10 +953,6 @@ $ ls -a
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
       </li>
     
   </ul>

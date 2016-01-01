@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决： 如下图： 出错的时候， &hellip;">
+  <meta name="description" content="如果在使用Storyboard中出现如下警告： warning: Unsupported Configuration: Scene is unreachable due to lack of entry points and does not have an identifier for &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/">Scene Is Unreachable Due to Lack of Entry Points and Does Not Have an Identifier for Runtime Access</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:24:38+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:24 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果在使用Storyboard中出现如下警告：</p>
+
+<pre><code>warning: Unsupported Configuration: Scene is unreachable due to lack of entry points and does not have an identifier for runtime access via -instantiateViewControllerWithIdentifier:
+</code></pre>
+
+<p>那么说明为了访问该Scene需要给其设置一个StoryboardID,一般设置一个Storyboard ID即可.</p>
+
+<p>如下图:
+<img src="/images/StoryboardID.jpg" alt="img" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -496,163 +536,6 @@ OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/">YYModel源码略读</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T20:13:42+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>8:13 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
-
-<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
-
-<p>例如其中的YYClassInfo类的定义如下：</p>
-
-<pre><code>@interface YYClassInfo : NSObject
-
-@property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, assign, readonly) Class superCls;
-@property (nonatomic, assign, readonly) Class metaCls;
-@property (nonatomic, assign, readonly) BOOL isMeta;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
-
-@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
-@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
-@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
-
-+ (instancetype)classInfoWithClass:(Class)cls;
-
-+ (instancetype)classInfoWithClassName:(NSString *)className;
-
-@end
-</code></pre>
-
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<strong>class_copyPropertyList</strong>， <strong>class_copyMethodList</strong>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
-
-<p>另，使用<strong>class_copyPropertyList</strong>时候需要注意，<strong>class_copyPropertyList</strong>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
-
-<pre><code>Any properties declared by superclasses are not included. 
-</code></pre>
-
-<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
-
-<pre><code>// Create all property metas.
-NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-YYClassInfo *curClassInfo = classInfo;
-while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
-    for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
-        if (!propertyInfo.name) continue;
-        if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
-        if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
-        _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
-                                                                propertyInfo:propertyInfo
-                                                                     generic:genericMapper[propertyInfo.name]];
-        if (!meta || !meta-&gt;_name) continue;
-        if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
-        if (allPropertyMetas[meta-&gt;_name]) continue;
-        allPropertyMetas[meta-&gt;_name] = meta;
-    }
-    curClassInfo = curClassInfo.superClassInfo;
-}
-if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
-</code></pre>
-
-<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
-
-<p>另，在YYClassPropertyInfo的- (instancetype)initWithProperty:(objc_property_t)property方法中可以看到下面的代码：</p>
-
-<pre><code>objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-for (unsigned int i = 0; i &lt; attrCount; i++) {
-    switch (attrs[i].name[0]) {
-        case 'T': { // Type encoding
-            if (attrs[i].value) {
-                _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                type = YYEncodingGetType(attrs[i].value);
-                if (type &amp; YYEncodingTypeObject) {
-                    size_t len = strlen(attrs[i].value);
-                    if (len &gt; 3) {
-                        char name[len - 2];
-                        name[len - 3] = '\0';
-                        memcpy(name, attrs[i].value + 2, len - 3);
-                        _cls = objc_getClass(name);
-                    }
-                }
-            }
-        } break;
-        case 'V': { // Instance variable
-            if (attrs[i].value) {
-                _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'R': {
-            type |= YYEncodingTypePropertyReadonly;
-        } break;
-        case 'C': {
-            type |= YYEncodingTypePropertyCopy;
-        } break;
-        case '&amp;': {
-            type |= YYEncodingTypePropertyRetain;
-        } break;
-        case 'N': {
-            type |= YYEncodingTypePropertyNonatomic;
-        } break;
-        case 'D': {
-            type |= YYEncodingTypePropertyDynamic;
-        } break;
-        case 'W': {
-            type |= YYEncodingTypePropertyWeak;
-        } break;
-        case 'P': {
-            type |= YYEncodingTypePropertyGarbage;
-        } break;
-        case 'G': {
-            type |= YYEncodingTypePropertyCustomGetter;
-            if (attrs[i].value) {
-                _getter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'S': {
-            type |= YYEncodingTypePropertyCustomSetter;
-            if (attrs[i].value) {
-                _setter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        default:
-            break;
-    }
-}
-</code></pre>
-
-<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties</a></p>
-
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/6">&larr; Older</a>
@@ -675,6 +558,10 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/xiu-gai-git-commitli-shi/">修改git Commit历史</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/">如何通过代码修改Xcode工程文件</a>
@@ -710,10 +597,6 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
       </li>
     
   </ul>

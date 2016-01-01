@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi/</loc>
+    <lastmod>2016-01-01T18:27:46+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/</loc>
     <lastmod>2016-01-01T14:22:42+08:00</lastmod>
   </url>
@@ -220,6 +224,9 @@
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/categories/jie-jue-wen-ti/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/categories/git/</loc>
   </url>
   <url>
     <loc>http://agger0207.github.io/posts/2/</loc>

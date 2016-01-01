@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T18:23:04+08:00</updated>
+  <updated>2016-01-01T18:51:21+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[修改git Commit历史]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi/"/>
+    <updated>2016-01-01T18:27:46+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/xiu-gai-git-commitli-shi</id>
+    <content type="html"><![CDATA[<p>例如，一个需求是，之前递交的时候本地设置的email地址都错了，那么需要把之前所有的提交的电子邮件地址改过来，也就是批量修改commit历史，而<code>git commit --amend</code>命令只能修改最近的一次提交，这个时候就可以用到git filter-branch命令了，示例如下：</p>
+
+<pre><code>$ git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+        then
+                GIT_AUTHOR_NAME="agger0207";
+                GIT_AUTHOR_EMAIL="agger0207@users.noreply.github.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+</code></pre>
+
+<p>如果之前执行过一次，会报错，说无法backup之类，原因是会再一次rewrite .git目录下的<code>refs/original/</code>, 这时加个参数<code>-f</code>强制执行即可：</p>
+
+<pre><code>git filter-branch -f --commit-filter '
+            if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+            then
+                    GIT_AUTHOR_NAME="agger0207";
+                    GIT_AUTHOR_EMAIL="agger0207@users.noreply.github.com";
+                    git commit-tree "$@";
+            else
+                    git commit-tree "$@";
+            fi' HEAD
+</code></pre>
+
+<p>同理，也可以删除某个作者或者email地址对应的历史commit:</p>
+
+<pre><code>git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "xxx@xxx.com" ];
+        then
+                skip_commit "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+</code></pre>
+
+<p>如何判断某个提交是从哪个地址或者作者提交呢? github在自己的帮助文档<a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a>里明确提到，在commit对应的url下加上.patch就会显示递交的作者信息了，例如, 通过url<code>https://github.com/octocat/octocat.github.io/commit/67c0afc1da354d8571f51b6f0af8f2794117fd10.patch</code>就可以得到<code>octocat.github.io</code>这个rep的commit<code>67c0afc1da354d8571f51b6f0af8f2794117fd10</code>的提交信息如下:</p>
+
+<pre><code>From 67c0afc1da354d8571f51b6f0af8f2794117fd10 Mon Sep 17 00:00:00 2001
+From: The Octocat &lt;octocat@nowhere.com&gt;
+Date: Sun, 27 Apr 2014 15:36:39 +0530
+Subject: [PATCH] updated index for better welcome message
+</code></pre>
+
+<p>我实践的时候，前面进行的都很顺利，但是提交的时候<code>git push</code>会报错，git会认为有分支的发散，但是我试着先<code>git pull</code>在<code>git push</code>的话发现后来是多了很多commit而不是直接覆盖掉原有的commit; 后来尝试直接<code>git push -f</code>强制覆盖，貌似可以解决问题。然后看参考链接中的<a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a>也提到，除非清楚的知道要做什么，否则谨慎使用git filter-branch, 因为无法安全的push, 原文如下：</p>
+
+<pre><code>WARNING! The rewritten history will have different object names for all the objects and will not converge with the original branch. You will not be able to easily push and distribute the rewritten branch on top of the original branch. Please do not use this command if you do not know the full implications, and avoid using it anyway, if a simple single commit would suffice to fix your problem. (See the "RECOVERING FROM UPSTREAM REBASE" section in git-rebase(1) for further information about rewriting published history.)
+
+Always verify that the rewritten version is correct: The original refs, if different from the rewritten ones, will be stored in the namespace refs/original/.
+</code></pre>
+
+<h2>参考资料</h2>
+
+<ul>
+<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2">Git 工具 - 重写历史</a></li>
+<li><a href="https://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git-filter-branch(1) Manual Page</a></li>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">check the email address used for a commit</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何通过代码修改Xcode工程文件]]></title>
@@ -909,93 +977,6 @@ github地址：<a href="https://github.com/callmeed/pop-playground">https://gith
 该作者平时积累的一些第三方库和控件使用方法.</p>
 
 <p>暂时只留意到这些，后续有找到新的会陆续添加；这些Sample Code对于快速理解新特性或者一些开源库还是很有帮助的，当然，首先还是要看下苹果官方或者第三方开源库作者自己提供的Demo啦。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开源库 之 网络请求]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/"/>
-    <updated>2015-11-27T14:31:27+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu</id>
-    <content type="html"><![CDATA[<p>iOS一般都是HTTP/HTTPS网络请求，相应的有多个开源库来支持iOS客户端HTTP请求; 比较知名和常用的主要有如下几个：</p>
-
-<h2>一 ASIHttpRequest</h2>
-
-<p>比较老的开源网络库，现在已经不再维护了；ASIHttpRequest基于CFNetworking而不是NSURLConnection, 所以性能会更好；功能上会比AFNetworking更强大，但是使用起来不如AFNetworking那么方便，而且对于新的iOS版本没有提供支持；现在应该还有一些比较老的项目仍然在使用。</p>
-
-<p>项目地址：<a href="https://github.com/pokeb/asi-http-request">https://github.com/pokeb/asi-http-request</a></p>
-
-<p>ASI VS AFNetworking是之前大家经常讨论的话题，而且确实在支持的功能上也有一些不同，比如ASI支持同步请求，支持自定义Proxy设置(AFNetworking在iOS 7.0之前不支持),不过随着ASI不再维护，慢慢的也就没有这个比较了，可以参看下面的文章了解二者的差异.</p>
-
-<p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a></p>
-
-<h2>二 AFNetworking</h2>
-
-<p>github地址：<a href="https://github.com/AFNetworking/AFNetworking">https://github.com/AFNetworking/AFNetworking</a></p>
-
-<p>现在知名度最高、应用最广泛的开源网络库，使用起来非常简单；接口清晰明了；此外，还有很多在此基础上做的扩展，后面提到的RestKit和YTKNetworking其实下面都是在用AFNetworking做请求的发送；事实上，现存的绝大多数APP中，如果仅仅是支持HTTP协议的话，除了自己用苹果的API(NSURLSession或者NSURLConnection)外，基本就是用AFNetworking了.</p>
-
-<p>AFNetworking现在到了3.0版本，3.0版本去除了NSURLConnection那套接口，只有NSURLSession的接口，只支持iOS 7以上；
-另外，作者还开发了Swift版本<a href="https://github.com/Alamofire/Alamofire">Alamofire</a>. 可以查看RayWenderlich提供的教程<a href="http://www.raywenderlich.com/85080/beginning-alamofire-tutorial">alamofire-tutorial</a>或者该教程的翻译版本<a href="http://www.cocoachina.com/ios/20141202/10390.html">Alamofire网络库基础教程：使用 Alamofire 轻松实现 Swift 网络请求</a>获得更多信息.</p>
-
-<p>AFNetworking本身也是很值得学习的库，里面对于NSOperation的使用、网络请求相关的处理都很值得学习，这里有一篇关于AFNetworking源码解读的文章:<a href="http://blog.cnbang.net/tech/2320/">AFNetworking2.0源码解析</a>，不过并没有涉及到NSURLSession部分。
-另外，由于AFNetworking的作者Mattt Thompson本身是<a href="http://nshipster.com">NSHipter</a>的发起人，所以也可以看作者自己写的介绍文章<a href="http://nshipster.cn/afnetworking-2/">AFNetworking 2.0</a>，体会架构的优化与了解功能的变更. 另附<a href="http://nshipster.cn/">NSHipter中文版本</a>.</p>
-
-<p>各个大版本的变迁：
-<a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-3.0-Migration-Guide">AFNetworking 3.0 Migration Guide</a></p>
-
-<p><a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-2.0-Migration-Guide">AFNetworking 2.0 Migration Guide</a></p>
-
-<h2>三 RestKit</h2>
-
-<p>项目地址：<a href="https://github.com/RestKit/RestKit">https://github.com/RestKit/RestKit</a></p>
-
-<p>RestKit is a modern Objective-C framework for implementing RESTful web services clients on iOS and Mac OS X. It provides a powerful object mapping engine that seamlessly integrates with Core Data and a simple set of networking primitives for mapping HTTP requests and responses built on top of AFNetworking.</p>
-
-<p>RestKit主要是在网络请求的发送之外额外提供了对象映射的功能，可以将服务器返回的结果(无论是JSON还是XML)自动映射成为Model对象，并且集成了CoreData的支持；它利用RequestDescriptor和ResponseDescriptor来描述请求与Model的对应关系，这样对于配置好后的RKObjectManager, 可以自动的对请求的结果进行映射；所以其强大之处就在于这个对象的映射功能，避免繁杂的JSON映射啊什么的.</p>
-
-<p>不过好像RestKit在国内的应用不多，我个人觉得是有这么几个原因：
-1 RestKit底下其实还是用AFNetworking来发送请求，而且还使用的是老的AFNetworking 1.x的版本；由于其与AFNetworking耦合比较紧，替换成为AFNetworking 2.x以上版本非常麻烦；RestKit的开发者本来计划是要升级到AFNetworking 2.x的，不过弄了一两年也没搞完，现在的方向貌似是直接抛弃AFNetworking，直接自己通过NSURLSession来发送网络请求，但是具体啥时候能够做完就不知道了；
-2 RestKit的设计、实现和使用都偏复杂，很多地方都会看到对这一点的抱怨；对于中小型应用，AFNetworking + Mantle 完全可以做掉 RestKit的工作，还更简单；想单独的替换/升级Mantle或者AFNetworking都方便很多；
-3 国内好像CoreData用得应该不太多，RestKit强大的ObjectMapping+CoreData的集成没有多少用武之地.
-4 中小型项目用RestKit嫌麻烦，大型项目要用RestKit倒是好，但是一般这种级别的项目或者公司都会希望能够集成自己的私有TCP协议，这个要集成起来也够头疼.</p>
-
-<p>我个人也不是太喜欢RestKit, 还是AFNetworking + Mantle会更简单，即使要支持Object Mapping, 在一些JSON&lt;>Model转换库的基础上做做也还好，毕竟，大多数时候，不需要考虑一些奇怪的JSON返回内容，可以约束服务器开发人员返回更友好更易快速解析的JSON内容，而不是一些不规范的、异构的内容.</p>
-
-<h2>四 MKNetworkKit</h2>
-
-<p>Github地址：<a href="https://github.com/MugunthKumar/MKNetworkKit">https://github.com/MugunthKumar/MKNetworkKit</a>
-介绍文章：<a href="http://www.cnblogs.com/scorpiozj/p/3222803.html">http://www.cnblogs.com/scorpiozj/p/3222803.html</a>
-License:MIT License</p>
-
-<p>主要特性：
-超轻量级
-整个应用共享单一队列
-正确的显示网络连接的标志
-Auto queue sizing 自动队列大小
-Auto caching 自动缓存
-Operation freezing 操作冻结
-Image Caching 图片缓存
-Performance 性能
-Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
-
-<p>个人感觉
-1 功能偏简单；库本身的设计上感觉没有什么特别的；主要就是封装了一个Operation和一个调度的Engine; Engine中涉及一些配置和调度；
-2 使用的时候需要自己去写MKNetworkEngine的子类; 当然，一个应用一般是访问同一个服务器，所以只需要在同一个Engine类中开放不同的API接口；每个接口里面去创建一个MKNetworkOperation;
-3 一般来说，不需要子类化MKNetworkOperation类
-4 创建MKNetworkOperation时参数要自己组装；所以实际使用的时候，还是需要在这之上封装一个网络层出来；
-5 坦白说，MKNetworkKit的代码风格都比较差，包括空行和空格什么的，可读性不那么好，没有其他几个知名库那样赏心悦目.</p>
-
-<h2>五 YTKNetwork</h2>
-
-<p>YTKNetwork 是猿题库 iOS 研发团队基于 AFNetworking 封装的 iOS 网络库，其实现了一套 High Level 的 API，提供了更高层次的网络访问抽象。
-项目地址: <a href="https://github.com/yuantiku/YTKNetwork">https://github.com/yuantiku/YTKNetwork</a></p>
-
-<p>总体还是基于AFNetworking 2.x的，做了一些上层封装，集成了Cache功能，让网络层请求写起来更加简单。我觉得大多数情况下，使用这个库足够了，方便又清晰.</p>
-
-<p>不过，我觉得实际使用的过程中，要是能够加上JSON-Model的映射功能，使用起来会更爽；另外，这套请求还是基于AFNetworking 2.x老的那套接口，也就是AFURLSessionManager那一套，底下还是NSURLConnection, 估计后面也会迁移到AFNetworking 3.x上使用NSURLSession吧！</p>
-
-<p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
 ]]></content>
   </entry>
   
