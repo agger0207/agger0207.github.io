@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T14:47:53+08:00</updated>
+  <updated>2016-01-01T15:11:57+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -155,6 +155,29 @@ $ ls -a
 <li><a href="http://stackoverflow.com/questions/19619280/octopress-pushing-error-to-github">Octopress pushing error to GitHub</a></li>
 </ul>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发 之 数据持久化存储]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/"/>
+    <updated>2015-12-10T15:17:31+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu</id>
+    <content type="html"><![CDATA[<p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
+
+<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
+[standardDefaults synchronize];
+每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
+
+<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
+
+<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
+
+<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
+</code></pre>
+
+<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
 ]]></content>
   </entry>
   
@@ -630,38 +653,6 @@ $ ls -a
     <updated>2015-11-30T15:16:54+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-dong-hua</id>
     <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/"/>
-    <updated>2015-11-30T00:00:00+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu</id>
-    <content type="html"><![CDATA[<hr />
-
-<p>layout: post
-title: &ldquo;iOS开发 之 数据持久化存储&rdquo;
-date: 2015-11-30 15:17:31 +0800
-comments: true</p>
-
-<h2>categories: </h2>
-
-<p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
-
-<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
-[standardDefaults synchronize];
-每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
-
-<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
-
-<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
-
-<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
-</code></pre>
-
-<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
 ]]></content>
   </entry>
   

@@ -72,6 +72,38 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-30T16:02:44+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>4:02 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a></h1>
     
     
@@ -124,61 +156,6 @@
 
 
   <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T00:00:00+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>12:00 am</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><hr />
-
-<p>layout: post
-title: &ldquo;iOS开发 之 数据持久化存储&rdquo;
-date: 2015-11-30 15:17:31 +0800
-comments: true</p>
-
-<h2>categories: </h2>
-
-<p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
-
-<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
-[standardDefaults synchronize];
-每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
-
-<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
-
-<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
-
-<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
-</code></pre>
-
-<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
 </div>
   
   
@@ -428,6 +405,10 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
       </li>
     
@@ -445,10 +426,6 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a>
       </li>
     
   </ul>
