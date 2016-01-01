@@ -9,7 +9,9 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。 不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS &hellip;">
+  <meta name="description" content="这几天在ASO100的微信公众号上看到2015年App Store审核被拒的23个理由, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。 1 App中出现安卓字样；一般是活动页面；
+2 App中活动页面奖品中出现iPhone等；
+3 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +67,78 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/">App Store审核拒绝理由</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:28:17+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:28 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这几天在ASO100的微信公众号上看到<a href="%E5%9C%B0%E5%9D%80%E6%89%BE%E4%B8%8D%E5%88%B0">2015年App Store审核被拒的23个理由</a>, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。</p>
+
+<p>1 App中出现安卓字样；一般是活动页面；
+2 App中活动页面奖品中出现iPhone等；
+3 App中活动页面没有返回按钮；
+这个问题出现的原因是，活动页面一般使用H5来做，然后有的H5带了Header, 有的没有带；客户端通过URL参数来判断是否要加导航栏头部，然后万一运营上了个活动页面，自己没有带H5 Header, 配置又不正确的话，就悲剧了；
+4 应用内提供了检查更新机制；
+吐槽：话说尽管苹果审核指南明确规定了所有应用都应该通过AppStore更新，但其实很多应用都在设置页面提供了检查更新的机制，然后在2015年的某一天，突然这个就成为了被拒的理由了，即使同样的功能已经存在一年多了。。。。
+5 推荐其他应用
+别家的应用是一定不能推荐的，自家的应用不清楚，不过我看大家基本都在推，好像问题不太大。
+6 求好评
+具体不记得了，一般在设置页面放一栏是没啥问题的，但是好像某种弹出界面以比较强的提示要求给好评的话，会过不了审核
+7 彩票类栏目没有提供用户协议
+嗯，这个也是一个某个功能存在了很久，突然就因为这个被拒了。。。。
+8 提供用户注册功能的应用必须提供隐私协议
+同上，之前好好的过审，苹果艳照门之后就一定要提供隐私协议了
+9 社区模块没有提供举报功能
+吐槽：不说啥，社区水很深，据说社区里面的帖子里面要是有“安卓”字样都可能被拒
+10 在status bar上显示自己的信息
+吐槽：这个是听兄弟部门的哥们说的，以前大家都会在status bar上显示一些提示信息，比如说下载进度、同步进度或者active状态下收到的push消息等等，但是兄弟部门的哥们说iOS 9之后，不让加了，因为这个被拒了一次，据说是因为status bar上苹果自己要在那上面显示信息了。。。
+11 非用户创造的数据没有放在/tmp下也没有打上do not back up属性，会被拒，因为苹果认为只有用户创造的数据才允许被iCloud backup备份
+可以参见下面两个链接：
+<a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">https://developer.apple.com/library/ios/qa/qa1719/_index.html</a>
+<a href="https://developer.apple.com/icloud/documentation/data-storage/index.html">https://developer.apple.com/icloud/documentation/data-storage/index.html</a></p>
+
+<p>上次其他组因为这个原因被拒是因为下载的H5资源包放在Documents目录下没有加do not back up属性.</p>
+
+<p>12 H5资源包升级的时候卡住界面了&hellip;.
+其实是个bug, 不过也提醒我们，这种资源包升级的事情明显可以在审核过程中避免或者在测试过程中出现的，应该尽早处理掉.</p>
+
+<p>有些想不起来了，想起来了后面再加：）</p>
+
+<p>小结：
+1 审核期间运营上活动一定要注意沟通，一般运营都不明白审核规则，有些甚至上了活动之后自己都不会去测试；当然，有些公司会直接在后台做一些配置确保当前递交版本不会出现新的活动页面；
+2 可能因为网络原因导致出错的主要功能要在审核前格外注意.</p>
+
+<p>当然，你还可以在<a href="https://github.com/jcccn/Why-Reject">苹果审核拒绝理由</a> 下面看到更多奇葩理由。</p>
+
+<p>为了保证审核通过，还是要仔细研究苹果官方的审核指南，不过其实大家很多时候都没有严格按照审核指南来做，很多时候甚至是想一些办法来绕过审核的。苹果的审核由于是人工审核，有的时候也会有一些奇葩的事情发生，经常会出现多年不修改的功能，突然某个版本就过不了审核了；尤其是在苹果发布新版本的Xcode，iOS或者出了一些隐私泄漏的大事的时候，审核都会收紧。</p>
+
+<p>建议新产品第一次上线前，有专人能够根据审核规则进行一次详细的Review, 这样大家能够形成共识，避免下次出现问题, 至少不会把未完成的功能加上去或者说出现“敬请期待”等等。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -655,70 +729,6 @@ dispatch_async(dispatch_get_main_queue(), {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/">每周文章选读 第三周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:19:24+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:19 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这周偷懒，随便选了些以前读过的老文章</p>
-
-<h2>一 <a href="http://www.raywenderlich.com/46988/ios-design-patterns">iOS Design Patterns</a></h2>
-
-<p>raywenderlich出品的文章都很不错，主要就是介绍iOS开发中常用的那些设计模式，以及在什么场景下使用；内容充实，解释清楚，而且结合了iOS开发自身的特点。</p>
-
-<h2>二 <a href="http://www.raywenderlich.com/73602/dynamic-table-view-cell-height-auto-layout">Dynamic Table View Cell Height and Auto Layout</a></h2>
-
-<p>也是raywenderlich出品的文章， 介绍如何利用Auto Layout来动态调整UITableViewCell的高度, 核心就是先创建一个Cell之后，通过AutoLayout自动计算出高度来。话说动态调整TableViewCell的高度，一直都是个挺火的topic。我记得sunnyxxx有专门做个第三方库来快速的动态调整UITableViewCell的高度的，改天挑出来一起放在这里。</p>
-
-<p>说点感触，看过好些raywenderlich的文章，确实写得很详细啊，感觉那些作者花了不少时间在上面。</p>
-
-<h2>三 <a href="https://www.mikeash.com/pyblog/friday-qa-2009-05-22-objective-c-class-loading-and-initialization.html">Objective-C Class Loading and Initialization</a></h2>
-
-<p>讲+load和+initialize这两个方法的，一些文章里面提到必问的面试题里面就有这个题，不过我好像没问过别人这个问题，也没被人问过，囧&hellip;</p>
-
-<h2>四 <a href="http://onevcat.com/2015/08/watchos2/">WWDC15 Session笔记 - 30 分钟开发一个简单的 watchOS 2 app</a></h2>
-
-<p>30分钟根本不够好吗？而且遇到个坑爹的问题，偶尔会提示说Operation Could not be completed&hellip;.</p>
-
-<h2>五 <a href="http://onevcat.com/2014/07/ios-ui-unique/?mc_cid=023329096e&amp;mc_eid=5b294811da">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></h2>
-
-<p>喵神的WWDC Session笔记系列都很值得看。。。。</p>
-
-<h2>六 <a href="http://www.cocoachina.com/cms/wap.php?action=article&amp;id=9717">理解iOS 8中的Self Sizing Cells和Dynamic Type</a></h2>
-
-<p>动态计算UITableViewCell的行高，仅支持iOS 8以及以上</p>
-
-<h2>七 <a href="http://nshipster.cn/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a></h2>
-
-<p>Interface Builder相关.</p>
-
-<p>其实，今天好多内容都是和界面以及Interface Builder相关的。。。。不过我觉得，用代码写界面和用IB搭建界面都得非常熟练才比较有意思</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/6">&larr; Older</a>
@@ -741,6 +751,10 @@ dispatch_async(dispatch_get_main_queue(), {
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能优化</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/01/xiu-gai-git-commitli-shi/">修改git Commit历史</a>
@@ -776,10 +790,6 @@ dispatch_async(dispatch_get_main_queue(), {
     
       <li class="post">
         <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
       </li>
     
   </ul>

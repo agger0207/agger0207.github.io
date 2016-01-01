@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:56:03+08:00</updated>
+  <updated>2016-01-01T23:04:12+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS界面性能优化]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/"/>
+    <updated>2016-01-01T20:17:14+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/iosjie-mian-xing-neng-you-hua</id>
+    <content type="html"><![CDATA[<h2>TODO</h2>
+
+<ul>
+<li>列表3</li>
+<li>列表3</li>
+<li>列表3</li>
+</ul>
+
+
+<p>博客的列表排版似乎存在问题，很丑.</p>
+
+<ol>
+<li>排版1</li>
+<li>排版2</li>
+<li><p>排版3</p></li>
+<li><p>列表3</p></li>
+<li>列表3</li>
+<li>列表3</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[修改git Commit历史]]></title>
@@ -841,15 +869,6 @@ Aborting
     <link href="http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/"/>
     <updated>2015-11-28T14:27:11+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CocoaPods基本使用]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/28/cocoapodsji-ben-shi-yong/"/>
-    <updated>2015-11-28T14:26:42+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/28/cocoapodsji-ben-shi-yong</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
