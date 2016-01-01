@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 其它 | 穷小子Agger的技术博客]]></title>
+  <link href="http://agger0207.github.io/blog/categories/qi-ta/atom.xml" rel="self"/>
+  <link href="http://agger0207.github.io/"/>
+  <updated>2016-01-01T19:38:49+08:00</updated>
+  <id>http://agger0207.github.io/</id>
+  <author>
+    <name><![CDATA[Agger]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My First Post for Testing Octopress]]></title>
+    <link href="http://agger0207.github.io/blog/2015/10/31/my-first-post-for-testing-octopresee/"/>
+    <updated>2015-10-31T15:46:15+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/10/31/my-first-post-for-testing-octopresee</id>
+    <content type="html"><![CDATA[<p>It is a test file</p>
+
+<p>这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。</p>
+
+<p>主要参考教程是<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>, 另外blog的一些配置参考了<a href="http://southpeak.github.io/">南峰子的技术博客</a>, 这也是我非常推荐的一个iOS相关的技术博客，后续我会逐步完善自己的blog内容，例如样式排版什么的.</p>
+
+<p>随便贴个代码试试看:</p>
+
+<pre><code class="objective-c">    + (NSArray *)getPropertyList:(Class)theClass {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+
+        unsigned int outCount, i;
+        objc_property_t *properties = class_copyPropertyList(theClass, &amp;outCount);
+        for (i = 0; i &lt; outCount; i++) {
+
+            objc_property_t property = properties[i];
+            NSString *propertyNameString = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+            NSString *propertyAttributeString = [[NSString alloc] initWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+
+            NSMutableString *filedTypeString = [NSMutableString stringWithString:propertyAttributeString];
+
+            NSRange range = [filedTypeString rangeOfString:@","];
+            filedTypeString = (NSMutableString *)[filedTypeString substringToIndex:range.location];
+
+            [dic setObject:filedTypeString forKey:propertyNameString];
+        }
+
+        return [dic allKeys];
+    }
+</code></pre>
+
+<p>参考资料：</p>
+
+<ol>
+<li><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a></li>
+<li><a href="http://southpeak.github.io/">南峰子的技术博客</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:05:56+08:00</updated>
+  <updated>2016-01-01T19:38:49+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -133,43 +133,55 @@ Always verify that the rewritten version is correct: The original refs, if diffe
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Cocoa新的依赖管理工具 Carthage]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/"/>
-    <updated>2015-11-27T14:27:51+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage</id>
-    <content type="html"><![CDATA[<p>之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。</p>
+    <title type="html"><![CDATA[常用Git命令]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/05/chang-yong-gitming-ling/"/>
+    <updated>2015-12-05T14:26:30+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/05/chang-yong-gitming-ling</id>
+    <content type="html"><![CDATA[<h2>基本操作</h2>
 
-<p>不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS 8以及以后.</p>
+<p>git clone</p>
 
-<pre><code>Note that Carthage only supports dynamic frameworks, which are only available on iOS 8 or later (or any version of OS X).
+<p>git checkout</p>
+
+<p>git push</p>
+
+<p>git pull</p>
+
+<p>git commit</p>
+
+<p>git add</p>
+
+<p>git branch</p>
+
+<h2>分支相关操作</h2>
+
+<h2>问题处理</h2>
+
+<p>1 切换到另一分支例如运行命令 <strong>git checkout develop</strong> 时提示：</p>
+
+<pre><code>error: The following untracked working tree files would be overwritten by checkout:
+...
+Please move or remove them before you can switch branches.
+Aborting
 </code></pre>
 
-<p>github地址：</p>
+<p>错误原因很清楚了，有untracked的文件未处理，如果这些文件是需要提交的，那么git commit后再切换分支;如果这些改动可能本来就不要的；那么直接执行下面命令先清理掉即可：</p>
 
-<p><a href="https://github.com/Carthage/Carthage">https://github.com/Carthage/Carthage</a></p>
+<pre><code>git clean -d -f
+</code></pre>
 
-<p>由于自己主要还是在用Cocoapods和git submodule，所以还是推荐两篇文章自己去看吧，也算是给自己的一个备忘:</p>
+<p>-d参数的含义是删除untracked目录与文件;-f含义是force, 强制执行。</p>
 
-<p><a href="http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager">Carthage：Xcode项目的GitHub依赖管理器</a>
-<a href="http://www.isaced.com/post-265.html">Cocoa 新的依赖管理工具：Carthage</a></p>
+<p>然后再执行 <strong>git checkout develop</strong> 就没问题了.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Nvm安装node后bash仍然提示找不到的问题]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/"/>
-    <updated>2015-11-20T19:57:05+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti</id>
-    <content type="html"><![CDATA[<p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
-
-<p>后来通过下面的命令解决了这个问题：</p>
-
-<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
-</code></pre>
-
-<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
-
-<p>用homebrew直接安装的话没这个问题。</p>
+    <title type="html"><![CDATA[Markdown编辑技巧]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/markdownbian-ji-ji-qiao/"/>
+    <updated>2015-11-30T14:37:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/markdownbian-ji-ji-qiao</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   

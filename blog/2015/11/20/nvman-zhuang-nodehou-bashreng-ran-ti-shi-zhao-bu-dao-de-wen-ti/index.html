@@ -87,14 +87,14 @@
   </header>
 
 
-<div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
+<div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<code>nvm which node</code>命令查了下，貌似通过nvm安装的node在路径<code>/Users/username/.nvm/versions/node/v4.2.1/bin/node</code>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
 
 <p>后来通过下面的命令解决了这个问题：</p>
 
 <pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
 </code></pre>
 
-<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
+<p>实际就是创建了一个到<code>/usr/local/bin/node</code>的软连接 。</p>
 
 <p>用homebrew直接安装的话没这个问题。</p>
 </div>
@@ -117,7 +117,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/gong-ju/'>工具</a>
+    <a class='category' href='/blog/categories/jing-yan-jiao-xun/'>经验教训</a>
   
 </span>
 
@@ -198,7 +198,15 @@
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
       </li>
     
       <li class="post">
@@ -207,14 +215,6 @@
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
       </li>
     
   </ul>

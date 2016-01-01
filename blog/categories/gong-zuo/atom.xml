@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工作 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-zuo/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:05:56+08:00</updated>
+  <updated>2016-01-01T19:38:49+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -33,8 +33,12 @@
 
 <p>Done.</p>
 
-<p>参考资料：<br/>
-1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
+<h2>参考资料</h2>
+
+<ol>
+<li><a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></li>
+</ol>
+
 ]]></content>
   </entry>
   

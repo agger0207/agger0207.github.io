@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, &hellip;">
+  <meta name="description" content="主要区别： 在ARC开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -87,9 +87,21 @@
   </header>
 
 
-<div class="entry-content"><p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
+<div class="entry-content"><p>主要区别：</p>
 
-<p>详细可以参见唐巧的文章</p>
+<ol>
+<li>在ARC开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</li>
+<li><p>在ARC下<code>__block id x</code>是会retain 对象x的，而MRC下这样写不会retain x, 所以MRC下<strong>block关键字可以用于打破block使用时的循环引用，而ARC下还是要用</strong>weak, 原文如下：</p>
+
+<pre><code> In manual reference counting mode, __block id x; has the effect of not retaining x. In ARC mode, __block id x; defaults to retaining x (just like all other values). To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x;. As the name __unsafe_unretained implies, however, having a non-retained variable is dangerous (because it can dangle) and is therefore discouraged. Two better options are to either use __weak (if you don’t need to support iOS 4 or OS X v10.6), or set the __block value to nil to break the retain cycle.
+</code></pre></li>
+</ol>
+
+
+<p>出自<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Mac Developer LibraryDeveloperSearch
+Transitioning to ARC Release Notes</a>.</p>
+
+<p>其余详细的对于block的剖析可以参见唐巧的文章:</p>
 
 <p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
 </div>
@@ -193,7 +205,15 @@
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
       </li>
     
       <li class="post">
@@ -202,14 +222,6 @@
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
       </li>
     
   </ul>

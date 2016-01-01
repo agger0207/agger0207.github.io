@@ -96,126 +96,165 @@
 
 <p>例如其中的YYClassInfo类的定义如下：</p>
 
-<pre><code>@interface YYClassInfo : NSObject
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="k">@interface</span> <span class="nc">YYClassInfo</span> : <span class="bp">NSObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">Class</span> <span class="n">cls</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">Class</span> <span class="n">superCls</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">Class</span> <span class="n">metaCls</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">isMeta</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="n">YYClassInfo</span> <span class="o">*</span><span class="n">superClassInfo</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">ivarInfos</span><span class="p">;</span>     <span class="c1">///&lt; key:NSString(ivar),     value:YYClassIvarInfo</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">methodInfos</span><span class="p">;</span>   <span class="c1">///&lt; key:NSString(selector), value:YYClassMethodInfo</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">propertyInfos</span><span class="p">;</span> <span class="c1">///&lt; key:NSString(property), value:YYClassPropertyInfo</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">classInfoWithClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">cls</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">classInfoWithClassName:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">className</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
-@property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, assign, readonly) Class superCls;
-@property (nonatomic, assign, readonly) Class metaCls;
-@property (nonatomic, assign, readonly) BOOL isMeta;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) YYClassInfo *superClassInfo;
 
-@property (nonatomic, strong, readonly) NSDictionary *ivarInfos;     ///&lt; key:NSString(ivar),     value:YYClassIvarInfo
-@property (nonatomic, strong, readonly) NSDictionary *methodInfos;   ///&lt; key:NSString(selector), value:YYClassMethodInfo
-@property (nonatomic, strong, readonly) NSDictionary *propertyInfos; ///&lt; key:NSString(property), value:YYClassPropertyInfo
+<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<code>class_copyPropertyList</code>， <code>class_copyMethodList</code>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
 
-+ (instancetype)classInfoWithClass:(Class)cls;
-
-+ (instancetype)classInfoWithClassName:(NSString *)className;
-
-@end
-</code></pre>
-
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<strong>class_copyPropertyList</strong>， <strong>class_copyMethodList</strong>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
-
-<p>另，使用<strong>class_copyPropertyList</strong>时候需要注意，<strong>class_copyPropertyList</strong>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
+<p>另，使用<code>class_copyPropertyList</code>时候需要注意，<code>class_copyPropertyList</code>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
 
 <pre><code>Any properties declared by superclasses are not included. 
 </code></pre>
 
 <p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
 
-<pre><code>// Create all property metas.
-NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-YYClassInfo *curClassInfo = classInfo;
-while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
-    for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
-        if (!propertyInfo.name) continue;
-        if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;
-        if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;
-        _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo
-                                                                propertyInfo:propertyInfo
-                                                                     generic:genericMapper[propertyInfo.name]];
-        if (!meta || !meta-&gt;_name) continue;
-        if (!meta-&gt;_getter &amp;&amp; !meta-&gt;_setter) continue;
-        if (allPropertyMetas[meta-&gt;_name]) continue;
-        allPropertyMetas[meta-&gt;_name] = meta;
-    }
-    curClassInfo = curClassInfo.superClassInfo;
-}
-if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'>  <span class="c1">// Create all property metas.</span>
+</span><span class='line'>  <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">allPropertyMetas</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableDictionary</span> <span class="n">new</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">YYClassInfo</span> <span class="o">*</span><span class="n">curClassInfo</span> <span class="o">=</span> <span class="n">classInfo</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="n">curClassInfo</span> <span class="o">&amp;&amp;</span> <span class="n">curClassInfo</span><span class="p">.</span><span class="n">superCls</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// recursive parse super class, but ignore root class (NSObject/NSProxy)</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">YYClassPropertyInfo</span> <span class="o">*</span><span class="n">propertyInfo</span> <span class="k">in</span> <span class="n">curClassInfo</span><span class="p">.</span><span class="n">propertyInfos</span><span class="p">.</span><span class="n">allValues</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">blacklist</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">blacklist</span> <span class="nl">containsObject</span><span class="p">:</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">whitelist</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">[</span><span class="n">whitelist</span> <span class="nl">containsObject</span><span class="p">:</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">_YYModelPropertyMeta</span> <span class="o">*</span><span class="n">meta</span> <span class="o">=</span> <span class="p">[</span><span class="n">_YYModelPropertyMeta</span> <span class="nl">metaWithClassInfo</span><span class="p">:</span><span class="n">classInfo</span>
+</span><span class='line'>                                                                  <span class="nl">propertyInfo</span><span class="p">:</span><span class="n">propertyInfo</span>
+</span><span class='line'>                                                                       <span class="nl">generic</span><span class="p">:</span><span class="n">genericMapper</span><span class="p">[</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">]];</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">meta</span> <span class="o">||</span> <span class="o">!</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_name</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_getter</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_setter</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">allPropertyMetas</span><span class="p">[</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_name</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">allPropertyMetas</span><span class="p">[</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">curClassInfo</span> <span class="o">=</span> <span class="n">curClassInfo</span><span class="p">.</span><span class="n">superClassInfo</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">allPropertyMetas</span><span class="p">.</span><span class="n">count</span><span class="p">)</span> <span class="n">_allPropertyMetas</span> <span class="o">=</span> <span class="n">allPropertyMetas</span><span class="p">.</span><span class="n">allValues</span><span class="p">.</span><span class="k">copy</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
 
 <p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
 
-<p>另，在YYClassPropertyInfo的- (instancetype)initWithProperty:(objc_property_t)property方法中可以看到下面的代码：</p>
+<p>另，在<code>YYClassPropertyInfo</code>的<code>- (instancetype)initWithProperty:(objc_property_t)property</code>方法中可以看到下面的代码：</p>
 
-<pre><code>objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-for (unsigned int i = 0; i &lt; attrCount; i++) {
-    switch (attrs[i].name[0]) {
-        case 'T': { // Type encoding
-            if (attrs[i].value) {
-                _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                type = YYEncodingGetType(attrs[i].value);
-                if (type &amp; YYEncodingTypeObject) {
-                    size_t len = strlen(attrs[i].value);
-                    if (len &gt; 3) {
-                        char name[len - 2];
-                        name[len - 3] = '\0';
-                        memcpy(name, attrs[i].value + 2, len - 3);
-                        _cls = objc_getClass(name);
-                    }
-                }
-            }
-        } break;
-        case 'V': { // Instance variable
-            if (attrs[i].value) {
-                _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'R': {
-            type |= YYEncodingTypePropertyReadonly;
-        } break;
-        case 'C': {
-            type |= YYEncodingTypePropertyCopy;
-        } break;
-        case '&amp;': {
-            type |= YYEncodingTypePropertyRetain;
-        } break;
-        case 'N': {
-            type |= YYEncodingTypePropertyNonatomic;
-        } break;
-        case 'D': {
-            type |= YYEncodingTypePropertyDynamic;
-        } break;
-        case 'W': {
-            type |= YYEncodingTypePropertyWeak;
-        } break;
-        case 'P': {
-            type |= YYEncodingTypePropertyGarbage;
-        } break;
-        case 'G': {
-            type |= YYEncodingTypePropertyCustomGetter;
-            if (attrs[i].value) {
-                _getter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        case 'S': {
-            type |= YYEncodingTypePropertyCustomSetter;
-            if (attrs[i].value) {
-                _setter = [NSString stringWithUTF8String:attrs[i].value];
-            }
-        } break;
-        default:
-            break;
-    }
-}
+<pre><code class="Objective-C">  objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
+  for (unsigned int i = 0; i &lt; attrCount; i++) {
+      switch (attrs[i].name[0]) {
+          case 'T': { // Type encoding
+              if (attrs[i].value) {
+                  _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
+                  type = YYEncodingGetType(attrs[i].value);
+                  if (type &amp; YYEncodingTypeObject) {
+                      size_t len = strlen(attrs[i].value);
+                      if (len &gt; 3) {
+                          char name[len - 2];
+                          name[len - 3] = '\0';
+                          memcpy(name, attrs[i].value + 2, len - 3);
+                          _cls = objc_getClass(name);
+                      }
+                  }
+              }
+          } break;
+          case 'V': { // Instance variable
+              if (attrs[i].value) {
+                  _ivarName = [NSString stringWithUTF8String:attrs[i].value];
+              }
+          } break;
+          case 'R': {
+              type |= YYEncodingTypePropertyReadonly;
+          } break;
+          case 'C': {
+              type |= YYEncodingTypePropertyCopy;
+          } break;
+          case '&amp;': {
+              type |= YYEncodingTypePropertyRetain;
+          } break;
+          case 'N': {
+              type |= YYEncodingTypePropertyNonatomic;
+          } break;
+          case 'D': {
+              type |= YYEncodingTypePropertyDynamic;
+          } break;
+          case 'W': {
+              type |= YYEncodingTypePropertyWeak;
+          } break;
+          case 'P': {
+              type |= YYEncodingTypePropertyGarbage;
+          } break;
+          case 'G': {
+              type |= YYEncodingTypePropertyCustomGetter;
+              if (attrs[i].value) {
+                  _getter = [NSString stringWithUTF8String:attrs[i].value];
+              }
+          } break;
+          case 'S': {
+              type |= YYEncodingTypePropertyCustomSetter;
+              if (attrs[i].value) {
+                  _setter = [NSString stringWithUTF8String:attrs[i].value];
+              }
+          } break;
+          default:
+              break;
+      }
+  }
 </code></pre>
 
 <p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties</a></p>
-
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a></p>
+<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a>.</p>
 </div>
   
   
@@ -247,14 +286,14 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
   </header>
 
 
-  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
+  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<code>nvm which node</code>命令查了下，貌似通过nvm安装的node在路径<code>/Users/username/.nvm/versions/node/v4.2.1/bin/node</code>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
 
 <p>后来通过下面的命令解决了这个问题：</p>
 
 <pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
 </code></pre>
 
-<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
+<p>实际就是创建了一个到<code>/usr/local/bin/node</code>的软连接 。</p>
 
 <p>用homebrew直接安装的话没这个问题。</p>
 </div>
@@ -303,8 +342,12 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
 
 <p>Done.</p>
 
-<p>参考资料：<br/>
-1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
+<h2>参考资料</h2>
+
+<ol>
+<li><a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></li>
+</ol>
+
 </div>
   
   
@@ -336,9 +379,21 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
   </header>
 
 
-  <div class="entry-content"><p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
+  <div class="entry-content"><p>主要区别：</p>
 
-<p>详细可以参见唐巧的文章</p>
+<ol>
+<li>在ARC开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</li>
+<li><p>在ARC下<code>__block id x</code>是会retain 对象x的，而MRC下这样写不会retain x, 所以MRC下<strong>block关键字可以用于打破block使用时的循环引用，而ARC下还是要用</strong>weak, 原文如下：</p>
+
+<pre><code> In manual reference counting mode, __block id x; has the effect of not retaining x. In ARC mode, __block id x; defaults to retaining x (just like all other values). To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x;. As the name __unsafe_unretained implies, however, having a non-retained variable is dangerous (because it can dangle) and is therefore discouraged. Two better options are to either use __weak (if you don’t need to support iOS 4 or OS X v10.6), or set the __block value to nil to break the retain cycle.
+</code></pre></li>
+</ol>
+
+
+<p>出自<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Mac Developer LibraryDeveloperSearch
+Transitioning to ARC Release Notes</a>.</p>
+
+<p>其余详细的对于block的剖析可以参见唐巧的文章:</p>
 
 <p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
 </div>
@@ -400,7 +455,7 @@ for (unsigned int i = 0; i &lt; attrCount; i++) {
 
 <p>主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。</p>
 
-<p>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></p>
+<h2>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></h2>
 
 <p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍.</p>
 </div>
@@ -654,7 +709,15 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
       </li>
     
       <li class="post">
@@ -663,14 +726,6 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
       </li>
     
   </ul>

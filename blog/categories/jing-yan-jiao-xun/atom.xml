@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 经验教训 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/jing-yan-jiao-xun/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:05:56+08:00</updated>
+  <updated>2016-01-01T19:38:49+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Nvm安装node后bash仍然提示找不到的问题]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/"/>
+    <updated>2015-11-20T19:57:05+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<code>nvm which node</code>命令查了下，貌似通过nvm安装的node在路径<code>/Users/username/.nvm/versions/node/v4.2.1/bin/node</code>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
+
+<p>后来通过下面的命令解决了这个问题：</p>
+
+<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
+</code></pre>
+
+<p>实际就是创建了一个到<code>/usr/local/bin/node</code>的软连接 。</p>
+
+<p>用homebrew直接安装的话没这个问题。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pods: Unable to Satisfy the Following Requirements]]></title>
@@ -37,6 +55,30 @@
 <p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
 
 <p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[工作问题记录 一]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/"/>
+    <updated>2015-11-09T20:20:44+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi</id>
+    <content type="html"><![CDATA[<p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
+
+<h2>一  使用RestKit的时候Crash</h2>
+
+<p>参考：
+<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
+
+<h2>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</h2>
+
+<p>参考：
+<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
+
+<h2>三 Framework签名问题</h2>
+
+<p>参考：
+<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
 ]]></content>
   </entry>
   

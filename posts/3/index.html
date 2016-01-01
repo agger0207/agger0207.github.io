@@ -9,7 +9,8 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="一 iOS使用不规范造成的首页白屏 WebView页面被遮挡，然后被Remove掉的时候，页面内容没有渲染出来 二 人家的bug H5页面的bug, iOS开发工程师来帮忙调, 最怕的是Android还没问题(其实是Andorid也有问题，负负得正) 三 人家的bug: Andorid内存溢出 四 &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,136 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/28/cocoapodsji-ben-shi-yong/">CocoaPods基本使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-28T14:26:42+08:00'><span class='date'>2015 年11 月28 日</span> <span class='time'>2:26 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/28/cocoapodsji-ben-shi-yong/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T17:02:50+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>5:02 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/">工作经历回忆 之 快速性能改进</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:37:29+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:37 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近唐巧老师在他的个人博客上开始普及算法相关知识，其中提到熟悉算法和数据结构知识能够帮助我们更好的评估性能问题所在，能够认识到问题的规模对于实际性能的影响，并且举了一个由于问题的规模太小根本就不需要做算法改进的例子，这个我倒是有些体会，也见过一些将代码写得难看加不安全仅仅自以为可以提升性能的做法（比如去掉空指针的判断以为减少了性能开销，其实性能没有节省多少但是带来了crash的风险）；加上自己以前也做过一些性能优化方面的工作，能够很好的认识到，性能优化并不等同于算法优化，所以想回忆一些之前做的一些性能改进的实例，也算是对自己过往工作的一个总结。由于我其实一直是做客户端相关的工作，所以涉及到算法比较少，这些优化经验大部分也和算法优化关系不大, 或者说，这是在介绍自己如何在不改进算法的基础上做的一些性能改进，其实想法都比较简单。</p>
+
+<h2>一 多线程改进数据备份还原性能</h2>
+
+<p>问题描述：做磁盘/文件数据备份，性能慢
+一般误解：由于一般过程是，读取数据&ndash;>压缩&ndash;>写入目标文件；所以想到可能是改进压缩算法
+实际解决：性能太慢其实仅仅是因为所有的操作都是在一条线程中完成的，即使不压缩，也足够慢呀；所以改进策略就是采用多线程的解决方案，读，压缩，并行即可；无论对于文件备份还是磁盘备份都适合；
+进一步优化：
+1）多线程压缩；并行后压缩成为真正的瓶颈所在，那么这个时候就可以提高压缩性能了；而比换一个压缩算法更好的方式是，同时用多个线程进行的数据压缩；
+2）对部分文件避免压缩：如果是做文件备份，对于图片、视频数据，压缩得不偿失，压缩率低，压缩时间长，不压缩就好了
+3）读写线程改善；对同一块磁盘的读写并行，不仅不会提高性能，反而会降低性能；而对不同磁盘的读写并行，是可以提高性能的</p>
+
+<h2>二 遍历磁盘文件树的性能改进</h2>
+
+<p>问题描述：做某个分区的文件备份，需要建立分区的文件树，然后看这些文件是否需要备份，并且需要和已备份的文件树比较，来支持增量备份等一系列的功能；
+改进方案：
+1 递归改非递归；
+如果使用者不分区，那么一个分区里面十几万的文件很正常，这个时候递归遍历并且比较的时候，函数调用会有很多额外的开销，所以仅仅是递归改非递归就可以大大提高这部分性能；
+2 避免多次遍历与多次比较；（这个其实是原来的代码写得有问题^_^)
+3 利用文件系统的特性：
+Windows上有个很火的工具，叫做Everything, 号称是速度最快的文件名搜索工具；其实就是因为在NTFS系统下，所有文件目录和文件的meta信息都存放在一个叫做MFT文件里面，只需要获取到这里面的信息，就可以快速获取到NTFS分区里面的文件树信息了，是不是快了很多？</p>
+
+<p>还有一些，时间久远，不太想得起来了，后面慢慢加 :)</p>
+
+<h2>三 随机存取备份文件改进文件提取性能</h2>
+
+<p>问题描述：需要从磁盘备份数据里面找到某个文件然后还原出来。。。
+之前的版本：从备份文件里面展示出所有文件大概需要一个多小时，然后找到这个文件后还原，大概需要两个小时，而且内存和CPU都占满了
+原因：之前是不支持随机存取，然后要展示所有的文件，差不多需要把整个磁盘备份解压缩一遍，然后找到文件还原的时候需要解压缩两遍，囧。。。
+改进：以NTFS文件系统为例啦，有个MFT(Master File Table)文件，它里面每一项呢，都代表一个文件，然后MFT呢，本身也是一个特殊的文件，其实大家可以把它想象成为一本书的目录啦，只不过有个特殊的是，这个目录(MFT)的内容，并不是固定在某一个区域里的，而是可能分散在分区的任何一处的。所以之前的做法相当于是，先把整本书翻了一遍，然后将目录信息取出来了；然后找到某个文件的时候呢，又把整本书翻了一遍找到某个文件对应的目录信息，然后呢，再把整本书翻了一遍取到这个文件的信息。忘了说了，NTFS文件系统的特殊性还包括，这个文件的后半部分在磁盘上的位置可能更前，这样的话，可能还得从头把这本书翻一遍。
+解决方案：其实就是允许随机存取备份生成的文件；对备份前的磁盘分块，通过改进文件格式，在已备份信息中记录类似MFT的信息，例如，所有待备份的都以2MB的大小分块，那么只要能够从备份生成的文件中快速找到要还原的文件是分布在哪些2MB块里面，就可以找到这些信息在备份文件里的偏移量，只需要解压缩这部分数据就可以了。比如说，先取目录信息(MFT)的时候，只需要取这个MFT文件对应的offset的内容进行解压缩，甚至可以做到，只取第一层目录；然后每个文件都能够找到它的对应内容处在备份文件的哪一块，再也不需要从头开始解压缩了。</p>
+
+<p>其实，上面这些基本上都不需要什么特殊的算法知识，很多时候都是具体分析瓶颈在那里，尤其是在数据规模大的时候；而常见的性能改进方法，无非就是多线程、缓存、随机存取等等。</p>
+
+<p>待续&hellip;.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -264,251 +395,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/">那些我问过的、答过的、见过的iOS面试题（一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:33:18+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:33 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/na-xie-wo-wen-guo-de-,-da-guo-de-,-jian-guo-de-iosmian-shi-ti-(%5B%3F%5D-)/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>网上现在流传不少iOS面试题以及解答，再加上自己也整理过一些面试题给组里的人去做校招和社招的面试，正好列在下面，逐步完善和补充；有些还是我被人面试的时候回答过的，由简单到难慢慢列着吧.</p>
-
-<h2>一 Objective-C属性关键字</h2>
-
-<p>常见问题：
-1 有哪些属性关键字，各自的作用是什么？
-2 strong和weak的区别
-3 weak，assign的区别
-4 strong/retain和copy的区别
-5 什么情况下需要用copy?
-6 IBOutlet属性里面用weak, 如果用strong会有问题吗？如果有，会有什么问题？
-7 默认的属性关键字，尤其是针对内存管理上的默认属性关键字
-8 readonly有什么作用？
-9 使用atomic会有什么负面影响? atomic修饰属性后，一定是线程安全的吗？如果atomic修饰的是NSMutableArray呢？
-10 delegate为什么要用weak来修饰？如果用assign修饰的话会有问题吗？如何避免这一问题？
-11 深拷贝与浅拷贝相关</p>
-
-<p>一般挑几个大致问下就差不多了，遇到过好些不知道weak和assign的区别&hellip;.
-话说我一般不问getter和setter。。。。</p>
-
-<h2>二 基本知识</h2>
-
-<p>1 protocol是什么？可以定义property吗？如果可以，那么怎么做或者有什么需要注意的地方？
-2 category是什么？主要有什么作用？在什么情况下会考虑用到category?category可以替换掉原有的实现吗？写category需要注意些什么（比如命名上）？Category可以定义property吗？如果可以，那么怎么做？Category可以为类增加成员变量吗？</p>
-
-<h2>三 内存管理</h2>
-
-<p>1 内存管理机制
-2 循环引用的理解，遇到过哪些循环引用，如何解决
-3 AutoReleasePool的原理，放入AutoReleasePool中的对象会在什么时候真正释放，什么情况下需要手写AutoReleasePool块
-4 MRC转到ARC后需要注意的一些问题，在哪些情况下需要自己去做一些资源释放的问题
-5 CF对象的Release问题相关</p>
-
-<h2>四 不分类了</h2>
-
-<p>发现好难分类，不分类了，一顺写下来吧！</p>
-
-<p>1 View Controller的生命周期; loadView会在哪个过程中被调用到？viewWillLayoutSubviews和viewDidLayoutSubviews又会在哪个过程中被调用到？从A页面调到B页面，各自的ViewController中哪些方法会被调用到？
-如果是iOS 6以前就开始做了的，那么会问下UIViewDidUnload相关的问题，比如为什么现在UIViewDidUnload不需要处理了.
-2 Application的生命周期；一般需要做哪些处理；在各个阶段的回调处理时需要注意什么，比如，是否可以在启动的回调中做一些耗时操作等等;
-3 APNS基本流程；应用需要做哪些处理
-4 SetNeedsDisplay是做什么用的？drawRect呢？setNeedsLayout呢？</p>
-
-<p>待续</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/">iOS开源库 之 Sample Code</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:31:44+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:31 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>一 使用Facebook的pop做的一些动画示例</h2>
-
-<p>1 <a href="https://github.com/schneiderandre/popping">schneiderandre/popping</a></p>
-
-<p>github地址：<a href="https://github.com/schneiderandre/popping">https://github.com/schneiderandre/popping</a>       <br/>
-说明：A collection of animation examples for iOS apps.</p>
-
-<p>2 <a href="https://github.com/victorBaro/PopPlayground">victorBaro/PopPlayground</a>                        <br/>
-github地址：<a href="https://github.com/victorBaro/PopPlayground">https://github.com/victorBaro/PopPlayground</a>       <br/>
-说明：Examples and Controls made entirely using Pop (Facebook&rsquo;s framework)</p>
-
-<p>3 <a href="https://github.com/callmeed/pop-playground">callmeed/pop-playground</a>     <br/>
-github地址：<a href="https://github.com/callmeed/pop-playground">https://github.com/callmeed/pop-playground</a>
-说明：Some example animations using Facebook&rsquo;s Pop animation library</p>
-
-<h2>二 针对iOS 7, 8, 9新特性的Sample Code</h2>
-
-<p>作者都是同一个人：）</p>
-
-<p><a href="https://github.com/shu223/iOS-9-Sampler">iOS-9-Sampler</a>                      <br/>
-<a href="https://github.com/shu223/iOS8-Sampler">iOS-8-Sampler</a>                       <br/>
-<a href="https://github.com/shu223/iOS7-Sampler">iOS-7-Sampler</a></p>
-
-<h2>三 SuperDemo</h2>
-
-<p><a href="https://github.com/bingxue314159/SuperDemo">bingxue314159/SuperDemo</a>            <br/>
-该作者平时积累的一些第三方库和控件使用方法.</p>
-
-<p>暂时只留意到这些，后续有找到新的会陆续添加；这些Sample Code对于快速理解新特性或者一些开源库还是很有帮助的，当然，首先还是要看下苹果官方或者第三方开源库作者自己提供的Demo啦。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:31:27+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:31 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>iOS一般都是HTTP/HTTPS网络请求，相应的有多个开源库来支持iOS客户端HTTP请求; 比较知名和常用的主要有如下几个：</p>
-
-<h2>一 ASIHttpRequest</h2>
-
-<p>比较老的开源网络库，现在已经不再维护了；ASIHttpRequest基于CFNetworking而不是NSURLConnection, 所以性能会更好；功能上会比AFNetworking更强大，但是使用起来不如AFNetworking那么方便，而且对于新的iOS版本没有提供支持；现在应该还有一些比较老的项目仍然在使用。</p>
-
-<p>项目地址：<a href="https://github.com/pokeb/asi-http-request">https://github.com/pokeb/asi-http-request</a></p>
-
-<p>ASI VS AFNetworking是之前大家经常讨论的话题，而且确实在支持的功能上也有一些不同，比如ASI支持同步请求，支持自定义Proxy设置(AFNetworking在iOS 7.0之前不支持),不过随着ASI不再维护，慢慢的也就没有这个比较了，可以参看下面的文章了解二者的差异.</p>
-
-<p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a></p>
-
-<h2>二 AFNetworking</h2>
-
-<p>github地址：<a href="https://github.com/AFNetworking/AFNetworking">https://github.com/AFNetworking/AFNetworking</a></p>
-
-<p>现在知名度最高、应用最广泛的开源网络库，使用起来非常简单；接口清晰明了；此外，还有很多在此基础上做的扩展，后面提到的RestKit和YTKNetworking其实下面都是在用AFNetworking做请求的发送；事实上，现存的绝大多数APP中，如果仅仅是支持HTTP协议的话，除了自己用苹果的API(NSURLSession或者NSURLConnection)外，基本就是用AFNetworking了.</p>
-
-<p>AFNetworking现在到了3.0版本，3.0版本去除了NSURLConnection那套接口，只有NSURLSession的接口，只支持iOS 7以上；
-另外，作者还开发了Swift版本<a href="https://github.com/Alamofire/Alamofire">Alamofire</a>. 可以查看RayWenderlich提供的教程<a href="http://www.raywenderlich.com/85080/beginning-alamofire-tutorial">alamofire-tutorial</a>或者该教程的翻译版本<a href="http://www.cocoachina.com/ios/20141202/10390.html">Alamofire网络库基础教程：使用 Alamofire 轻松实现 Swift 网络请求</a>获得更多信息.</p>
-
-<p>AFNetworking本身也是很值得学习的库，里面对于NSOperation的使用、网络请求相关的处理都很值得学习，这里有一篇关于AFNetworking源码解读的文章:<a href="http://blog.cnbang.net/tech/2320/">AFNetworking2.0源码解析</a>，不过并没有涉及到NSURLSession部分。
-另外，由于AFNetworking的作者Mattt Thompson本身是<a href="http://nshipster.com">NSHipter</a>的发起人，所以也可以看作者自己写的介绍文章<a href="http://nshipster.cn/afnetworking-2/">AFNetworking 2.0</a>，体会架构的优化与了解功能的变更. 另附<a href="http://nshipster.cn/">NSHipter中文版本</a>.</p>
-
-<p>各个大版本的变迁：
-<a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-3.0-Migration-Guide">AFNetworking 3.0 Migration Guide</a></p>
-
-<p><a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-2.0-Migration-Guide">AFNetworking 2.0 Migration Guide</a></p>
-
-<h2>三 RestKit</h2>
-
-<p>项目地址：<a href="https://github.com/RestKit/RestKit">https://github.com/RestKit/RestKit</a></p>
-
-<p>RestKit is a modern Objective-C framework for implementing RESTful web services clients on iOS and Mac OS X. It provides a powerful object mapping engine that seamlessly integrates with Core Data and a simple set of networking primitives for mapping HTTP requests and responses built on top of AFNetworking.</p>
-
-<p>RestKit主要是在网络请求的发送之外额外提供了对象映射的功能，可以将服务器返回的结果(无论是JSON还是XML)自动映射成为Model对象，并且集成了CoreData的支持；它利用RequestDescriptor和ResponseDescriptor来描述请求与Model的对应关系，这样对于配置好后的RKObjectManager, 可以自动的对请求的结果进行映射；所以其强大之处就在于这个对象的映射功能，避免繁杂的JSON映射啊什么的.</p>
-
-<p>不过好像RestKit在国内的应用不多，我个人觉得是有这么几个原因：
-1 RestKit底下其实还是用AFNetworking来发送请求，而且还使用的是老的AFNetworking 1.x的版本；由于其与AFNetworking耦合比较紧，替换成为AFNetworking 2.x以上版本非常麻烦；RestKit的开发者本来计划是要升级到AFNetworking 2.x的，不过弄了一两年也没搞完，现在的方向貌似是直接抛弃AFNetworking，直接自己通过NSURLSession来发送网络请求，但是具体啥时候能够做完就不知道了；
-2 RestKit的设计、实现和使用都偏复杂，很多地方都会看到对这一点的抱怨；对于中小型应用，AFNetworking + Mantle 完全可以做掉 RestKit的工作，还更简单；想单独的替换/升级Mantle或者AFNetworking都方便很多；
-3 国内好像CoreData用得应该不太多，RestKit强大的ObjectMapping+CoreData的集成没有多少用武之地.
-4 中小型项目用RestKit嫌麻烦，大型项目要用RestKit倒是好，但是一般这种级别的项目或者公司都会希望能够集成自己的私有TCP协议，这个要集成起来也够头疼.</p>
-
-<p>我个人也不是太喜欢RestKit, 还是AFNetworking + Mantle会更简单，即使要支持Object Mapping, 在一些JSON&lt;>Model转换库的基础上做做也还好，毕竟，大多数时候，不需要考虑一些奇怪的JSON返回内容，可以约束服务器开发人员返回更友好更易快速解析的JSON内容，而不是一些不规范的、异构的内容.</p>
-
-<h2>四 MKNetworkKit</h2>
-
-<p>Github地址：<a href="https://github.com/MugunthKumar/MKNetworkKit">https://github.com/MugunthKumar/MKNetworkKit</a>
-介绍文章：<a href="http://www.cnblogs.com/scorpiozj/p/3222803.html">http://www.cnblogs.com/scorpiozj/p/3222803.html</a>
-License:MIT License</p>
-
-<p>主要特性：
-超轻量级
-整个应用共享单一队列
-正确的显示网络连接的标志
-Auto queue sizing 自动队列大小
-Auto caching 自动缓存
-Operation freezing 操作冻结
-Image Caching 图片缓存
-Performance 性能
-Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
-
-<p>个人感觉
-1 功能偏简单；库本身的设计上感觉没有什么特别的；主要就是封装了一个Operation和一个调度的Engine; Engine中涉及一些配置和调度；
-2 使用的时候需要自己去写MKNetworkEngine的子类; 当然，一个应用一般是访问同一个服务器，所以只需要在同一个Engine类中开放不同的API接口；每个接口里面去创建一个MKNetworkOperation;
-3 一般来说，不需要子类化MKNetworkOperation类
-4 创建MKNetworkOperation时参数要自己组装；所以实际使用的时候，还是需要在这之上封装一个网络层出来；
-5 坦白说，MKNetworkKit的代码风格都比较差，包括空行和空格什么的，可读性不那么好，没有其他几个知名库那样赏心悦目.</p>
-
-<h2>五 YTKNetwork</h2>
-
-<p>YTKNetwork 是猿题库 iOS 研发团队基于 AFNetworking 封装的 iOS 网络库，其实现了一套 High Level 的 API，提供了更高层次的网络访问抽象。
-项目地址: <a href="https://github.com/yuantiku/YTKNetwork">https://github.com/yuantiku/YTKNetwork</a></p>
-
-<p>总体还是基于AFNetworking 2.x的，做了一些上层封装，集成了Cache功能，让网络层请求写起来更加简单。我觉得大多数情况下，使用这个库足够了，方便又清晰.</p>
-
-<p>不过，我觉得实际使用的过程中，要是能够加上JSON-Model的映射功能，使用起来会更爽；另外，这套请求还是基于AFNetworking 2.x老的那套接口，也就是AFURLSessionManager那一套，底下还是NSURLConnection, 估计后面也会迁移到AFNetworking 3.x上使用NSURLSession吧！</p>
-
-<p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -553,7 +439,15 @@ Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
       </li>
     
       <li class="post">
@@ -562,14 +456,6 @@ Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a>
       </li>
     
   </ul>
