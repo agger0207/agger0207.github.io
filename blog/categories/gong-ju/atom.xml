@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T14:06:36+08:00</updated>
+  <updated>2016-01-01T14:47:53+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何创建自己的私有Pod Spec Repo]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/"/>
+    <updated>2016-01-01T14:10:19+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo</id>
+    <content type="html"><![CDATA[<p>晕，发现文章在公司写了没传到github上；假期结束后去公司发好了；其实很简单，直接看官网文章<a href="https://guides.cocoapods.org/making/private-cocoapods.html">Private Pods</a>就可以了，另外有一篇中文文章写得更细致点。</p>
+
+<p>提一句，CocoaPods Spec Repo的核心也就是一个github仓库<a href="https://github.com/CocoaPods/Specs">CocoaPods/Specs</a>, 然后这里面的所有内容就是各个开源库提交过来的Specs信息，<code>pod setup</code>的时候会将这个仓库clone到本地；为什么我们经常说在国内，<code>pod update</code>的时候非常慢，主要就是因为需要将本地的spec repo和github上做一个同步，而这个repo由于里面的文件非常多，更新也多，所以以国内的网速，同步起来非常非常慢，我试过将这个仓库一次性全clone到本地，要一个多小时。。。。所以一般大家在<code>pod update</code>的时候会加上参数<code>--no-repo-update</code>避免重新去同步这个仓库。</p>
+
+<p>而所谓的创建私有Pod Spec Repo或者说创建一个新的Repo镜像，本质都是维护一个github的仓库，这个仓库里面放的就是这些spec了</p>
+
+<p>话说创建好自己的私有Pod Spec Repo后，添加原有的那些内部用的podspec的时候，无一例外都报错，囧。。。。看来得花时间好好review这些podspec啦 ^_^</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[github上Contributions丢失的问题]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/"/>
+    <updated>2016-01-01T14:09:54+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了，而github是通过user email来对应到实际的用户的；解决这个问题一般通过命令</p>
+
+<pre><code>$ git config --global user.email "xxxx@xxxx.com"
+</code></pre>
+
+<p>其中的email地址需要和自己github profile的email地址一样;</p>
+
+<p>而如果希望不在commit中暴露自己的email地址的话，可以用如下命令</p>
+
+<pre><code>$ git config --global user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>其中<code>username</code>是自己的github用户明名，这样既可以同自己的profile关联起来，自己在profile中将email地址不对外开放的话，别人也看到你的email地址。</p>
+
+<p>但是<code>git config --global</code>这个命令是全局生效的，也就是所有git的提交都会使用这个email, 如果自己还使用了另外一个email提交代码，比如说一般公司内网都会搭建gitbucket之类，自己同时还在内网提交代码，那么所用的账户对应的email可能是不一样的，那么就需要对具体某个local repo来设置email了，命令如下：</p>
+
+<pre><code>$ git config --local user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>这样就可以对当前的repo设置一个email, 在当前repo下所有commit都会和这个email关联起来，其实这样也挺麻烦的，按道理说应该可以配置得更加智能些，毕竟这些config信息都是存在配置文件上的，改天自己实践过后再来更新这篇文章吧！话说我发现我的某个分支好像又是存在问题的，commit的作者显示不正确，看来改天又要去检查下啦。。。。</p>
+
+<p>参考资料:</p>
+
+<ul>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">Why are my contributions not showing up on my profile?</a></li>
+<li><a href="https://help.github.com/articles/keeping-your-email-address-private/">Keeping your email address private</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cocoa新的依赖管理工具 Carthage]]></title>
@@ -78,148 +129,6 @@
 <p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
 
 <p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RestKit测试服务器搭建]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian/"/>
-    <updated>2015-11-10T20:38:03+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/10/restkitce-shi-fu-wu-qi-da-jian</id>
-    <content type="html"><![CDATA[<h2>用途</h2>
-
-<p>RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。本文档主要针对服务器的配置与启动列出实际的解决方案。</p>
-
-<h2>一 在用户目录安装Ruby</h2>
-
-<p>默认情况下，系统中已经安装了Ruby; 但如果直接使用系统的Ruby执行命令"gem install bundler"会报错，提示无权限。</p>
-
-<pre><code>While executing gem ... (Gem::FilePermissionError)
-You don't have write permissions for the /Library/Ruby/Gems/2.0.0 directory.
-</code></pre>
-
-<p>尽管使用命令"sudo gem install bundler"可以获得权限安装bundler, 但会影响系统自定义安装的Ruby. 故推荐在用户目录安装Ruby. 步骤如下：</p>
-
-<h3>1 使用brew安装ruby</h3>
-
-<pre><code>brew install ruby    
-</code></pre>
-
-<p>在这之前可以使用命令"ruby &ndash;version"查看系统安装的ruby版本或者使用命令"which ruby"查看系统安装的ruby路径.</p>
-
-<p>Note: brew安装有的时候会过慢，可以参考<code>http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html</code>提供的方式更换合适的镜像.</p>
-
-<h3>2 修改环境变量</h3>
-
-<p>到自己目录下的.profile 或者 .bashrc 或者  .bash_profile</p>
-
-<pre><code>/Users/agger/.profile   
-</code></pre>
-
-<p>用emacs或是vim打开 （更改前请备份好这个文件，避免误操作）在文件的末尾加入</p>
-
-<pre><code># for brew install
-export PATH=/usr/local/bin:$PATH
-</code></pre>
-
-<p>然后重启终端，就可以用到了新的ruby了    . 此时执行which ruby会发现路径和系统安装的ruby路径不相同.</p>
-
-<p>一点说明：实际操作中我机器上原本是没有这个.profile的，于是直接新建了这个文件并加入那段代码.</p>
-
-<h2>二 安装bundler</h2>
-
-<h3>1 执行如下命令安装bundler</h3>
-
-<pre><code>gem install bundler
-</code></pre>
-
-<h3>2 执行如下命令查看bundler是否安装成功</h3>
-
-<pre><code>gem list --local
-</code></pre>
-
-<h2>三 通过Bundle安装其他组件</h2>
-
-<h3>1 修改gemfile</h3>
-
-<p>在安装之前，需要修改RestKit目录下的gemfile; 将下面这行</p>
-
-<pre><code>source "https://rubygems.org"
-</code></pre>
-
-<p>修改为：</p>
-
-<pre><code>source "https://ruby.taobao.org/"
-</code></pre>
-
-<p>否则会不断提示安装步骤；</p>
-
-<p>Note: 之前的地址<code>http://ruby.taobao.org</code>无法访问，需要更新为<code>https://ruby.taobao.org</code>.</p>
-
-<h3>2 安装</h3>
-
-<p>执行命令<code>bundle install</code>安装gemfile指定的组件.</p>
-
-<h3>3 执行命令<code>bundle</code>查看使用的组件.</h3>
-
-<h3>4 可能发生的错误与解决方法</h3>
-
-<p>1 执行命令<code>bundle</code>时报错"Could not find rake-10.3.2 in any of the sources"
-解决方法：bundle install可以自动安装上rake-10.3.2; 执行完毕后可以在gem list &ndash;local中查看rake对应版本是否可以安装上.</p>
-
-<p>2 bundle install的时候报错：
-An error occurred while installing i18n (0.7.0), and Bundler cannot continue.
-Make sure that <code>gem install i18n -v '0.7.0'</code> succeeds before bundling.</p>
-
-<p>运行<code>gem install i18n -v '0.7.0'</code>即可; 一般如果gemfile按照上面的步骤做过修改是不会报这个错误的.</p>
-
-<p>3 报错：Make sure that <code>gem install nokogiri -v '1.6.6.2'</code> succeeds before bundling
-解决方法：运行如下命令</p>
-
-<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/libxml2
-</code></pre>
-
-<p>Note: 请根据自己的系统版本信息调整上述路径，例如，当我的系统升级到最新的版本10.11后，上面SDK的路径就应该从<code>MacOSX10.10.sdk</code>调整为
-<code>MacOSX10.11.sdk</code>.完成的命令如下：</p>
-
-<pre><code>gem install nokogiri -- --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
-Building native extensions with: '--use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2'
-</code></pre>
-
-<p>然后继续执行bundle install即可.
-参考：
-<a href="http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/">http://ruby.zigzo.com/2015/03/18/installing-nokogiri-on-yosemite/</a></p>
-
-<h2>四 运行RestKit Test Server</h2>
-
-<p>按照RestKit原有的文档，执行命令<code>rake server</code>可以启动服务器；但实际操作中发现会报错，原因是server要求的rake版本是1.3.2; 而我系统上激活的rake版本为1.4.2; 这时换用如下命令可以正常启动服务器:</p>
-
-<pre><code>bundle exec rake server
-</code></pre>
-
-<h2>五 检查测试服务器是否运行</h2>
-
-<p>浏览器中输入：
-<a href="http://localhost:4567/">http://localhost:4567/</a></p>
-
-<h2>参考文档：</h2>
-
-<p><a href="http://blog.csdn.net/maojudong/article/details/7920578">http://blog.csdn.net/maojudong/article/details/7920578</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mac实用小工具 CheatSheet]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet/"/>
-    <updated>2015-11-10T20:18:49+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/10/macshi-yong-xiao-gong-ju-cheatsheet</id>
-    <content type="html"><![CDATA[<p>CheatSheet是一个可以显示当前正在使用app的快捷键的小工具，使用起来相当方便；直接从官网下载安装即可，安装后，长按command键可以弹出当前程序下的快捷键列表，对于我这种懒得记那么多快捷键的人非常有用。</p>
-
-<p>下图是就是通过CheatSheet显示的Mou的快捷键:</p>
-
-<p><img src="/images/CheatSheet.png" alt="image" /></p>
-
-<p>官网地址：<a href="http://www.cheatsheetapp.com/CheatSheet/">CheatSheet</a></p>
 ]]></content>
   </entry>
   

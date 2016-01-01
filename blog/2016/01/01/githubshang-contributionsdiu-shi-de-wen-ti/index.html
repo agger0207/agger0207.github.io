@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS开发博客与网站 - 穷小子Agger的技术博客</title>
+  <title>github上Contributions丢失的问题 - 穷小子Agger的技术博客</title>
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="值得一看的iOS开发者博客: 推荐的文章： InfoQ: 可以订阅一下 CocoaChina: 文章多，但是好文章不够，可以订阅一下； 订阅的一些微信公众号：
-">
+  <meta name="description" content="前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">
+  <link rel="canonical" href="http://agger0207.github.io/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="穷小子Agger的技术博客" type="application/atom+xml">
@@ -69,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS开发博客与网站</h1>
+      <h1 class="entry-title">github上Contributions丢失的问题</h1>
     
     
       <p class="meta">
@@ -78,7 +77,7 @@
 
 
 
-<time class='entry-date' datetime='2015-11-30T16:05:03+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>4:05 pm</span></time>
+<time class='entry-date' datetime='2016-01-01T14:09:54+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:09 pm</span></time>
         
         
            | <a href="#comments">Comments</a>
@@ -88,15 +87,34 @@
   </header>
 
 
-<div class="entry-content"><p>值得一看的iOS开发者博客:</p>
+<div class="entry-content"><p>前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了，而github是通过user email来对应到实际的用户的；解决这个问题一般通过命令</p>
 
-<p>推荐的文章：</p>
+<pre><code>$ git config --global user.email "xxxx@xxxx.com"
+</code></pre>
 
-<p>InfoQ: 可以订阅一下</p>
+<p>其中的email地址需要和自己github profile的email地址一样;</p>
 
-<p>CocoaChina: 文章多，但是好文章不够，可以订阅一下；</p>
+<p>而如果希望不在commit中暴露自己的email地址的话，可以用如下命令</p>
 
-<p>订阅的一些微信公众号：</p>
+<pre><code>$ git config --global user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>其中<code>username</code>是自己的github用户明名，这样既可以同自己的profile关联起来，自己在profile中将email地址不对外开放的话，别人也看到你的email地址。</p>
+
+<p>但是<code>git config --global</code>这个命令是全局生效的，也就是所有git的提交都会使用这个email, 如果自己还使用了另外一个email提交代码，比如说一般公司内网都会搭建gitbucket之类，自己同时还在内网提交代码，那么所用的账户对应的email可能是不一样的，那么就需要对具体某个local repo来设置email了，命令如下：</p>
+
+<pre><code>$ git config --local user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>这样就可以对当前的repo设置一个email, 在当前repo下所有commit都会和这个email关联起来，其实这样也挺麻烦的，按道理说应该可以配置得更加智能些，毕竟这些config信息都是存在配置文件上的，改天自己实践过后再来更新这篇文章吧！话说我发现我的某个分支好像又是存在问题的，commit的作者显示不正确，看来改天又要去检查下啦。。。。</p>
+
+<p>参考资料:</p>
+
+<ul>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">Why are my contributions not showing up on my profile?</a></li>
+<li><a href="https://help.github.com/articles/keeping-your-email-address-private/">Keeping your email address private</a></li>
+</ul>
+
 </div>
 
 
@@ -112,8 +130,14 @@
 
 
 
-<time class='entry-date' datetime='2015-11-30T16:05:03+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>4:05 pm</span></time>
+<time class='entry-date' datetime='2016-01-01T14:09:54+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:09 pm</span></time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gong-ju/'>工具</a>
+  
+</span>
 
 
     </p>
@@ -127,10 +151,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/" title="Previous Post: Facebook Pop使用指南（翻译）">&laquo; Facebook Pop使用指南（翻译）</a>
+        <a class="basic-alignment left" href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/" title="Previous Post: 在两台机器上同时用octopress写博客的问题">&laquo; 在两台机器上同时用octopress写博客的问题</a>
       
       
-        <a class="basic-alignment right" href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/" title="Next Post: 在两台机器上同时用octopress写博客的问题">在两台机器上同时用octopress写博客的问题 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/" title="Next Post: 如何创建自己的私有Pod Spec Repo">如何创建自己的私有Pod Spec Repo &raquo;</a>
       
     </p>
   </footer>
@@ -141,7 +165,7 @@
 <section>
     <h1>Comments</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-<div class="ds-thread" data-title="iOS开发博客与网站"></div>
+<div class="ds-thread" data-title="github上Contributions丢失的问题"></div>
 <script type="text/javascript">
     var duoshuoQuery = {short_name:"agger0207"};
     (function() {

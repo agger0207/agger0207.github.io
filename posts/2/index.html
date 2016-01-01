@@ -72,6 +72,125 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-30T15:17:05+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>3:17 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-30T15:16:54+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>3:16 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-30T00:00:00+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>12:00 am</span></time>
+        
+        
+           | <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><hr />
+
+<p>layout: post
+title: &ldquo;iOS开发 之 数据持久化存储&rdquo;
+date: 2015-11-30 15:17:31 +0800
+comments: true</p>
+
+<h2>categories: </h2>
+
+<p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
+
+<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
+[standardDefaults synchronize];
+每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
+
+<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
+
+<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
+
+<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
+</code></pre>
+
+<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a></h1>
     
     
@@ -269,132 +388,6 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/">我的工作经历</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:36:21+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:36 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/wo-de-gong-zuo-jing-li/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>主要想回忆一些自己工作的感受、经历，做一下总结，随便写写总比什么都不写好，毕竟年纪慢慢大了，记忆力慢慢衰退了，说不定哪一天就不记得自己干过什么了呢：）尽量多正面的回忆，少吐槽，当然，也不是写简历，要写简历直接去拉勾了：）</p>
-
-<p>先列提纲，再慢慢写吧！</p>
-
-<h2>一 Arcsoft</h2>
-
-<p>系统架构部门软件工程师</p>
-
-<h2>二 Nero</h2>
-
-<p>Nero BackItUp架构师</p>
-
-<h2>三 挖财</h2>
-
-<p>资深iOS开发工程师</p>
-
-<h2>四 网易</h2>
-
-<p>资深客户端开发工程师</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:35:06+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:35 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/">Xcode 7免费真机调试</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:33:55+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:33 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在Xcode 7可以免费进行真机调试了，不需要任何开发者账号，只要有一个Apple ID就可以了。</p>
-
-<p>主要步骤如下：
-1 运行Xcode后，点击菜单中的Preferences, 进行Account标签，选择添加Apple Id
-2 输入AppId，登录；登录成功后会看到相关信息；
-3 选中账号信息，点击View Details, 在弹出的对话框中操作添加开发者证书
-4 打开要调试的项目，在Target的General的Team中可以看到刚才添加的Apple Id
-5 连上设备调试前可以看到Team旁有一个Issue, 点击Fix，profile就生成并且添加到项目中了
-6 可以到原来设置profile和证书的地方看看，一切都设置好了。然后就可以运行调试并且安装到真机上了。</p>
-
-<p>全程傻瓜式操作；晚点上图：）</p>
-
-<p>不过会不会有什么坑暂时还不知道，等遇到了再更新；至少现在是用得好好的，不需要开发者账号也可以愉快的真机调试.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -417,6 +410,18 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/">如何通过代码修改Xcode工程文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/">如何创建自己的私有Pod Spec Repo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/">github上Contributions丢失的问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/">在两台机器上同时用octopress写博客的问题</a>
@@ -444,18 +449,6 @@ Windows上有个很火的工具，叫做Everything, 号称是速度最快的文�
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/markdownbian-ji-ji-qiao/">Markdown编辑技巧</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/">工作经历回忆 之 快速性能改进</a>
       </li>
     
   </ul>

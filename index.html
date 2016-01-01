@@ -9,8 +9,8 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="问题描述:
-之前是在晚上在公司机器上来发布文章，但是同时也会在自己家里写文章，我们知道，octopress日常操作的实际就是blog所在的git仓库的source分支，例如我自己的blog对应的仓库实际上就是https://github.com/agger0207/agger0207.github &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,135 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/">如何通过代码修改Xcode工程文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-01T14:22:42+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:22 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/">如何创建自己的私有Pod Spec Repo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-01T14:10:19+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:10 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>晕，发现文章在公司写了没传到github上；假期结束后去公司发好了；其实很简单，直接看官网文章<a href="https://guides.cocoapods.org/making/private-cocoapods.html">Private Pods</a>就可以了，另外有一篇中文文章写得更细致点。</p>
+
+<p>提一句，CocoaPods Spec Repo的核心也就是一个github仓库<a href="https://github.com/CocoaPods/Specs">CocoaPods/Specs</a>, 然后这里面的所有内容就是各个开源库提交过来的Specs信息，<code>pod setup</code>的时候会将这个仓库clone到本地；为什么我们经常说在国内，<code>pod update</code>的时候非常慢，主要就是因为需要将本地的spec repo和github上做一个同步，而这个repo由于里面的文件非常多，更新也多，所以以国内的网速，同步起来非常非常慢，我试过将这个仓库一次性全clone到本地，要一个多小时。。。。所以一般大家在<code>pod update</code>的时候会加上参数<code>--no-repo-update</code>避免重新去同步这个仓库。</p>
+
+<p>而所谓的创建私有Pod Spec Repo或者说创建一个新的Repo镜像，本质都是维护一个github的仓库，这个仓库里面放的就是这些spec了</p>
+
+<p>话说创建好自己的私有Pod Spec Repo后，添加原有的那些内部用的podspec的时候，无一例外都报错，囧。。。。看来得花时间好好review这些podspec啦 ^_^</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/">github上Contributions丢失的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-01T14:09:54+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:09 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了，而github是通过user email来对应到实际的用户的；解决这个问题一般通过命令</p>
+
+<pre><code>$ git config --global user.email "xxxx@xxxx.com"
+</code></pre>
+
+<p>其中的email地址需要和自己github profile的email地址一样;</p>
+
+<p>而如果希望不在commit中暴露自己的email地址的话，可以用如下命令</p>
+
+<pre><code>$ git config --global user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>其中<code>username</code>是自己的github用户明名，这样既可以同自己的profile关联起来，自己在profile中将email地址不对外开放的话，别人也看到你的email地址。</p>
+
+<p>但是<code>git config --global</code>这个命令是全局生效的，也就是所有git的提交都会使用这个email, 如果自己还使用了另外一个email提交代码，比如说一般公司内网都会搭建gitbucket之类，自己同时还在内网提交代码，那么所用的账户对应的email可能是不一样的，那么就需要对具体某个local repo来设置email了，命令如下：</p>
+
+<pre><code>$ git config --local user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>这样就可以对当前的repo设置一个email, 在当前repo下所有commit都会和这个email关联起来，其实这样也挺麻烦的，按道理说应该可以配置得更加智能些，毕竟这些config信息都是存在配置文件上的，改天自己实践过后再来更新这篇文章吧！话说我发现我的某个分支好像又是存在问题的，commit的作者显示不正确，看来改天又要去检查下啦。。。。</p>
+
+<p>参考资料:</p>
+
+<ul>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">Why are my contributions not showing up on my profile?</a></li>
+<li><a href="https://help.github.com/articles/keeping-your-email-address-private/">Keeping your email address private</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -701,125 +830,6 @@ $ ls -a
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T15:17:05+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>3:17 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T15:16:54+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>3:16 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T00:00:00+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>12:00 am</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><hr />
-
-<p>layout: post
-title: &ldquo;iOS开发 之 数据持久化存储&rdquo;
-date: 2015-11-30 15:17:31 +0800
-comments: true</p>
-
-<h2>categories: </h2>
-
-<p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
-
-<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
-[standardDefaults synchronize];
-每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
-
-<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
-
-<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
-
-<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
-</code></pre>
-
-<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -840,6 +850,18 @@ comments: true</p>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/">如何通过代码修改Xcode工程文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/">如何创建自己的私有Pod Spec Repo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/">github上Contributions丢失的问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/">在两台机器上同时用octopress写博客的问题</a>
@@ -867,18 +889,6 @@ comments: true</p>
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/markdownbian-ji-ji-qiao/">Markdown编辑技巧</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/">工作经历回忆 之 快速性能改进</a>
       </li>
     
   </ul>

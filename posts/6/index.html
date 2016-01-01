@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="一 Swift中的设计模式 InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式， &hellip;">
+  <meta name="description" content="一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用nvm which node命令查了下，貌似通过nvm安装的node在路径/Users/username &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,131 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/">Nvm安装node后bash仍然提示找不到的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:57:05+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:57 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<strong>nvm which node</strong>命令查了下，貌似通过nvm安装的node在路径<strong>/Users/username/.nvm/versions/node/v4.2.1/bin/node</strong>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
+
+<p>后来通过下面的命令解决了这个问题：</p>
+
+<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
+</code></pre>
+
+<p>实际就是创建了一个到<strong>/usr/local/bin/node</strong>的软连接   。</p>
+
+<p>用homebrew直接安装的话没这个问题。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/">Cocoapods和Git Submodules结合使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:41:59+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:41 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
+
+<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
+
+<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
+
+<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
+
+<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
+
+<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
+</code></pre>
+
+<p>Done.</p>
+
+<p>参考资料：<br/>
+1 <a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/">ARC与MRC下 Block的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:34:23+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:34 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>核心其实就是在ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</p>
+
+<p>详细可以参见唐巧的文章</p>
+
+<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -366,155 +491,6 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/">使用homebrew安装工具</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-10T20:06:29+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:06 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>可以参考自己写的RestKit测试服务器启动问题.</p>
-
-<p>参考文章：</p>
-
-<p>1 <a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a>
-2 <a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a>
-3 <a href="http://brew.sh/index_zh-cn.html">Homebrew</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/">工作问题记录 一</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-09T20:20:44+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>8:20 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
-
-<p>一  使用RestKit的时候Crash</p>
-
-<p>参考：
-<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
-
-<p>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</p>
-
-<p>参考：
-<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
-
-<p>三 Framework签名问题</p>
-
-<p>参考：
-<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/">iOS每周文章选读 第一周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-09T19:58:05+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>7:58 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自己平时读得多，写得少，所以就想办法将自己最近看过的好文章慢慢整理起来，方便自己后续查阅和复习，也可以向公司的新人推荐这些文章，而且现在每周也需要向组里推荐好文章来学习，所以作此记录，既然坚持写那么难，那么就得坚持读了；当然，其实InfoQ的iOS技术开发周报已经是很好的文章合集了。</p>
-
-<h2>一 <a href="http://xiangwangfeng.com/2015/05/20/%E7%A7%BB%E5%8A%A8IM%E5%BC%80%E5%8F%91%E9%82%A3%E4%BA%9B%E4%BA%8B/">移动IM开发那些事</a></h2>
-
-<p>最近公司内部老是有网易云信的广告，后续有时间可以研究一下。</p>
-
-<p>这篇文章主要是介绍了移动IM开发相关的一些知识点，尤其是技术方案的选择。一些小公司可能会直接用云信或者环信提供的IM服务，不过，稍微大一些的公司还是都会自己去做IM开发相关的事情，比如蘑菇街啊，英坦网络技术等，都有自己做移动IM。如果需要做移动IM或者说公司产品需要设计私有协议进行网络通信的话，还是可以从里面得到很多启发，至少不会踩很多坑了。</p>
-
-<p>对于我个人而言，MessagePack, MQTT和XMPP都有接触过，不过都没啥深入的学习，以后有空还是可以好好研究一下。</p>
-
-<h2>二 <a href="http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a></h2>
-
-<p>RunLoop 是 iOS 和 OSX 开发中非常基础的一个概念，这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的。</p>
-
-<h2>三 <a href="https://github.com/ChenYilong/ParseSourceCodeStudy/blob/master/01_Parse%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF/Parse%E7%9A%84%E5%BA%95%E5%B1%82%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.md#gcd%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E5%83%8Foperationqueue%E9%82%A3%E6%A0%B7%E7%BB%88%E6%AD%A2%E4%BB%BB%E5%8A%A1">Parse源码浅析系列（一）&mdash;Parse的底层多线程处理思路：GCD高级用法</a></h2>
-
-<p>GCD的简单使用方法，相信大部分iOS开发者都会，但是高级用法就不一定了；看过的不少开源库，对于GCD的使用都有很多值得学习的地方。</p>
-
-<h2>四 <a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></h2>
-
-<p>很久以前的文章了，温故而知新.</p>
-
-<h2>五 <a href="http://blog.devtang.com/blog/2015/11/02/mvc-and-mvvm/">被误解的 MVC 和被神化的 MVVM</a></h2>
-
-<p>唐巧最新的文章，主要是介绍了一下作者自己对MVC和MVVM的一些理解，以及对应用新技术的一些看法，并且给出一些实际开发工程中的建议。其实，相关的道理都是浅显易懂，但是在实际的开发过程中，要使得架构层次清晰、便于维护和扩展又不是一件容易的事情，大家可以从这篇文章中汲取对自己有益的部分，并在实际开发过程中慢慢体会并且逐步应用一些实用的技巧。</p>
-
-<h2>六 <a href="http://blog.ibireme.com/">iOS 处理图片的一些小 Tip</a></h2>
-
-<p>图片处理相关</p>
-
-<h2>七 <a href="http://blog.sunnyxx.com/2015/06/12/objc-new-features-in-2015/">2015 Objective-C 新特性</a></h2>
-
-<p>描述了Objective-C的一些新特性，Lightweight Generics还是挺有用的，现在有开始用到自己的代码中。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/7">&larr; Older</a>
@@ -537,6 +513,18 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/ru-he-tong-guo-dai-ma-xiu-gai-xcodegong-cheng-wen-jian/">如何通过代码修改Xcode工程文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/">如何创建自己的私有Pod Spec Repo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/">github上Contributions丢失的问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/">在两台机器上同时用octopress写博客的问题</a>
@@ -564,18 +552,6 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
     
       <li class="post">
         <a href="/blog/2015/11/30/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">Ioskai Fa Zhi Shu Ju Chi Jiu Hua Cun Chu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/markdownbian-ji-ji-qiao/">Markdown编辑技巧</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/">工作经历回忆 之 快速性能改进</a>
       </li>
     
   </ul>
