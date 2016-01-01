@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:38:49+08:00</updated>
+  <updated>2016-01-01T19:56:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -133,55 +133,32 @@ Always verify that the rewritten version is correct: The original refs, if diffe
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[常用Git命令]]></title>
-    <link href="http://agger0207.github.io/blog/2015/12/05/chang-yong-gitming-ling/"/>
-    <updated>2015-12-05T14:26:30+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/12/05/chang-yong-gitming-ling</id>
-    <content type="html"><![CDATA[<h2>基本操作</h2>
-
-<p>git clone</p>
-
-<p>git checkout</p>
-
-<p>git push</p>
-
-<p>git pull</p>
-
-<p>git commit</p>
-
-<p>git add</p>
-
-<p>git branch</p>
-
-<h2>分支相关操作</h2>
-
-<h2>问题处理</h2>
-
-<p>1 切换到另一分支例如运行命令 <strong>git checkout develop</strong> 时提示：</p>
-
-<pre><code>error: The following untracked working tree files would be overwritten by checkout:
-...
-Please move or remove them before you can switch branches.
-Aborting
-</code></pre>
-
-<p>错误原因很清楚了，有untracked的文件未处理，如果这些文件是需要提交的，那么git commit后再切换分支;如果这些改动可能本来就不要的；那么直接执行下面命令先清理掉即可：</p>
-
-<pre><code>git clean -d -f
-</code></pre>
-
-<p>-d参数的含义是删除untracked目录与文件;-f含义是force, 强制执行。</p>
-
-<p>然后再执行 <strong>git checkout develop</strong> 就没问题了.</p>
+    <title type="html"><![CDATA[Xcode 7调试选项 Address Sanitizer]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/"/>
+    <updated>2015-12-15T14:21:58+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Markdown编辑技巧]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/markdownbian-ji-ji-qiao/"/>
-    <updated>2015-11-30T14:37:53+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/markdownbian-ji-ji-qiao</id>
-    <content type="html"><![CDATA[
+    <title type="html"><![CDATA[CocoaPods使用问题总结]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie/"/>
+    <updated>2015-12-07T14:26:58+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie</id>
+    <content type="html"><![CDATA[<p>1 CocoaPods中添加资源的支持</p>
+
+<p>2 CocoaPods中去除编译Warning</p>
+
+<p>3 添加Library</p>
+
+<p>4 集成git submodule</p>
+
+<p>5 本地Pods</p>
+
+<p>6 sub spec</p>
+
+<p>7 私有Pods</p>
 ]]></content>
   </entry>
   

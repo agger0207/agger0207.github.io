@@ -21,12 +21,28 @@
     <lastmod>2016-01-01T13:37:15+08:00</lastmod>
   </url>
   <url>
+    <loc>http://agger0207.github.io/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/</loc>
+    <lastmod>2015-12-27T17:02:50+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2015/12/17/xcode-7-ui-testing/</loc>
     <lastmod>2015-12-17T14:22:16+08:00</lastmod>
   </url>
   <url>
+    <loc>http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/</loc>
+    <lastmod>2015-12-15T14:21:58+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/</loc>
+    <lastmod>2015-12-12T14:35:06+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/</loc>
     <lastmod>2015-12-10T15:17:31+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie/</loc>
+    <lastmod>2015-12-07T14:26:58+08:00</lastmod>
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/2015/12/05/chang-yong-gitming-ling/</loc>
@@ -57,12 +73,12 @@
     <lastmod>2015-11-30T14:37:53+08:00</lastmod>
   </url>
   <url>
-    <loc>http://agger0207.github.io/blog/2015/11/28/cocoapodsji-ben-shi-yong/</loc>
-    <lastmod>2015-11-28T14:26:42+08:00</lastmod>
+    <loc>http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/</loc>
+    <lastmod>2015-11-28T14:27:11+08:00</lastmod>
   </url>
   <url>
-    <loc>http://agger0207.github.io/blog/2015/11/27/reactivecocoacao-zuo-fu-jie-shao/</loc>
-    <lastmod>2015-11-27T17:02:50+08:00</lastmod>
+    <loc>http://agger0207.github.io/blog/2015/11/28/cocoapodsji-ben-shi-yong/</loc>
+    <lastmod>2015-11-28T14:26:42+08:00</lastmod>
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/2015/11/27/gong-zuo-jing-li-hui-yi-zhi-kuai-su-xing-neng-gai-jin/</loc>
@@ -75,10 +91,6 @@
   <url>
     <loc>http://agger0207.github.io/blog/2015/11/27/wo-de-gong-zuo-jing-li/</loc>
     <lastmod>2015-11-27T14:36:21+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/blog/2015/11/27/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/</loc>
-    <lastmod>2015-11-27T14:35:06+08:00</lastmod>
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/</loc>
@@ -105,14 +117,6 @@
     <lastmod>2015-11-27T14:27:51+08:00</lastmod>
   </url>
   <url>
-    <loc>http://agger0207.github.io/blog/2015/11/27/git-submoduleji-ben-shi-yong-fang-fa/</loc>
-    <lastmod>2015-11-27T14:27:11+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/blog/2015/11/27/cocoapodsshi-yong-wen-ti-zong-jie/</loc>
-    <lastmod>2015-11-27T14:26:58+08:00</lastmod>
-  </url>
-  <url>
     <loc>http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/</loc>
     <lastmod>2015-11-27T14:25:41+08:00</lastmod>
   </url>
@@ -127,10 +131,6 @@
   <url>
     <loc>http://agger0207.github.io/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/</loc>
     <lastmod>2015-11-27T14:23:20+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/blog/2015/11/27/xcode-7diao-shi-xuan-xiang-address-sanitizer/</loc>
-    <lastmod>2015-11-27T14:21:58+08:00</lastmod>
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/</loc>
@@ -226,30 +226,12 @@
     <loc>http://agger0207.github.io/blog/categories/jing-yan-zong-jie/</loc>
   </url>
   <url>
-    <loc>http://agger0207.github.io/blog/categories/pop/</loc>
-  </url>
-  <url>
     <loc>http://agger0207.github.io/blog/categories/git/</loc>
   </url>
   <url>
+    <loc>http://agger0207.github.io/blog/categories/pop/</loc>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/categories/jie-jue-wen-ti/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/2/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/3/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/4/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/5/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/6/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/7/</loc>
   </url>
 </urlset>

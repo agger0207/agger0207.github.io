@@ -9,7 +9,8 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="基本操作 git clone git checkout git push git pull git commit git add git branch 分支相关操作 问题处理 1 切换到另一分支例如运行命令 git checkout develop 时提示： error: The &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,160 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-15T14:21:58+08:00'><span class='date'>2015 年12 月15 日</span> <span class='time'>2:21 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-12T14:35:06+08:00'><span class='date'>2015 年12 月12 日</span> <span class='time'>2:35 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-10T15:17:31+08:00'><span class='date'>2015 年12 月10 日</span> <span class='time'>3:17 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
+
+<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
+[standardDefaults synchronize];
+每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
+
+<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
+
+<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
+
+<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
+</code></pre>
+
+<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie/">CocoaPods使用问题总结</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-07T14:26:58+08:00'><span class='date'>2015 年12 月7 日</span> <span class='time'>2:26 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>1 CocoaPods中添加资源的支持</p>
+
+<p>2 CocoaPods中去除编译Warning</p>
+
+<p>3 添加Library</p>
+
+<p>4 集成git submodule</p>
+
+<p>5 本地Pods</p>
+
+<p>6 sub spec</p>
+
+<p>7 私有Pods</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -629,134 +784,6 @@ Aborting
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/">iOS开发文章选读 之 第三周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T16:02:44+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>4:02 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/">iOS开发 之 界面布局</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T15:17:05+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>3:17 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/">iOS开发 之 动画</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T15:16:54+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>3:16 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/ioskai-fa-zhi-dong-hua/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/30/markdownbian-ji-ji-qiao/">Markdown编辑技巧</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-30T14:37:53+08:00'><span class='date'>2015 年11 月30 日</span> <span class='time'>2:37 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/30/markdownbian-ji-ji-qiao/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -801,23 +828,23 @@ Aborting
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
       </li>
     
   </ul>

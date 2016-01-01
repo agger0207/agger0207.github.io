@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:38:49+08:00</updated>
+  <updated>2016-01-01T19:56:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -122,6 +122,15 @@ Aborting
 <p>-d参数的含义是删除untracked目录与文件;-f含义是force, 强制执行。</p>
 
 <p>然后再执行 <strong>git checkout develop</strong> 就没问题了.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git Submodule基本使用方法]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa/"/>
+    <updated>2015-11-28T14:27:11+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/28/git-submoduleji-ben-shi-yong-fang-fa</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   

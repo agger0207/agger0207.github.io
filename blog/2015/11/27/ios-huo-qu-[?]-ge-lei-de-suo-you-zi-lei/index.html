@@ -9,7 +9,28 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="利用Objetive-C runtime提供的方法objc_getClassList可以获取到当前源码中所有注册的类的信息，该方法的官方文档如下: /** * Obtains the list of registered class definitions. * * @param buffer &hellip;">
+  <meta name="description" content="利用Objetive-C runtime提供的方法objc_getClassList可以获取到当前源码中所有注册的类的信息，该方法的官方文档如下: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+/** * Obtains the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,56 +110,103 @@
 
 <div class="entry-content"><p>利用Objetive-C runtime提供的方法objc_getClassList可以获取到当前源码中所有注册的类的信息，该方法的官方文档如下:</p>
 
-<pre><code>/** 
- * Obtains the list of registered class definitions.
- * 
- * @param buffer An array of \c Class values. On output, each \c Class value points to
- *  one class definition, up to either \e bufferCount or the total number of registered classes,
- *  whichever is less. You can pass \c NULL to obtain the total number of registered class
- *  definitions without actually retrieving any class definitions.
- * @param bufferCount An integer value. Pass the number of pointers for which you have allocated space
- *  in \e buffer. On return, this function fills in only this number of elements. If this number is less
- *  than the number of registered classes, this function returns an arbitrary subset of the registered classes.
- * 
- * @return An integer value indicating the total number of registered classes.
- * 
- * @note The Objective-C runtime library automatically registers all the classes defined in your source code.
- *  You can create class definitions at runtime and register them with the \c objc_addClass function.
- * 
- * @warning You cannot assume that class objects you get from this function are classes that inherit from \c NSObject,
- *  so you cannot safely call any methods on such classes without detecting that the method is implemented first.
- */
-OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
-    __OSX_AVAILABLE_STARTING(__MAC_10_0, __IPHONE_2_0);
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="cm">/** </span>
+</span><span class='line'><span class="cm"> * Obtains the list of registered class definitions.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @param buffer An array of \c Class values. On output, each \c Class value points to</span>
+</span><span class='line'><span class="cm"> *  one class definition, up to either \e bufferCount or the total number of registered classes,</span>
+</span><span class='line'><span class="cm"> *  whichever is less. You can pass \c NULL to obtain the total number of registered class</span>
+</span><span class='line'><span class="cm"> *  definitions without actually retrieving any class definitions.</span>
+</span><span class='line'><span class="cm"> * @param bufferCount An integer value. Pass the number of pointers for which you have allocated space</span>
+</span><span class='line'><span class="cm"> *  in \e buffer. On return, this function fills in only this number of elements. If this number is less</span>
+</span><span class='line'><span class="cm"> *  than the number of registered classes, this function returns an arbitrary subset of the registered classes.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @return An integer value indicating the total number of registered classes.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @note The Objective-C runtime library automatically registers all the classes defined in your source code.</span>
+</span><span class='line'><span class="cm"> *  You can create class definitions at runtime and register them with the \c objc_addClass function.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @warning You cannot assume that class objects you get from this function are classes that inherit from \c NSObject,</span>
+</span><span class='line'><span class="cm"> *  so you cannot safely call any methods on such classes without detecting that the method is implemented first.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">OBJC_EXPORT</span> <span class="kt">int</span> <span class="nf">objc_getClassList</span><span class="p">(</span><span class="kt">Class</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bufferCount</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">__OSX_AVAILABLE_STARTING</span><span class="p">(</span><span class="n">__MAC_10_0</span><span class="p">,</span> <span class="n">__IPHONE_2_0</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>获取一个类的直接子类的主要思路就是，先获取到类的个数，然后分配足够的空间获取类的信息，接下来遍历所有的类并且比较基类从而判断是否该类的直接子类，代码如下所示：</p>
 
-<pre><code>+ (NSArray *)directSubclassesOfClass:(Class)baseClass {
-    int numClasses;
-    Class *classes = NULL;
-    numClasses = objc_getClassList(NULL, 0);
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">directSubclassesOfClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">baseClass</span> <span class="p">{</span>
+</span><span class='line'>   <span class="kt">int</span> <span class="n">numClasses</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">Class</span> <span class="o">*</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">classNameList</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableArray</span> <span class="n">array</span><span class="p">];</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>       <span class="n">classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">__unsafe_unretained</span> <span class="kt">Class</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span> <span class="o">*</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>       <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>       <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numClasses</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>           <span class="k">if</span> <span class="p">(</span><span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">baseClass</span><span class="p">){</span>
+</span><span class='line'>               <span class="bp">NSString</span> <span class="o">*</span><span class="n">className</span> <span class="o">=</span> <span class="n">NSStringFromClass</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>               <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="n">className</span><span class="p">);</span>
+</span><span class='line'>               <span class="k">if</span> <span class="p">([</span><span class="n">className</span> <span class="n">length</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                   <span class="p">[</span><span class="n">classNameList</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">className</span><span class="p">];</span>
+</span><span class='line'>               <span class="p">}</span>
+</span><span class='line'>           <span class="p">}</span>
+</span><span class='line'>       <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>       <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="k">return</span> <span class="n">classNameList</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    NSMutableArray *classNameList = [NSMutableArray array];
-    if (numClasses &gt; 0) {
-        classes = (__unsafe_unretained Class *)malloc(sizeof(Class) * numClasses);
-        numClasses = objc_getClassList(classes, numClasses);
-        for (int i = 0; i &lt; numClasses; i++) {
-            if (class_getSuperclass(classes[i]) == baseClass){
-                NSString *className = NSStringFromClass(classes[i]);
-                NSLog(@"%@", className);
-                if ([className length] &gt; 0) {
-                    [classNameList addObject:className];
-                }
-            }
-        }
-
-        free(classes);
-    }
-
-    return classNameList;
-}
-</code></pre>
 
 <p>但是上面的方法是不能获取到子类的子类的，只能获取到直接子类；我尝试将判断条件</p>
 
@@ -152,104 +220,199 @@ OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
 
 <p>结果Crash了。</p>
 
-<p>原因是：1 官方文档中明确说明，<strong>&ldquo;You cannot assume that class objects you get from this function are classes that inherit from \c NSObject&rdquo;</strong>, 也就是获取到的类可能根本就不是NSObject的子类，而isSubclassOfClass是NSObject的类方法；
-2 在这个过程中，会执行+initialzie方法，在这个过程中部分系统类会提示找不到selector而crash；（具体原因没有去研究过，因为第一条原因就决定了不能这样用了）</p>
+<p>原因是：</p>
+
+<ol>
+<li>官方文档中明确说明，<code>"You cannot assume that class objects you get from this function are classes that inherit from \c NSObject"</code>, 也就是获取到的类可能根本就不是NSObject的子类，而isSubclassOfClass是NSObject的类方法；</li>
+<li>在这个过程中，会执行+initialzie方法，在这个过程中部分系统类会提示找不到selector而crash；（具体原因没有去研究过，因为第一条原因就决定了不能这样用了）</li>
+</ol>
+
 
 <p>那么只能循环一下继续找基类来获取所有子类：</p>
 
-<pre><code>+ (NSArray *)subclassesOfClass:(Class)baseClass {
-    int numClasses;
-    Class *classes = NULL;
-    numClasses = objc_getClassList(NULL, 0);
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">subclassesOfClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">baseClass</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">numClasses</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">Class</span> <span class="o">*</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">classNameList</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableArray</span> <span class="n">array</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">__unsafe_unretained</span> <span class="kt">Class</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span> <span class="o">*</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numClasses</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kt">Class</span> <span class="n">iterClass</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">==</span> <span class="n">iterClass</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="kt">Class</span> <span class="n">superClass</span> <span class="o">=</span> <span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">iterClass</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">!=</span> <span class="n">superClass</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">superClass</span> <span class="o">==</span> <span class="n">baseClass</span><span class="p">){</span>
+</span><span class='line'>                    <span class="p">[</span><span class="n">classNameList</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">iterClass</span><span class="p">];</span>
+</span><span class='line'>                    <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">superClass</span> <span class="o">=</span> <span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">superClass</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">classNameList</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    NSMutableArray *classNameList = [NSMutableArray array];
-    if (numClasses &gt; 0) {
-        classes = (__unsafe_unretained Class *)malloc(sizeof(Class) * numClasses);
-        numClasses = objc_getClassList(classes, numClasses);
-        for (int i = 0; i &lt; numClasses; i++) {
-            Class iterClass = classes[i];
-            if (nil == iterClass) {
-                continue;
-            }
-
-            Class superClass = class_getSuperclass(iterClass);
-            while (nil != superClass) {
-                if (superClass == baseClass){
-                    [classNameList addObject:iterClass];
-                    break;
-                }
-
-                superClass = class_getSuperclass(superClass);
-            }
-        }
-
-        free(classes);
-    }
-
-    return classNameList;
-}
-</code></pre>
 
 <p>当然，一般情况不太会有这种需求，即使有这种需求的时候，都是需要找某个自己写的特殊类的子类，也一般有别的方法来解决，但是用来写写测试代码还是很方便的，比如我自己封装了一个网络请求的库，所有的请求都从基类的request派生都有同样的调用方式，于是可以用这种方法来快速测试某个项目中所有的请求在默认设置下是否会出错。</p>
 
 <p>另外，获取所有类的这个方法在第三方日志库CocoaLumberjack中也有用到，下面是其中一段源码：</p>
 
-<pre><code>+ (NSArray *)registeredClasses {
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">registeredClasses</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// We&#39;re going to get the list of all registered classes.</span>
+</span><span class='line'>    <span class="c1">// The Objective-C runtime library automatically registers all the classes defined in your source code.</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// To do this we use the following method (documented in the Objective-C Runtime Reference):</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// int objc_getClassList(Class *buffer, int bufferLen)</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// We can pass (NULL, 0) to obtain the total number of</span>
+</span><span class='line'>    <span class="c1">// registered class definitions without actually retrieving any class definitions.</span>
+</span><span class='line'>    <span class="c1">// This allows us to allocate the minimum amount of memory needed for the application.</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">numClasses</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">Class</span> <span class="o">*</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">numClasses</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSUInteger</span><span class="p">)</span><span class="n">MAX</span><span class="p">(</span><span class="n">objc_getClassList</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// numClasses now tells us how many classes we have (but it might change)</span>
+</span><span class='line'>        <span class="c1">// So we can allocate our buffer, and get pointers to all the class definitions.</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="bp">NSUInteger</span> <span class="n">bufferSize</span> <span class="o">=</span> <span class="n">numClasses</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">classes</span> <span class="o">=</span> <span class="n">numClasses</span> <span class="o">?</span> <span class="p">(</span><span class="kt">Class</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span> <span class="o">*</span> <span class="n">bufferSize</span><span class="p">)</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">classes</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span> <span class="c1">//no memory or classes?</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">numClasses</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSUInteger</span><span class="p">)</span><span class="n">MAX</span><span class="p">(</span><span class="n">objc_getClassList</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">bufferSize</span><span class="p">),</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">&gt;</span> <span class="n">bufferSize</span> <span class="o">||</span> <span class="n">numClasses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//apparently more classes added between calls (or a problem); try again</span>
+</span><span class='line'>            <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">numClasses</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// We can now loop through the classes, and test each one to see if it is a DDLogging class.</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableArray</span> <span class="nl">arrayWithCapacity</span><span class="p">:</span><span class="n">numClasses</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="bp">NSUInteger</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numClasses</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">Class</span> <span class="k">class</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">([</span><span class="nb">self</span> <span class="nl">isRegisteredClass</span><span class="p">:</span><span class="k">class</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">result</span> <span class="nl">addObject</span><span class="p">:</span><span class="k">class</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    // We're going to get the list of all registered classes.
-    // The Objective-C runtime library automatically registers all the classes defined in your source code.
-    //
-    // To do this we use the following method (documented in the Objective-C Runtime Reference):
-    //
-    // int objc_getClassList(Class *buffer, int bufferLen)
-    //
-    // We can pass (NULL, 0) to obtain the total number of
-    // registered class definitions without actually retrieving any class definitions.
-    // This allows us to allocate the minimum amount of memory needed for the application.
 
-    NSUInteger numClasses = 0;
-    Class *classes = NULL;
-
-    while (numClasses == 0) {
-
-        numClasses = (NSUInteger)MAX(objc_getClassList(NULL, 0), 0);
-
-        // numClasses now tells us how many classes we have (but it might change)
-        // So we can allocate our buffer, and get pointers to all the class definitions.
-
-        NSUInteger bufferSize = numClasses;
-
-        classes = numClasses ? (Class *)malloc(sizeof(Class) * bufferSize) : NULL;
-        if (classes == NULL) {
-            return nil; //no memory or classes?
-        }
-
-        numClasses = (NSUInteger)MAX(objc_getClassList(classes, (int)bufferSize),0);
-
-        if (numClasses &gt; bufferSize || numClasses == 0) {
-            //apparently more classes added between calls (or a problem); try again
-            free(classes);
-            numClasses = 0;
-        }
-    }
-
-    // We can now loop through the classes, and test each one to see if it is a DDLogging class.
-
-    NSMutableArray *result = [NSMutableArray arrayWithCapacity:numClasses];
-
-    for (NSUInteger i = 0; i &lt; numClasses; i++) {
-        Class class = classes[i];
-
-        if ([self isRegisteredClass:class]) {
-            [result addObject:class];
-        }
-    }
-
-    free(classes);
-
-    return result;
-}   
-</code></pre>
+<p>全文完.</p>
 </div>
 
 
@@ -268,6 +431,12 @@ OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
 <time class='entry-date' datetime='2015-11-27T14:23:20+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:23 pm</span></time>
       
 
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>ios</a>
+  
+</span>
+
 
     </p>
     
@@ -280,7 +449,7 @@ OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/11/27/xcode-7diao-shi-xuan-xiang-address-sanitizer/" title="Previous Post: Xcode 7调试选项 Address Sanitizer">&laquo; Xcode 7调试选项 Address Sanitizer</a>
+        <a class="basic-alignment left" href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/" title="Previous Post: Xcode插件管理器Alcatraz">&laquo; Xcode插件管理器Alcatraz</a>
       
       
         <a class="basic-alignment right" href="/blog/2015/11/27/xcode-error-use-of-undeclared-type/" title="Next Post: Xcode Error: Use of undeclared type">Xcode Error: Use of undeclared type &raquo;</a>
@@ -345,23 +514,23 @@ OBJC_EXPORT int objc_getClassList(Class *buffer, int bufferCount)
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ios, | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:38:49+08:00</updated>
+  <updated>2016-01-01T19:56:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -97,6 +97,8 @@ Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
 <p>不过，我觉得实际使用的过程中，要是能够加上JSON-Model的映射功能，使用起来会更爽；另外，这套请求还是基于AFNetworking 2.x老的那套接口，也就是AFURLSessionManager那一套，底下还是NSURLConnection, 估计后面也会迁移到AFNetworking 3.x上使用NSURLSession吧！</p>
 
 <p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
+
+<p>全文完。</p>
 ]]></content>
   </entry>
   

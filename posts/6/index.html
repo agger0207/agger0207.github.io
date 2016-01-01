@@ -191,67 +191,128 @@
 
 <p>另，在<code>YYClassPropertyInfo</code>的<code>- (instancetype)initWithProperty:(objc_property_t)property</code>方法中可以看到下面的代码：</p>
 
-<pre><code class="Objective-C">  objc_property_attribute_t *attrs = property_copyAttributeList(property, &amp;attrCount);
-  for (unsigned int i = 0; i &lt; attrCount; i++) {
-      switch (attrs[i].name[0]) {
-          case 'T': { // Type encoding
-              if (attrs[i].value) {
-                  _typeEncoding = [NSString stringWithUTF8String:attrs[i].value];
-                  type = YYEncodingGetType(attrs[i].value);
-                  if (type &amp; YYEncodingTypeObject) {
-                      size_t len = strlen(attrs[i].value);
-                      if (len &gt; 3) {
-                          char name[len - 2];
-                          name[len - 3] = '\0';
-                          memcpy(name, attrs[i].value + 2, len - 3);
-                          _cls = objc_getClass(name);
-                      }
-                  }
-              }
-          } break;
-          case 'V': { // Instance variable
-              if (attrs[i].value) {
-                  _ivarName = [NSString stringWithUTF8String:attrs[i].value];
-              }
-          } break;
-          case 'R': {
-              type |= YYEncodingTypePropertyReadonly;
-          } break;
-          case 'C': {
-              type |= YYEncodingTypePropertyCopy;
-          } break;
-          case '&amp;': {
-              type |= YYEncodingTypePropertyRetain;
-          } break;
-          case 'N': {
-              type |= YYEncodingTypePropertyNonatomic;
-          } break;
-          case 'D': {
-              type |= YYEncodingTypePropertyDynamic;
-          } break;
-          case 'W': {
-              type |= YYEncodingTypePropertyWeak;
-          } break;
-          case 'P': {
-              type |= YYEncodingTypePropertyGarbage;
-          } break;
-          case 'G': {
-              type |= YYEncodingTypePropertyCustomGetter;
-              if (attrs[i].value) {
-                  _getter = [NSString stringWithUTF8String:attrs[i].value];
-              }
-          } break;
-          case 'S': {
-              type |= YYEncodingTypePropertyCustomSetter;
-              if (attrs[i].value) {
-                  _setter = [NSString stringWithUTF8String:attrs[i].value];
-              }
-          } break;
-          default:
-              break;
-      }
-  }
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'>  <span class="kt">objc_property_attribute_t</span> <span class="o">*</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">property_copyAttributeList</span><span class="p">(</span><span class="n">property</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attrCount</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">attrCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">switch</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;T&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// Type encoding</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="n">_typeEncoding</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
+</span><span class='line'>                  <span class="n">type</span> <span class="o">=</span> <span class="n">YYEncodingGetType</span><span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">);</span>
+</span><span class='line'>                  <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">&amp;</span> <span class="n">YYEncodingTypeObject</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                      <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">);</span>
+</span><span class='line'>                      <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                          <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>                          <span class="n">name</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>                          <span class="n">memcpy</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>                          <span class="n">_cls</span> <span class="o">=</span> <span class="n">objc_getClass</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+</span><span class='line'>                      <span class="p">}</span>
+</span><span class='line'>                  <span class="p">}</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;V&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// Instance variable</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="n">_ivarName</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;R&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyReadonly</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;C&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyCopy</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;&amp;&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyRetain</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;N&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyNonatomic</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;D&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyDynamic</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;W&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyWeak</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;P&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyGarbage</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;G&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyCustomGetter</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="n">_getter</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;S&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyCustomSetter</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="n">_setter</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">default</span><span class="o">:</span>
+</span><span class='line'>              <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a>.</p>
@@ -709,23 +770,23 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
       </li>
     
       <li class="post">
+        <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/30/ioskai-fa-zhe-bo-ke/">iOS开发博客与网站</a>
       </li>
     
   </ul>

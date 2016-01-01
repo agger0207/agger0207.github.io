@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 开源库 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/kai-yuan-ku/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:38:49+08:00</updated>
+  <updated>2016-01-01T19:56:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ReactiveCocoa操作符介绍]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/"/>
+    <updated>2015-12-27T17:02:50+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Facebook Pop使用指南（翻译）]]></title>
@@ -313,6 +322,49 @@ basicAnimation.delegate=self;
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[iOS开源库 之 Sample Code]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code/"/>
+    <updated>2015-11-27T14:31:44+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-sample-code</id>
+    <content type="html"><![CDATA[<h2>一 使用Facebook的pop做的一些动画示例</h2>
+
+<p>1.<a href="https://github.com/schneiderandre/popping">schneiderandre/popping</a></p>
+
+<p>github地址：<a href="https://github.com/schneiderandre/popping">https://github.com/schneiderandre/popping</a>       <br/>
+说明：A collection of animation examples for iOS apps.</p>
+
+<p>2.<a href="https://github.com/victorBaro/PopPlayground">victorBaro/PopPlayground</a>                        <br/>
+github地址：<a href="https://github.com/victorBaro/PopPlayground">https://github.com/victorBaro/PopPlayground</a>       <br/>
+说明：Examples and Controls made entirely using Pop (Facebook&rsquo;s framework)</p>
+
+<p>3.<a href="https://github.com/callmeed/pop-playground">callmeed/pop-playground</a>     <br/>
+github地址：<a href="https://github.com/callmeed/pop-playground">https://github.com/callmeed/pop-playground</a>
+说明：Some example animations using Facebook&rsquo;s Pop animation library</p>
+
+<h2>二 针对iOS 7, 8, 9新特性的Sample Code</h2>
+
+<ol>
+<li><a href="https://github.com/shu223/iOS-9-Sampler">iOS-9-Sampler</a></li>
+<li><a href="https://github.com/shu223/iOS8-Sampler">iOS-8-Sampler</a></li>
+<li><a href="https://github.com/shu223/iOS7-Sampler">iOS-7-Sampler</a></li>
+</ol>
+
+
+<p>作者都是同一个人.</p>
+
+<h2>三 SuperDemo</h2>
+
+<ol>
+<li><a href="https://github.com/bingxue314159/SuperDemo">bingxue314159/SuperDemo</a>            <br/>
+该作者平时积累的一些第三方库和控件使用方法.</li>
+</ol>
+
+
+<p>暂时只留意到这些，后续有找到新的会陆续添加；这些Sample Code对于快速理解新特性或者一些开源库还是很有帮助的，当然，首先还是要看下苹果官方或者第三方开源库作者自己提供的Demo啦。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[iOS开源库 之 网络请求]]></title>
     <link href="http://agger0207.github.io/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/"/>
     <updated>2015-11-27T14:31:27+08:00</updated>
@@ -396,6 +448,8 @@ Full support for Objective-C ARC 全面支持Ojbective-C ARC</p>
 <p>不过，我觉得实际使用的过程中，要是能够加上JSON-Model的映射功能，使用起来会更爽；另外，这套请求还是基于AFNetworking 2.x老的那套接口，也就是AFURLSessionManager那一套，底下还是NSURLConnection, 估计后面也会迁移到AFNetworking 3.x上使用NSURLSession吧！</p>
 
 <p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
+
+<p>全文完。</p>
 ]]></content>
   </entry>
   

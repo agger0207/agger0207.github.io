@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 经验教训 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/jing-yan-jiao-xun/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T19:38:49+08:00</updated>
+  <updated>2016-01-01T19:56:03+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,71 +14,123 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Nvm安装node后bash仍然提示找不到的问题]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/"/>
-    <updated>2015-11-20T19:57:05+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti</id>
-    <content type="html"><![CDATA[<p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<code>nvm which node</code>命令查了下，貌似通过nvm安装的node在路径<code>/Users/username/.nvm/versions/node/v4.2.1/bin/node</code>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
-
-<p>后来通过下面的命令解决了这个问题：</p>
-
-<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
-</code></pre>
-
-<p>实际就是创建了一个到<code>/usr/local/bin/node</code>的软连接 。</p>
-
-<p>用homebrew直接安装的话没这个问题。</p>
+    <title type="html"><![CDATA[Xcode 7调试选项 Address Sanitizer]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/"/>
+    <updated>2015-12-15T14:21:58+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Pods: Unable to Satisfy the Following Requirements]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/"/>
-    <updated>2015-11-12T18:06:36+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements</id>
-    <content type="html"><![CDATA[<p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
-
-<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
-</code></pre>
-
-<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
-
-<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
-
-<pre><code>s.dependency "AFNetworking", "2.6.2"
-</code></pre>
-
-<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
-
-<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
-
-<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
-
-<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
+    <title type="html"><![CDATA[日常积累的开发技巧（一）]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/"/>
+    <updated>2015-12-12T14:35:06+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-([?]-)</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[工作问题记录 一]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/"/>
-    <updated>2015-11-09T20:20:44+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi</id>
-    <content type="html"><![CDATA[<p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
+    <title type="html"><![CDATA[Xcode 7免费真机调试]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi/"/>
+    <updated>2015-11-27T14:33:55+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/xcode-7mian-fei-zhen-ji-diao-shi</id>
+    <content type="html"><![CDATA[<p>现在Xcode 7可以免费进行真机调试了，不需要任何开发者账号，只要有一个Apple ID就可以了。</p>
 
-<h2>一  使用RestKit的时候Crash</h2>
+<p>主要步骤如下：
+1 运行Xcode后，点击菜单中的Preferences, 进行Account标签，选择添加Apple Id
+2 输入AppId，登录；登录成功后会看到相关信息；
+3 选中账号信息，点击View Details, 在弹出的对话框中操作添加开发者证书
+4 打开要调试的项目，在Target的General的Team中可以看到刚才添加的Apple Id
+5 连上设备调试前可以看到Team旁有一个Issue, 点击Fix，profile就生成并且添加到项目中了
+6 可以到原来设置profile和证书的地方看看，一切都设置好了。然后就可以运行调试并且安装到真机上了。</p>
 
-<p>参考：
-<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
+<p>全程傻瓜式操作；晚点上图：）</p>
 
-<h2>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</h2>
+<p>不过会不会有什么坑暂时还不知道，等遇到了再更新；至少现在是用得好好的，不需要开发者账号也可以愉快的真机调试.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[App Store审核拒绝理由]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/"/>
+    <updated>2015-11-27T14:28:17+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/app-storeshen-he-ju-jue-li-you</id>
+    <content type="html"><![CDATA[<p>这几天在ASO100的微信公众号上看到<a href="%E5%9C%B0%E5%9D%80%E6%89%BE%E4%B8%8D%E5%88%B0">2015年App Store审核被拒的23个理由</a>, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。</p>
 
-<p>参考：
-<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
+<p>1 App中出现安卓字样；一般是活动页面；
+2 App中活动页面奖品中出现iPhone等；
+3 App中活动页面没有返回按钮；
+这个问题出现的原因是，活动页面一般使用H5来做，然后有的H5带了Header, 有的没有带；客户端通过URL参数来判断是否要加导航栏头部，然后万一运营上了个活动页面，自己没有带H5 Header, 配置又不正确的话，就悲剧了；
+4 应用内提供了检查更新机制；
+吐槽：话说尽管苹果审核指南明确规定了所有应用都应该通过AppStore更新，但其实很多应用都在设置页面提供了检查更新的机制，然后在2015年的某一天，突然这个就成为了被拒的理由了，即使同样的功能已经存在一年多了。。。。
+5 推荐其他应用
+别家的应用是一定不能推荐的，自家的应用不清楚，不过我看大家基本都在推，好像问题不太大。
+6 求好评
+具体不记得了，一般在设置页面放一栏是没啥问题的，但是好像某种弹出界面以比较强的提示要求给好评的话，会过不了审核
+7 彩票类栏目没有提供用户协议
+嗯，这个也是一个某个功能存在了很久，突然就因为这个被拒了。。。。
+8 提供用户注册功能的应用必须提供隐私协议
+同上，之前好好的过审，苹果艳照门之后就一定要提供隐私协议了
+9 社区模块没有提供举报功能
+吐槽：不说啥，社区水很深，据说社区里面的帖子里面要是有“安卓”字样都可能被拒
+10 在status bar上显示自己的信息
+吐槽：这个是听兄弟部门的哥们说的，以前大家都会在status bar上显示一些提示信息，比如说下载进度、同步进度或者active状态下收到的push消息等等，但是兄弟部门的哥们说iOS 9之后，不让加了，因为这个被拒了一次，据说是因为status bar上苹果自己要在那上面显示信息了。。。
+11 非用户创造的数据没有放在/tmp下也没有打上do not back up属性，会被拒，因为苹果认为只有用户创造的数据才允许被iCloud backup备份
+可以参见下面两个链接：
+<a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">https://developer.apple.com/library/ios/qa/qa1719/_index.html</a>
+<a href="https://developer.apple.com/icloud/documentation/data-storage/index.html">https://developer.apple.com/icloud/documentation/data-storage/index.html</a></p>
 
-<h2>三 Framework签名问题</h2>
+<p>上次其他组因为这个原因被拒是因为下载的H5资源包放在Documents目录下没有加do not back up属性.</p>
 
-<p>参考：
-<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
+<p>12 H5资源包升级的时候卡住界面了&hellip;.
+其实是个bug, 不过也提醒我们，这种资源包升级的事情明显可以在审核过程中避免或者在测试过程中出现的，应该尽早处理掉.</p>
+
+<p>有些想不起来了，想起来了后面再加：）</p>
+
+<p>小结：
+1 审核期间运营上活动一定要注意沟通，一般运营都不明白审核规则，有些甚至上了活动之后自己都不会去测试；当然，有些公司会直接在后台做一些配置确保当前递交版本不会出现新的活动页面；
+2 可能因为网络原因导致出错的主要功能要在审核前格外注意.</p>
+
+<p>当然，你还可以在<a href="https://github.com/jcccn/Why-Reject">苹果审核拒绝理由</a> 下面看到更多奇葩理由。</p>
+
+<p>为了保证审核通过，还是要仔细研究苹果官方的审核指南，不过其实大家很多时候都没有严格按照审核指南来做，很多时候甚至是想一些办法来绕过审核的。苹果的审核由于是人工审核，有的时候也会有一些奇葩的事情发生，经常会出现多年不修改的功能，突然某个版本就过不了审核了；尤其是在苹果发布新版本的Xcode，iOS或者出了一些隐私泄漏的大事的时候，审核都会收紧。</p>
+
+<p>建议新产品第一次上线前，有专人能够根据审核规则进行一次详细的Review, 这样大家能够形成共识，避免下次出现问题, 至少不会把未完成的功能加上去或者说出现“敬请期待”等等。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[运行时报错 This Application Is Modifying the Autolayout Engine From a Background Thread]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/"/>
+    <updated>2015-11-27T14:25:41+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine</id>
+    <content type="html"><![CDATA[<p>下了个老的Swift的Demo, 在iOS 9模拟器上运行时报错</p>
+
+<pre><code>This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes. This will cause an exception in a future release.
+</code></pre>
+
+<p>从错误信息中可以看出，在后台线程中修改了UI. 搜了下，NSURLSession的问题，iOS 9上，NSURLSession的回调并不是在主线程中了，那个Demo在回调中直接去修改了界面，所以会报这个错。对应的Objective-C方法如下：</p>
+
+<pre><code>- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler;
+</code></pre>
+
+<p>解决方案:</p>
+
+<p>在block中需要更新UI时，利用GCD切换到主线程即可；</p>
+
+<pre><code>// Swift    
+dispatch_async(dispatch_get_main_queue(), {
+    // code here
+})
+</code></pre>
+
+<p>从StackOverFlow上的回答来看， NSURLConnection也存在这个问题，而且仅仅在iOS 9 SDK上才出现，改天看看AFNetworking的改动确认一下：</p>
+
+<p>附链接：</p>
+
+<p><a href="http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error">Getting a “This application is modifying the autolayout engine” error?</a></p>
 ]]></content>
   </entry>
   
