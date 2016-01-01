@@ -3,7 +3,7 @@ layout: post
 title: "Cocoapods和Git submodules结合使用"
 date: 2015-11-20 19:41:59 +0800
 comments: true
-categories: 工作
+categories: 工具 git
 ---
 
 iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上[Carthage](https://github.com/Carthage/Carthage)）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。

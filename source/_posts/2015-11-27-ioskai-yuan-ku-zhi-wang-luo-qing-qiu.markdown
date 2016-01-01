@@ -3,7 +3,7 @@ layout: post
 title: "iOS开源库 之 网络请求"
 date: 2015-11-27 14:31:27 +0800
 comments: true
-categories: iOS, 开源库
+categories: iOS 开源库
 ---
 
 iOS一般都是HTTP/HTTPS网络请求，相应的有多个开源库来支持iOS客户端HTTP请求; 比较知名和常用的主要有如下几个：

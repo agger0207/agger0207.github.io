@@ -3,7 +3,7 @@ layout: post
 title: "github上Contributions丢失的问题"
 date: 2016-01-01 14:09:54 +0800
 comments: true
-categories: 工具
+categories: 工具 git
 ---
 
 前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了，而github是通过user email来对应到实际的用户的；解决这个问题一般通过命令

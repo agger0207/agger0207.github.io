@@ -3,7 +3,7 @@ layout: post
 title: "在两台机器上同时用octopress写博客的问题"
 date: 2016-01-01 13:37:15 +0800
 comments: true
-categories: 解决问题
+categories: 工具 经验技巧 git
 ---
 
 问题描述:

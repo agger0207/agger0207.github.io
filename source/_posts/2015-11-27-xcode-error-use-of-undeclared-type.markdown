@@ -3,7 +3,7 @@ layout: post
 title: "Xcode Error: Use of undeclared type"
 date: 2015-11-27 14:23:53 +0800
 comments: true
-categories: 经验教训
+categories: 经验技巧
 ---
 
 前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决：

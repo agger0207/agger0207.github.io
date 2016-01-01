@@ -3,7 +3,7 @@ layout: post
 title: "让人崩溃的bug"
 date: 2015-11-27 14:36:39 +0800
 comments: true
-categories: 经验总结
+categories: 经验技巧
 ---
 ## 一 iOS使用不规范造成的首页白屏
 

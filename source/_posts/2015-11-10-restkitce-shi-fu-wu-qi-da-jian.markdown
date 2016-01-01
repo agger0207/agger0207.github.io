@@ -3,7 +3,7 @@ layout: post
 title: "RestKit测试服务器搭建"
 date: 2015-11-10 20:38:03 +0800
 comments: true
-categories: 工具
+categories: 开源库 工具
 ---
 ## 用途
 RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。本文档主要针对服务器的配置与启动列出实际的解决方案。

@@ -61,15 +61,30 @@ categories: 工具
 当写好文章发布后，我发现在Markdown里面添加的列表的缩进存在问题，列表符号（或者编号）默认溢出左侧文字内容边界, 没有和上下文对齐，显得非常难看，例如本文末尾的参考链接里的列表，而调整正常的方法就是在`sass/custom/_layout.scss`中找到`//$indented-lists: true;`然后再去掉注释符号`//`即可开启列表自动缩进的功能。
 
 ### 添加导航栏上的链接
+在`source/_includes/custom/navigation.html`里可以设置导航栏上显示的内容和链接，例如，如果想要在导航栏上显示`首页`, `工具`, `所有文章`这几项，那么`navigation.html`的内容应该类似下面这样子:
+
+	<ul class="main-navigation">
+	  <li><a href="{{ root_url }}/">首页</a></li>
+	  <li><a href="{{ root_url }}/blog/categories/gong-ju">工具</a></li>
+	  <li><a href="{{ root_url }}/blog/archives">所有文章</a></li>
+	</ul>
+
+链接怎么知道呢？在`_deploy`目录下实际放着的就是这个博客对应的网页文件，在`blog/categories`目录下就是所有的分类，那么这个url其实就是和文件的相对路径对应的了。
 
 ### 添加分类
-TODO: 使用多说的评论系统
+新生成的Markdown文件中，有`categories:`内容，直接在后面写上分类的名字即可；如果一篇文章属于多个分类，那么多个分类之间用空格隔开即可。
 
-## 代码着色
+### 代码着色
 直接用Markdown的语法即可为代码着色。
+
+### 编辑格式调整
+基本就是普通的Markdown编辑，后面会写一篇介绍如何使用Markdown的文档；实在不行，参照别人git上的源码整整或者google一下，方便又快捷。
 
 ## 评论系统
 TODO: 使用多说的评论系统
+
+## 如何加快访问速度
+TODO
 
 ## 参考链接
 如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.

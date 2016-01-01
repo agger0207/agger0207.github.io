@@ -3,7 +3,7 @@ layout: post
 title: "iOS开发 之 数据持久化存储"
 date: 2015-12-10 15:17:31 +0800
 comments: true
-categories: 
+categories: iOS
 ---
 
 如果只是想设置默认值而不覆盖用户设置的值，那么可以通过`registerDefaults`来做.
