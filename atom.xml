@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-01T15:11:57+08:00</updated>
+  <updated>2016-01-01T18:23:04+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -182,27 +182,10 @@ $ ls -a
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[iOS开发博客与网站]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke/"/>
-    <updated>2015-11-30T16:05:03+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke</id>
-    <content type="html"><![CDATA[<p>值得一看的iOS开发者博客:</p>
-
-<p>推荐的文章：</p>
-
-<p>InfoQ: 可以订阅一下</p>
-
-<p>CocoaChina: 文章多，但是好文章不够，可以订阅一下；</p>
-
-<p>订阅的一些微信公众号：</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Facebook Pop使用指南（翻译）]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/"/>
-    <updated>2015-11-30T16:03:28+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)</id>
+    <link href="http://agger0207.github.io/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)/"/>
+    <updated>2015-12-02T16:03:28+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)</id>
     <content type="html"><![CDATA[<p>原文链接：</p>
 
 <p><a href="https://github.com/maxmyers/FacebookPop">maxmyers/FacebookPop</a></p>
@@ -626,6 +609,23 @@ $ ls -a
 
 
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发博客与网站]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke/"/>
+    <updated>2015-11-30T16:05:03+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke</id>
+    <content type="html"><![CDATA[<p>值得一看的iOS开发者博客:</p>
+
+<p>推荐的文章：</p>
+
+<p>InfoQ: 可以订阅一下</p>
+
+<p>CocoaChina: 文章多，但是好文章不够，可以订阅一下；</p>
+
+<p>订阅的一些微信公众号：</p>
 ]]></content>
   </entry>
   
