@@ -25,7 +25,9 @@ class String
       i = index($1)
       x = self[i,self.length]
       # word with capitals and periods mid-word are left alone
-      self[i,1] = self[i,1].upcase unless x =~ /[A-Z]/ or x =~ /\.\w+/
+      # lwang comment: 注释掉下面一行代码主要是为了修正Category大小写的问题, 之前名为iOS的Category大小写总是错误的显示为Ios
+      # 不过应该有更合理的解决这个issue的方法.
+      # self[i,1] = self[i,1].upcase unless x =~ /[A-Z]/ or x =~ /\.\w+/
     end
     self
   end
