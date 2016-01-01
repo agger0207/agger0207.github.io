@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 开源库 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/kai-yuan-ku/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2015-11-30T20:31:03+08:00</updated>
+  <updated>2016-01-01T13:05:10+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,301 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Facebook Pop使用指南（翻译）]]></title>
+    <link href="http://agger0207.github.io/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)/"/>
+    <updated>2015-11-30T16:03:28+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/11/30/facebook-popshi-yong-zhi-nan-(fan-yi-)</id>
+    <content type="html"><![CDATA[<p>原文链接：</p>
+
+<p><a href="https://github.com/maxmyers/FacebookPop">maxmyers/FacebookPop</a></p>
+
+<h1>使用Facebook Pop库的五个步骤</h1>
+
+<pre><code class="objective-c">  // 1. 选择一种动画类型 
+  // 存在如下几种动画类型: POPBasicAnimation  POPSpringAnimation POPDecayAnimation
+  POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+
+  // 2. 决定你是要针对View的属性做动画还是Layer的属性做动画, 这里我们选择一个View的属性kPOPViewFrame, 顾名思义，这是针对View的Frame变化做动画
+  // View的属性包括： kPOPViewAlpha kPOPViewBackgroundColor kPOPViewBounds kPOPViewCenter kPOPViewFrame kPOPViewScaleXY kPOPViewSize
+  // Layer的属性包括 - kPOPLayerBackgroundColor kPOPLayerBounds kPOPLayerScaleXY kPOPLayerSize kPOPLayerOpacity kPOPLayerPosition kPOPLayerPositionX kPOPLayerPositionY kPOPLayerRotation kPOPLayerBackgroundColor
+  basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
+
+  // 3. 确定使用下面其中一种方法来设置toValue
+   //  anim.toValue = @(1.0);
+  //  anim.toValue =  [NSValue valueWithCGRect:CGRectMake(0, 0, 400, 400)];
+  //  anim.toValue =  [NSValue valueWithCGSize:CGSizeMake(40, 40)];
+  basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(0, 0, 90, 190)];
+
+  // 4. 为动画创建名字以及设置Delegate
+   basicAnimation.name=@"AnyAnimationNameYouWant";
+   basicAnimation.delegate=self
+
+  // 5. 将动画附加到View或者Layer, 这里我们选择self.tableView
+  // 如果我们之前设置的是针对Layer的属性，那么我们可以选择一个Layer例如self.tableView.layer
+  [self.tableView pop_addAnimation:basicAnimation forKey:@"WhatEverNameYouWant"];
+</code></pre>
+
+<h2>第一步 选择一种动画类型</h2>
+
+<h3>POPBasicAnimation （基本动画）</h3>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+// kCAMediaTimingFunctionLinear  kCAMediaTimingFunctionEaseIn  kCAMediaTimingFunctionEaseOut  kCAMediaTimingFunctionEaseInEaseOut
+</code></pre>
+
+<h3>POPSpringAnimation (弹簧动画)</h3>
+
+<pre><code class="objective-c">POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
+springAnimation.velocity=@(1000);       // change of value units per second
+springAnimation.springBounciness=14;    // value between 0-20 default at 4
+springAnimation.springSpeed=3;     // value between 0-20 default at 4
+</code></pre>
+
+<h3>POPDecayAnimation  (衰减动画)</h3>
+
+<pre><code class="objective-c">POPDecayAnimation *decayAnimation=[POPDecayAnimation animation];
+decayAnimation.velocity=@(233); //change of value units per second
+decayAnimation.deceleration=.833; //range of 0 to 1
+</code></pre>
+
+<h3>例如</h3>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+</code></pre>
+
+<h2>Step 2 选择是需要在view的属性上做动画还是Layer的属性上做动画</h2>
+
+<h3>View 的属性</h3>
+
+<p>下列枚举值与UIView的属性对应, 例如 alpha, color, bounds, center, frame, size等等;</p>
+
+<h5>Alpha - kPOPViewAlpha</h5>
+
+<h5>Color - kPOPViewBackgroundColor</h5>
+
+<h5>Size - kPOPViewBounds</h5>
+
+<h5>Center - kPOPViewCenter</h5>
+
+<h5>Location &amp; Size - kPOPViewFrame</h5>
+
+<h5>Size - kPOPViewScaleXY</h5>
+
+<h5>Size(Scale) - kPOPViewSize</h5>
+
+<h3>Layer的属性</h3>
+
+<p>下列枚举值与CALayer的属性对应，例如opaque等等</p>
+
+<h5>Color - kPOPLayerBackgroundColor</h5>
+
+<h5>Size - kPOPLayerBounds</h5>
+
+<h5>Size - kPOPLayerScaleXY</h5>
+
+<h5>Size - kPOPLayerSize</h5>
+
+<h5>Opacity - kPOPLayerOpacity</h5>
+
+<h5>Position - kPOPLayerPosition</h5>
+
+<h5>X Position - kPOPLayerPositionX</h5>
+
+<h5>Y Position - kPOPLayerPositionY</h5>
+
+<h5>Rotation - kPOPLayerRotation</h5>
+
+<h5>Color - kPOPLayerBackgroundColor</h5>
+
+<h3>例如</h3>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+// 选择在View的Frame属性上应用动画
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
+</code></pre>
+
+<h4>注意: 这些属性在任意的Layer属性或者UIView的属性上都可以生效，例如 UIToolbar | UIPickerView | UIDatePicker | UIScrollView |  UITextView | UIImageView | UITableViewCell | UIStepper | UIProgressView | UIActivityIndicatorView | UISwitch | UISlider | UITextField | UISegmentedControl | UIButton | UIView | UITableView</h4>
+
+<p>(意思是：可以对任意UIView的子类以及其layer应用动画)</p>
+
+<h2>Step 3 Find your property below then add and set .toValue</h2>
+
+<h3>View Properties</h3>
+
+<h5>Alpha - kPOPViewAlpha</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewAlpha];
+basicAnimation.toValue= @(0); // scale from 0 to 1
+</code></pre>
+
+<h5>Color - kPOPViewBackgroundColor</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPViewBackgroundColor];
+basicAnimation.toValue= [UIColor redColor];
+</code></pre>
+
+<h5>Size - kPOPViewBounds</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewBounds];
+basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(0, 0, 90, 190)]; //first 2 values dont matter
+</code></pre>
+
+<h5>Center - kPOPViewCenter</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
+basicAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(200, 200)];
+</code></pre>
+
+<h5>Location &amp; Size - kPOPViewFrame</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
+basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(140, 140, 140, 140)];
+</code></pre>
+
+<h5>Size - kPOPViewScaleXY</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewScaleXY];
+basicAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(3, 2)];
+</code></pre>
+
+<h5>Size(Scale) - kPOPViewSize</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewSize];
+basicAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(30, 200)];
+</code></pre>
+
+<h3>Layer Properties</h3>
+
+<h5>Color - kPOPLayerBackgroundColor</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerBackgroundColor];
+basicAnimation.toValue= [UIColor redColor];
+</code></pre>
+
+<h5>Size - kPOPLayerBounds</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerBounds];
+basicAnimation.toValue= [NSValue valueWithCGRect:CGRectMake(0, 0, 90, 90)]; //first 2 values dont matter
+</code></pre>
+
+<h5>Size - kPOPLayerScaleXY</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerScaleXY];
+basicAnimation.toValue= [NSValue valueWithCGSize:CGSizeMake(2, 1)];//increases width and height scales
+</code></pre>
+
+<h5>Size - kPOPLayerSize</h5>
+
+<pre><code class="objective-c">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerSize];
+basicAnimation.toValue= [NSValue valueWithCGSize:CGSizeMake(200, 200)];
+</code></pre>
+
+<h5>Opacity - kPOPLayerOpacity</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerOpacity];
+basicAnimation.toValue = @(0);
+</code></pre>
+
+<h5>Position - kPOPLayerPosition</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerPosition];
+basicAnimation.toValue= [NSValue valueWithCGRect:CGRectMake(130, 130, 0, 0)];//last 2 values dont matter
+</code></pre>
+
+<h5>X Position - kPOPLayerPositionX</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerPositionX];
+basicAnimation.toValue= @(240);
+</code></pre>
+
+<h5>Y Position - kPOPLayerPositionY</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *anim = [POPSpringAnimation animation];
+anim.property=[POPAnimatableProperty propertyWithName:kPOPLayerPositionY];
+anim.toValue = @(320);
+</code></pre>
+
+<h5>Rotation - kPOPLayerRotation</h5>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerRotation];
+basicAnimation.toValue= @(M_PI/4); //2 M_PI is an entire rotation
+</code></pre>
+
+<h4>Note: Property Changes work for all 3 animation types - POPBasicAnimation POPSpringAnimation POPDecayAnimation</h4>
+
+<h3>Example</h3>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerRotation];
+basicAnimation.toValue= @(M_PI/4); //2 M_PI is an entire rotation
+</code></pre>
+
+<h2>Step 4 Create Name &amp; Delegate For Animation</h2>
+
+<pre><code class="objective-c">basicAnimation.name=@"WhatEverAnimationNameYouWant";
+basicAnimation.delegate=self;
+</code></pre>
+
+<h5>Declare Delegate Protocol <code>&lt;POPAnimatorDelegate&gt;</code></h5>
+
+<h3>Delegate Methods</h3>
+
+<p><code>
+&lt;POPAnimatorDelegate&gt;
+</code>
+<code>objective-c
+- (void)pop_animationDidStart:(POPAnimation *)anim;
+</code>
+<code>objective-c
+- (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished;
+</code>
+<code>objective-c
+- (void)pop_animationDidReachToValue:(POPAnimation *)anim;
+</code></p>
+
+<h3>Example</h3>
+
+<pre><code class="objective-c">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
+basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(0, 0, 90, 190)];
+basicAnimation.name=@"WhatEverAnimationNameYouWant";
+basicAnimation.delegate=self;
+</code></pre>
+
+<h2>Step 5 向view添加动画</h2>
+
+<pre><code class="objective-c"> [self.tableView pop_addAnimation:basicAnimation forKey:@"WhatEverNameYouWant"];
+</code></pre>
+
+<h3>Example</h3>
+
+<pre><code class="objective-c">  POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];
+  basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
+  basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(0, 0, 90, 190)];
+  basicAnimation.name=@"SomeAnimationNameYouChoose";
+  basicAnimation.delegate=self;
+  [self.tableView pop_addAnimation:basicAnimation forKey:@"WhatEverNameYouWant"];
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS开源库 之 网络请求]]></title>
