@@ -3,7 +3,7 @@ layout: post
 title: "Xcode插件管理器Alcatraz"
 date: 2015-11-27 14:20:53 +0800
 comments: true
-categories: 
+categories: 工具
 ---
 
 Xcode插件管理器Alcatraz可以帮助搜索、查看和安装各类Xcode插件，这样不需要每次再去每个插件的主页上去找安装帮助文档了，极大的简化了Xcode插件的安装与管理.

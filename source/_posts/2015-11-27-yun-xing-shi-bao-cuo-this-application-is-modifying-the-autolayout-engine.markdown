@@ -3,7 +3,7 @@ layout: post
 title: "运行时报错 This application is modifying the autolayout engine from a background thread"
 date: 2015-11-27 14:25:41 +0800
 comments: true
-categories: 
+categories: 经验教训
 ---
 
 下了个老的Swift的Demo, 在iOS 9模拟器上运行时报错

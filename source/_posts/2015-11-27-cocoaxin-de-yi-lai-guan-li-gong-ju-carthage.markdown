@@ -18,8 +18,8 @@ github地址：
 
 由于自己主要还是在用Cocoapods和git submodule，所以还是推荐两篇文章自己去看吧，也算是给自己的一个备忘:
 
-[Carthage：Xcode项目的GitHub依赖管理器](http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager)
-[Cocoa 新的依赖管理工具：Carthage](http://www.isaced.com/post-265.html)
+1. [Carthage：Xcode项目的GitHub依赖管理器](http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager)
+2. [Cocoa 新的依赖管理工具：Carthage](http://www.isaced.com/post-265.html)
 
 
 

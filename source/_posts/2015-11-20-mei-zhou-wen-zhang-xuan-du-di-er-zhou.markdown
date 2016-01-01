@@ -36,7 +36,7 @@ InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，�
 
 主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。
 
-七 [浅析MagicalRecord](http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/)
+## 七 [浅析MagicalRecord](http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/)
 
 网易同事写的，还没来得及仔细看，主要是对[MagicalRecord](https://github.com/magicalpanda/MagicalRecord)的一些介绍.
 

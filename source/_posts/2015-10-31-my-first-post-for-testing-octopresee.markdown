@@ -3,7 +3,7 @@ layout: post
 title: "My First Post for Testing Octopress"
 date: 2015-10-31 15:46:15 +0800
 comments: true
-categories: 
+categories: 其它
 ---
 
 It is a test file
@@ -40,5 +40,5 @@ It is a test file
 	
 参考资料：
 
-[Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)
-[南峰子的技术博客](http://southpeak.github.io/)	
+1. [Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)
+2. [南峰子的技术博客](http://southpeak.github.io/)	

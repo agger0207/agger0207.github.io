@@ -20,5 +20,5 @@ iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（�
 	
 Done.
 
-参考资料：  
-1 [USING SUBMODULES IN COCOAPODS SOURCED FROM GIT](http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/)			
+## 参考资料  
+1. [USING SUBMODULES IN COCOAPODS SOURCED FROM GIT](http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/)			

@@ -86,3 +86,5 @@ YTKNetwork 是猿题库 iOS 研发团队基于 AFNetworking 封装的 iOS 网络
 
 另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.
 
+全文完。
+

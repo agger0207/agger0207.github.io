@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "CocoaPods使用问题总结"
-date: 2015-11-27 14:26:58 +0800
+date: 2015-12-7 14:26:58 +0800
 comments: true
-categories: 
+categories: 工具
 ---
 
 1 CocoaPods中添加资源的支持

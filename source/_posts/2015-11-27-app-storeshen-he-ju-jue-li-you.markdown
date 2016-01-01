@@ -3,7 +3,7 @@ layout: post
 title: "App Store审核拒绝理由"
 date: 2015-11-27 14:28:17 +0800
 comments: true
-categories: 经验技巧
+categories: iOS 经验教训
 ---
 
 这几天在ASO100的微信公众号上看到[2015年App Store审核被拒的23个理由](地址找不到), 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。

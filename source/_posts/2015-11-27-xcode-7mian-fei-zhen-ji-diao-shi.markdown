@@ -3,7 +3,7 @@ layout: post
 title: "Xcode 7免费真机调试"
 date: 2015-11-27 14:33:55 +0800
 comments: true
-categories: 
+categories: 经验教训
 ---
 
 现在Xcode 7可以免费进行真机调试了，不需要任何开发者账号，只要有一个Apple ID就可以了。

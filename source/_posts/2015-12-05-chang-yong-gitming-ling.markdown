@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "常用Git命令"
-date: 2015-11-27 14:26:30 +0800
+date: 2015-12-5 14:26:30 +0800
 comments: true
-categories: 
+categories: 工具 git
 ---
 
 ## 基本操作
