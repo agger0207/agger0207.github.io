@@ -6,6 +6,8 @@ comments: true
 categories: 其它
 ---
 
+## 正文
+
 It is a test file
 
 这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。
@@ -38,7 +40,6 @@ It is a test file
 	}
 ```	
 	
-参考资料：
-
+## 参考资料
 1. [Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)
 2. [南峰子的技术博客](http://southpeak.github.io/)	
