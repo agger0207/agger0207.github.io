@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T13:31:32+08:00</updated>
+  <updated>2016-01-02T13:59:11+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,11 +14,51 @@
 
   
   <entry>
-    <title type="html"><![CDATA[iOS界面性能优化]]></title>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第八周]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/"/>
+    <updated>2016-01-02T13:54:06+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[UIVieiew与CALayer]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/02/uivieiewyu-calayer/"/>
+    <updated>2016-01-02T13:49:22+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/02/uivieiewyu-calayer</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS界面性能分析与优化]]></title>
     <link href="http://agger0207.github.io/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/"/>
     <updated>2016-01-01T20:17:14+08:00</updated>
     <id>http://agger0207.github.io/blog/2016/01/01/iosjie-mian-xing-neng-you-hua</id>
-    <content type="html"><![CDATA[<p>Instrument</p>
+    <content type="html"><![CDATA[<h2>Instrument性能分析</h2>
+
+<h3>Time Profiler</h3>
+
+<h3>Core Animation</h3>
+
+<h3>OpenGL ES</h3>
+
+<h2>性能因素</h2>
+
+<h3>Blending</h3>
+
+<h3>离屏渲染</h3>
+
+<h3>DrawRect</h3>
+
+<h2>UITableView</h2>
+
+<h2>改进方案</h2>
+
+<h3>异步绘制</h3>
+
+<h3>AsyncDisplayKit</h3>
 ]]></content>
   </entry>
   
@@ -245,6 +285,24 @@ $ ls -a
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第七周]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/"/>
+    <updated>2015-12-25T13:53:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第六周]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/18/ioskai-fa-mei-zhou-wen-zhang-xuan-du-6/"/>
+    <updated>2015-12-18T13:53:48+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/18/ioskai-fa-mei-zhou-wen-zhang-xuan-du-6</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Xcode 7 UI Testing]]></title>
     <link href="http://agger0207.github.io/blog/2015/12/17/xcode-7-ui-testing/"/>
     <updated>2015-12-17T14:22:16+08:00</updated>
@@ -267,6 +325,15 @@ $ ls -a
     <link href="http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/"/>
     <updated>2015-12-12T14:35:06+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-([?]-)</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第五周]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/11/ioskai-fa-mei-zhou-wen-zhang-xuan-du-5/"/>
+    <updated>2015-12-11T13:53:35+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/11/ioskai-fa-mei-zhou-wen-zhang-xuan-du-5</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
@@ -356,6 +423,15 @@ Aborting
 <p>-d参数的含义是删除untracked目录与文件;-f含义是force, 强制执行。</p>
 
 <p>然后再执行 <strong>git checkout develop</strong> 就没问题了.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第四周]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/04/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/"/>
+    <updated>2015-12-04T16:02:44+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/04/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
@@ -789,80 +865,6 @@ Aborting
 
 
 <p>后记：其实翻译这个纯粹是偷懒，因为绝大部分都是代码，不需要翻译:) 不过算是个开头吧，然后真有兴趣的可以直接去原文链接看好了，是github上的一个仓库；另外，github上还有很多使用pop的动画例子可供参考.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发博客与网站]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke/"/>
-    <updated>2015-11-30T16:05:03+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhe-bo-ke</id>
-    <content type="html"><![CDATA[<p>值得一看的iOS开发者博客:</p>
-
-<p>推荐的文章：</p>
-
-<p>InfoQ: 可以订阅一下</p>
-
-<p>CocoaChina: 文章多，但是好文章不够，可以订阅一下；</p>
-
-<p>订阅的一些微信公众号：</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发文章选读 之 第三周]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou/"/>
-    <updated>2015-11-30T16:02:44+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-wen-zhang-xuan-du-zhi-di-san-zhou</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发 之 界面布局]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju/"/>
-    <updated>2015-11-30T15:17:05+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-jie-mian-bu-ju</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发 之 动画]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-dong-hua/"/>
-    <updated>2015-11-30T15:16:54+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/ioskai-fa-zhi-dong-hua</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Markdown编辑技巧]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/30/markdownbian-ji-ji-qiao/"/>
-    <updated>2015-11-30T14:37:53+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/30/markdownbian-ji-ji-qiao</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcode Error: Use of undeclared type]]></title>
-    <link href="http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type/"/>
-    <updated>2015-11-29T14:23:53+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/11/29/xcode-error-use-of-undeclared-type</id>
-    <content type="html"><![CDATA[<p>前几天写swift + watchOS 的程序时，编译遇到个错误，提示"Use of undeclard type"; 但实际上是系统类型，而且也正确import了module;后来仔细看了下，发现原来是加错了target导致的；修改成为正确的Target之后问题解决：</p>
-
-<p>如下图：</p>
-
-<p><img src="http://agger0207.github.io/images/XcodeTarget.jpg" alt="img" /></p>
-
-<p>出错的时候，所有Target是全选的。</p>
-
-<p>我后来新建了个文件试下，默认所有的Target都是选中的，当时没注意，一路Next下去了；后来突然想起前几天好像装了个Xcode插件叫做<code>AllTargets</code>的，这个插件就是当添加文件到工程的时候会自动帮助选上所有的Target，后来想想，这个功能没啥用，赶紧将这个插件删除了，然后就不会有这个问题啦:)</p>
-
-<p><code>AllTargets</code>如下图所示：</p>
-
-<p><img src="http://agger0207.github.io/images/XcodeAllTargets.jpg" alt="img" /></p>
 ]]></content>
   </entry>
   

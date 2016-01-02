@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="这周偷懒，随便选了些以前读过的老文章 一 iOS Design Patterns raywenderlich出品的文章都很不错，主要就是介绍iOS开发中常用的那些设计模式，以及在什么场景下使用；内容充实，解释清楚，而且结合了iOS开发自身的特点。 二 Dynamic Table View Cell &hellip;">
+  <meta name="description" content="之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。 不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +68,551 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/">Cocoa新的依赖管理工具 Carthage</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:27:51+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:27 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/cocoaxin-de-yi-lai-guan-li-gong-ju-carthage/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。</p>
+
+<p>不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS 8以及以后.</p>
+
+<pre><code>Note that Carthage only supports dynamic frameworks, which are only available on iOS 8 or later (or any version of OS X).
+</code></pre>
+
+<p>github地址：</p>
+
+<p><a href="https://github.com/Carthage/Carthage">https://github.com/Carthage/Carthage</a></p>
+
+<p>由于自己主要还是在用Cocoapods和git submodule，所以还是推荐两篇文章自己去看吧，也算是给自己的一个备忘:</p>
+
+<ol>
+<li><a href="http://www.infoq.com/cn/news/2015/05/carthage-dependency-manager">Carthage：Xcode项目的GitHub依赖管理器</a></li>
+<li><a href="http://www.isaced.com/post-265.html">Cocoa 新的依赖管理工具：Carthage</a></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/">运行时报错 This application is modifying the autolayout engine from a background thread</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:25:41+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:25 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/yun-xing-shi-bao-cuo-this-application-is-modifying-the-autolayout-engine/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>下了个老的Swift的Demo, 在iOS 9模拟器上运行时报错</p>
+
+<pre><code>This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes. This will cause an exception in a future release.
+</code></pre>
+
+<p>从错误信息中可以看出，在后台线程中修改了UI. 搜了下，NSURLSession的问题，iOS 9上，NSURLSession的回调并不是在主线程中了，那个Demo在回调中直接去修改了界面，所以会报这个错。对应的Objective-C方法如下：</p>
+
+<pre><code>- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler;
+</code></pre>
+
+<p>解决方案:</p>
+
+<p>在block中需要更新UI时，利用GCD切换到主线程即可；</p>
+
+<pre><code>// Swift    
+dispatch_async(dispatch_get_main_queue(), {
+    // code here
+})
+</code></pre>
+
+<p>从StackOverFlow上的回答来看， NSURLConnection也存在这个问题，而且仅仅在iOS 9 SDK上才出现，改天看看AFNetworking的改动确认一下：</p>
+
+<p>附链接：</p>
+
+<p><a href="http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error">Getting a “This application is modifying the autolayout engine” error?</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/">Scene is unreachable due to lack of entry points and does not have an identifier for runtime access</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:24:38+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:24 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/scene-is-unreachable-due-to-lack-of-entry-points-and-does-not-have-an-identifier-for-runtime-access/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>如果在使用Storyboard中出现如下警告：</p>
+
+<pre><code>warning: Unsupported Configuration: Scene is unreachable due to lack of entry points and does not have an identifier for runtime access via -instantiateViewControllerWithIdentifier:
+</code></pre>
+
+<p>那么说明为了访问该Scene需要给其设置一个StoryboardID,一般设置一个Storyboard ID即可.</p>
+
+<p>如下图:
+<img src="/images/StoryboardID.jpg" alt="img" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/">iOS 获取一个类的所有子类</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:23:20+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:23 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/ios-huo-qu-%5B%3F%5D-ge-lei-de-suo-you-zi-lei/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>利用Objetive-C runtime提供的方法objc_getClassList可以获取到当前源码中所有注册的类的信息，该方法的官方文档如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="cm">/** </span>
+</span><span class='line'><span class="cm"> * Obtains the list of registered class definitions.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @param buffer An array of \c Class values. On output, each \c Class value points to</span>
+</span><span class='line'><span class="cm"> *  one class definition, up to either \e bufferCount or the total number of registered classes,</span>
+</span><span class='line'><span class="cm"> *  whichever is less. You can pass \c NULL to obtain the total number of registered class</span>
+</span><span class='line'><span class="cm"> *  definitions without actually retrieving any class definitions.</span>
+</span><span class='line'><span class="cm"> * @param bufferCount An integer value. Pass the number of pointers for which you have allocated space</span>
+</span><span class='line'><span class="cm"> *  in \e buffer. On return, this function fills in only this number of elements. If this number is less</span>
+</span><span class='line'><span class="cm"> *  than the number of registered classes, this function returns an arbitrary subset of the registered classes.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @return An integer value indicating the total number of registered classes.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @note The Objective-C runtime library automatically registers all the classes defined in your source code.</span>
+</span><span class='line'><span class="cm"> *  You can create class definitions at runtime and register them with the \c objc_addClass function.</span>
+</span><span class='line'><span class="cm"> * </span>
+</span><span class='line'><span class="cm"> * @warning You cannot assume that class objects you get from this function are classes that inherit from \c NSObject,</span>
+</span><span class='line'><span class="cm"> *  so you cannot safely call any methods on such classes without detecting that the method is implemented first.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">OBJC_EXPORT</span> <span class="kt">int</span> <span class="nf">objc_getClassList</span><span class="p">(</span><span class="kt">Class</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bufferCount</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">__OSX_AVAILABLE_STARTING</span><span class="p">(</span><span class="n">__MAC_10_0</span><span class="p">,</span> <span class="n">__IPHONE_2_0</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>获取一个类的直接子类的主要思路就是，先获取到类的个数，然后分配足够的空间获取类的信息，接下来遍历所有的类并且比较基类从而判断是否该类的直接子类，代码如下所示：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">directSubclassesOfClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">baseClass</span> <span class="p">{</span>
+</span><span class='line'>   <span class="kt">int</span> <span class="n">numClasses</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">Class</span> <span class="o">*</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">classNameList</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableArray</span> <span class="n">array</span><span class="p">];</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>       <span class="n">classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">__unsafe_unretained</span> <span class="kt">Class</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span> <span class="o">*</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>       <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>       <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numClasses</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>           <span class="k">if</span> <span class="p">(</span><span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">baseClass</span><span class="p">){</span>
+</span><span class='line'>               <span class="bp">NSString</span> <span class="o">*</span><span class="n">className</span> <span class="o">=</span> <span class="n">NSStringFromClass</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>               <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="n">className</span><span class="p">);</span>
+</span><span class='line'>               <span class="k">if</span> <span class="p">([</span><span class="n">className</span> <span class="n">length</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                   <span class="p">[</span><span class="n">classNameList</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">className</span><span class="p">];</span>
+</span><span class='line'>               <span class="p">}</span>
+</span><span class='line'>           <span class="p">}</span>
+</span><span class='line'>       <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>       <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="k">return</span> <span class="n">classNameList</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是上面的方法是不能获取到子类的子类的，只能获取到直接子类；我尝试将判断条件</p>
+
+<pre><code>if (class_getSuperclass(classes[i]) == baseClass)
+</code></pre>
+
+<p>替换成为</p>
+
+<pre><code>if ([iterClass isSubclassOfClass:baseClass])
+</code></pre>
+
+<p>结果Crash了。</p>
+
+<p>原因是：</p>
+
+<ol>
+<li>官方文档中明确说明，<code>"You cannot assume that class objects you get from this function are classes that inherit from \c NSObject"</code>, 也就是获取到的类可能根本就不是NSObject的子类，而isSubclassOfClass是NSObject的类方法；</li>
+<li>在这个过程中，会执行+initialzie方法，在这个过程中部分系统类会提示找不到selector而crash；（具体原因没有去研究过，因为第一条原因就决定了不能这样用了）</li>
+</ol>
+
+
+<p>那么只能循环一下继续找基类来获取所有子类：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">subclassesOfClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">baseClass</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">numClasses</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">Class</span> <span class="o">*</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">classNameList</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableArray</span> <span class="n">array</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">__unsafe_unretained</span> <span class="kt">Class</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span> <span class="o">*</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">numClasses</span> <span class="o">=</span> <span class="n">objc_getClassList</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">numClasses</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numClasses</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kt">Class</span> <span class="n">iterClass</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">==</span> <span class="n">iterClass</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="kt">Class</span> <span class="n">superClass</span> <span class="o">=</span> <span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">iterClass</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="nb">nil</span> <span class="o">!=</span> <span class="n">superClass</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">superClass</span> <span class="o">==</span> <span class="n">baseClass</span><span class="p">){</span>
+</span><span class='line'>                    <span class="p">[</span><span class="n">classNameList</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">iterClass</span><span class="p">];</span>
+</span><span class='line'>                    <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">superClass</span> <span class="o">=</span> <span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">superClass</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">classNameList</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当然，一般情况不太会有这种需求，即使有这种需求的时候，都是需要找某个自己写的特殊类的子类，也一般有别的方法来解决，但是用来写写测试代码还是很方便的，比如我自己封装了一个网络请求的库，所有的请求都从基类的request派生都有同样的调用方式，于是可以用这种方法来快速测试某个项目中所有的请求在默认设置下是否会出错。</p>
+
+<p>另外，获取所有类的这个方法在第三方日志库CocoaLumberjack中也有用到，下面是其中一段源码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">registeredClasses</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// We&#39;re going to get the list of all registered classes.</span>
+</span><span class='line'>    <span class="c1">// The Objective-C runtime library automatically registers all the classes defined in your source code.</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// To do this we use the following method (documented in the Objective-C Runtime Reference):</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// int objc_getClassList(Class *buffer, int bufferLen)</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// We can pass (NULL, 0) to obtain the total number of</span>
+</span><span class='line'>    <span class="c1">// registered class definitions without actually retrieving any class definitions.</span>
+</span><span class='line'>    <span class="c1">// This allows us to allocate the minimum amount of memory needed for the application.</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">numClasses</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">Class</span> <span class="o">*</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">numClasses</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSUInteger</span><span class="p">)</span><span class="n">MAX</span><span class="p">(</span><span class="n">objc_getClassList</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// numClasses now tells us how many classes we have (but it might change)</span>
+</span><span class='line'>        <span class="c1">// So we can allocate our buffer, and get pointers to all the class definitions.</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="bp">NSUInteger</span> <span class="n">bufferSize</span> <span class="o">=</span> <span class="n">numClasses</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">classes</span> <span class="o">=</span> <span class="n">numClasses</span> <span class="o">?</span> <span class="p">(</span><span class="kt">Class</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span> <span class="o">*</span> <span class="n">bufferSize</span><span class="p">)</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">classes</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span> <span class="c1">//no memory or classes?</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">numClasses</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSUInteger</span><span class="p">)</span><span class="n">MAX</span><span class="p">(</span><span class="n">objc_getClassList</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">bufferSize</span><span class="p">),</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">numClasses</span> <span class="o">&gt;</span> <span class="n">bufferSize</span> <span class="o">||</span> <span class="n">numClasses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//apparently more classes added between calls (or a problem); try again</span>
+</span><span class='line'>            <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">numClasses</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// We can now loop through the classes, and test each one to see if it is a DDLogging class.</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableArray</span> <span class="nl">arrayWithCapacity</span><span class="p">:</span><span class="n">numClasses</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="bp">NSUInteger</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numClasses</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">Class</span> <span class="k">class</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">([</span><span class="nb">self</span> <span class="nl">isRegisteredClass</span><span class="p">:</span><span class="k">class</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">result</span> <span class="nl">addObject</span><span class="p">:</span><span class="k">class</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">classes</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>全文完.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/">Xcode插件管理器Alcatraz</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:20:53+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:20 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/xcodecha-jian-guan-li-qi-alcatraz/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Xcode插件管理器Alcatraz可以帮助搜索、查看和安装各类Xcode插件，这样不需要每次再去每个插件的主页上去找安装帮助文档了，极大的简化了Xcode插件的安装与管理.</p>
+
+<p>Alcatraz本身就是一个Xcode的插件，所以按照正常的插件安装方法就可以了。</p>
+
+<p>直接从项目主页上拷贝过来的</p>
+
+<p>Installation</p>
+
+<p>To install, open up your terminal and paste this:</p>
+
+<pre><code>curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh
+</code></pre>
+
+<p>or download the repository from Github and build it in Xcode. You&rsquo;ll need to restart Xcode after the installation.</p>
+
+<p>Alcatraz requires Xcode Command Line Tools, which can be installed in Xcode via Preferences > Downloads.</p>
+
+<p>简单翻译一下：
+两种安装方法，一种方法是直接在命令行中执行那个命令就可以了；
+第二种方法是从github上clone代码到本地，然后在Xcode中编译，接着重新启动Xcode就可以了，这个时候会有提示是否要load bundles，选择load就可以了。
+第二种方法其实就是绝大多数插件比如VVDocumeter的手动安装方法。</p>
+
+<p>安装好之后，在Xcode的Window菜单中就可以看到“Package Manager”这个菜单项，点开后就可以去里面搜索安装管理其他插件了。</p>
+
+<p>Xcode菜单项:</p>
+
+<p><img src="/images/PackageManager.jpg" alt="image" /></p>
+
+<p>Alcatraz管理页面:</p>
+
+<p><img src="/images/PackageManagerUI.jpg" alt="image" /></p>
+
+<p>地址：<a href="https://github.com/alcatraz/Alcatraz">https://github.com/alcatraz/Alcatraz</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -390,257 +935,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/">nvm安装node后bash仍然提示找不到的问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T19:57:05+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:57 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<code>nvm which node</code>命令查了下，貌似通过nvm安装的node在路径<code>/Users/username/.nvm/versions/node/v4.2.1/bin/node</code>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
-
-<p>后来通过下面的命令解决了这个问题：</p>
-
-<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
-</code></pre>
-
-<p>实际就是创建了一个到<code>/usr/local/bin/node</code>的软连接 。</p>
-
-<p>用homebrew直接安装的话没这个问题。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/">Cocoapods和Git submodules结合使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T19:41:59+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:41 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
-
-<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
-
-<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
-
-<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
-
-<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
-
-<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
-</code></pre>
-
-<p>Done.</p>
-
-<h2>参考资料</h2>
-
-<ol>
-<li><a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/">ARC与MRC下 block的区别</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T19:34:23+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:34 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>主要区别：</p>
-
-<ol>
-<li>在ARC开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</li>
-<li>在ARC下<code>__block id x</code>是会retain 对象x的，而MRC下这样写不会retain x, 所以MRC下<strong>block关键字可以用于打破block使用时的循环引用，而ARC下还是要用</strong>weak, 原文如下：</li>
-</ol>
-
-
-<p><code>In manual reference counting mode, __block id x; has the effect of not retaining x. In ARC mode, __block id x; defaults to retaining x (just like all other values). To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x;. As the name __unsafe_unretained implies, however, having a non-retained variable is dangerous (because it can dangle) and is therefore discouraged. Two better options are to either use __weak (if you don’t need to support iOS 4 or OS X v10.6), or set the __block value to nil to break the retain cycle.</code></p>
-
-<p>出自<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a>.</p>
-
-<p>其余详细的对于block的剖析可以参见唐巧的文章:</p>
-
-<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/">iOS开发每周文章选读 第二周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T18:35:26+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>6:35 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>一 <a href="http://www.infoq.com/cn/articles/design-patterns-in-swift?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=articles_link&amp;utm_content=link_text">Swift中的设计模式</a></h2>
-
-<p>InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式，那么高阶函数的使用就可以直接替换掉原有的命令模式(Command模式)。同理，Swift中的一些新语言特性也能够帮我们更好的理解策略模式，抽象工厂模式，适配器模式等。</p>
-
-<p>所以语言上对设计模式有原生的支持后，实际的编码过程就会更加容易。</p>
-
-<h2> 二 <a href="http://www.cnblogs.com/dsxniubility/p/4821184.html">整理iOS9适配中出现的坑</a></h2>
-
-<p>从github上的个人介绍来看，作者似乎是美团的，这篇文章主要就是记录了实际开发过程中适配iOS 9遇到的问题，主要包括：iOS 9默认使用HTTPS； Bitcode等等，很有实用价值，省得大家走弯路了。</p>
-
-<h2>三 <a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893">iOS 保持界面流畅的技巧</a></h2>
-
-<p>作者详细的分析了iOS界面构建中的各种性能问题以及对应的解决思路，尤其是对于列表界面。界面的优化很多时候都是用空间换时间，多做缓存，预先加载，提前进行异步绘制，避免离屏渲染等等都能有效的提升界面的流畅度，另外，我个人真心觉得要多用Instruments里面的Time Profiler、Core Animation、GPU Driver等来检测界面性能，找出真正的性能瓶颈然后有针对性的优化。</p>
-
-<p><a href="https://github.com/facebook/AsyncDisplayKit">AsyncDisplayKit</a>我之前没有用过，这篇文章有提到，有空可以研究一下。</p>
-
-<h2>四 <a href="http://xujim.github.io/ios/2014/12/07/AsyncDisplayKit_inside.html">AsyncDisplayKit技术分析</a></h2>
-
-<p>上面刚刚提到了AsyncDisplayKit, 我自己就又找到一篇介绍的技术文章，有空可以结合源代码看看:)</p>
-
-<h2>五 <a href="http://blog.cnbang.net/tech/2578/">iOS图片加载速度极限优化—FastImageCache解析</a></h2>
-
-<p>又是一篇关于性能优化的文章，主要是对于<a href="https://github.com/path/FastImageCache">FastImageCache</a>的分析，介绍FastImageCache是如何对含有大量图片的列表进行性能优化的。FastImageCache的滑动确实很流畅，我有个很旧的iPhone 4, 滑动的时候FPS还能有差不多50左右。</p>
-
-<h2>六 <a href="http://draveness.me/dknightversion-de-shi-xian-wei-ios-ying-yong-tian-jia-ye-jian-mo-shi/">DKNightVersion 的实现 &mdash; 如何为 iOS 应用添加夜间模式</a></h2>
-
-<p>主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。</p>
-
-<h2>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></h2>
-
-<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍, MagicRecord是用来简化CoreData使用的一个开源库，在github上star数也是相当多哦!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">Pods: Unable to satisfy the following requirements</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-12T18:06:36+08:00'><span class='date'>2015 年11 月12 日</span> <span class='time'>6:06 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
-
-<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
-</code></pre>
-
-<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
-
-<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
-
-<pre><code>s.dependency "AFNetworking", "2.6.2"
-</code></pre>
-
-<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
-
-<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
-
-<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
-
-<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/7">&larr; Older</a>
@@ -665,7 +959,15 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能优化</a>
+        <a href="/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/">iOS开发每周文章选读 之 第八周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/uivieiewyu-calayer/">UIVieiew与CALayer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能分析与优化</a>
       </li>
     
       <li class="post">
@@ -693,15 +995,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
+        <a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/">iOS开发每周文章选读 之 第七周</a>
       </li>
     
   </ul>

@@ -9,8 +9,8 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="问题描述:
+之前是在晚上在公司机器上来发布文章，但是同时也会在自己家里写文章，我们知道，octopress日常操作的实际就是blog所在的git仓库的source分支，例如我自己的blog对应的仓库实际上就是https://github.com/agger0207/agger0207.github &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +69,210 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/">在两台机器上同时用octopress写博客的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-01T13:37:15+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>1:37 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>问题描述:
+之前是在晚上在公司机器上来发布文章，但是同时也会在自己家里写文章，我们知道，octopress日常操作的实际就是blog所在的git仓库的source分支，例如我自己的blog对应的仓库实际上就是<code>https://github.com/agger0207/agger0207.github.io</code>, 平时写好文章后提交到git上，保持同步就好了。</p>
+
+<p>今天在家里执行<code>rake deploy</code>的时候就发现报错了；错误信息与解决过程看下面.</p>
+
+<p>错误1:</p>
+
+<pre><code>## Deploying branch to Github Pages 
+## Pulling any updates from Github Pages 
+cd _deploy
+rake aborted!
+Errno::ENOENT: No such file or directory @ dir_chdir - _deploy
+</code></pre>
+
+<p>提示是找不到<code>_deploy</code>文件夹，看了下，还真没有，感情自己一直没在家里的机器上deploy过，搜索了下，如果有不同的本地仓库的时候就会存在这种问题，执行如下命令，就会生成_deploy文件夹啦!</p>
+
+<pre><code>$ rake setup_github_pages
+</code></pre>
+
+<p>错误2：</p>
+
+<p>继续<code>rake deploy</code>, 继续报错：</p>
+
+<pre><code>On branch master
+nothing to commit, working directory clean
+
+## Pushing generated _deploy website
+To https://github.com/agger0207/agger0207.github.io
+ ! [rejected]        master -&gt; master (non-fast-forward)
+error: failed to push some refs to 'https://github.com/agger0207/agger0207.github.io'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+
+<p>错误提示是说无法向自己博客所在远程仓库的<code>master</code>分支push, 因为当前本地的版本没有更新到最新版本. 了解git的同学都知道，要push到远程分支，首先需要将最新的改动pull下来，否则不让提交的。而octopress实际发布的过程实际上就是会将本地的改动push到blog所在git仓库的master分支(也就是我们日常通过编写markdown文档的过程其实并不是直接去改动blog的呈现，而是在改动后，通过<code>rake generate</code>生成网页，然后deploy的时候将生成的页面信息push到远程的master分支上).</p>
+
+<p>google了一下，原来<code>_deploy</code>文件夹下的内容就是从<code>master</code>分支下取下来的内容，大家可以看下，<code>_deploy</code>目录下的是不是正好和github上<code>master</code>分支一样呢？</p>
+
+<p>执行命令:</p>
+
+<pre><code>$ cd _deploy
+$ ls -a 
+</code></pre>
+
+<p>可以看到结果：</p>
+
+<pre><code>.       assets      favicon.png javascripts sitemap.xml
+..      atom.xml    images      posts       stylesheets
+.git        blog        index.html  robots.txt  
+</code></pre>
+
+<p>.git的存在证明了这就是一个本地的git仓库嘛；</p>
+
+<p>剩下的就好办了，只需要与master同步即可：</p>
+
+<pre><code>$ git pull origin master    
+</code></pre>
+
+<p>pull失败，提示有冲突，不要紧，执行下面的命令恢复到和master分支一样就可以了，反正这里面的内容都是自动生成的.</p>
+
+<pre><code>$ git reset --hard origin/master
+</code></pre>
+
+<p>然后搞定，回到上一层目录，执行<code>rake deploy</code>就OK.</p>
+
+<p>小结：
+解决下来，发现这个问题其实还蛮有意思的；原来<code>_deploy</code>文件夹就是对应的git repo的master branch。其实octopress的这些操作核心就是ruby和git; 如果没有猜错，之前解决<code>_deploy</code>文件夹不存在时所执行的命令就是创建一个本地的仓库并且设置对应的remote url, 不过我对ruby不太熟，要不然可以研究下里面的rakefile确认一下。而octopress对于git仓库的处理就是，编辑的内容对应的是source branch, 而<code>_deploy</code>对应master branch, 和git submodule有点类似，只不过子文件夹下对应的remote repo是同一个repo的不同branch,  而git submodule一般都是不同的submodule放在不同的仓库下。</p>
+
+<p>参考资料：</p>
+
+<ul>
+<li><a href="https://github.com/imathis/octopress/issues/334">No such file or directory - _deploy</a></li>
+<li><a href="http://stackoverflow.com/questions/19619280/octopress-pushing-error-to-github">Octopress pushing error to GitHub</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-27T17:02:50+08:00'><span class='date'>2015 年12 月27 日</span> <span class='time'>5:02 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/">iOS开发每周文章选读 之 第七周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-25T13:53:53+08:00'><span class='date'>2015 年12 月25 日</span> <span class='time'>1:53 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/18/ioskai-fa-mei-zhou-wen-zhang-xuan-du-6/">iOS开发每周文章选读 之 第六周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-18T13:53:48+08:00'><span class='date'>2015 年12 月18 日</span> <span class='time'>1:53 pm</span></time>
+        
+        
+           | <a href="/blog/2015/12/18/ioskai-fa-mei-zhou-wen-zhang-xuan-du-6/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -166,619 +370,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/">iOS开发 之 数据持久化存储</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-10T15:17:31+08:00'><span class='date'>2015 年12 月10 日</span> <span class='time'>3:17 pm</span></time>
-        
-        
-           | <a href="/blog/2015/12/10/ioskai-fa-zhi-shu-ju-chi-jiu-hua-cun-chu/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>如果只是想设置默认值而不覆盖用户设置的值，那么可以通过<code>registerDefaults</code>来做.</p>
-
-<p>NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-[standardDefaults registerDefaults:@{@&ldquo;favoriteColor&rdquo;: @&ldquo;Green&rdquo;}];
-[standardDefaults synchronize];
-每次程序启动的时候调用registerDefaults: 方法都是安全的。完全可以将这个方法的调用放到applicationDidFinishLaunching:方法中. 这个方法永远都不会覆盖用户设置的值。</p>
-
-<p>NSUserDefaults是线程安全的，苹果官方文档有明确说明<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/index.html">The NSUserDefaults class is thread-safe.</a></p>
-
-<p><a href="http://stackoverflow.com/questions/10864482/is-nsuserdefault-thread-safe">McZonk关于is NSUserDefault thread-safe的回答</a>有提到，</p>
-
-<pre><code>Speaking for 10.10 and iOS8 if you looking into the implementation you'll find that -[NSUserDefaults setObject:forKey:] is calling __CFPreferencesSetAppValueWithContainer, which will eventually end up in +[CFPrefsSource withSourceForIdentifier:user:byHost:container:perform:]. This method is using a pthread_mutex_t to lock the access to the dictionary containing the values.
-</code></pre>
-
-<p>所以内部访问的时候是有加锁保护，所以是线程安全的.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie/">CocoaPods使用问题总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-07T14:26:58+08:00'><span class='date'>2015 年12 月7 日</span> <span class='time'>2:26 pm</span></time>
-        
-        
-           | <a href="/blog/2015/12/07/cocoapodsshi-yong-wen-ti-zong-jie/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>1 CocoaPods中添加资源的支持</p>
-
-<p>2 CocoaPods中去除编译Warning</p>
-
-<p>3 添加Library</p>
-
-<p>4 集成git submodule</p>
-
-<p>5 本地Pods</p>
-
-<p>6 sub spec</p>
-
-<p>7 私有Pods</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/05/chang-yong-gitming-ling/">常用Git命令</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-05T14:26:30+08:00'><span class='date'>2015 年12 月5 日</span> <span class='time'>2:26 pm</span></time>
-        
-        
-           | <a href="/blog/2015/12/05/chang-yong-gitming-ling/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>基本操作</h2>
-
-<p>git clone</p>
-
-<p>git checkout</p>
-
-<p>git push</p>
-
-<p>git pull</p>
-
-<p>git commit</p>
-
-<p>git add</p>
-
-<p>git branch</p>
-
-<h2>分支相关操作</h2>
-
-<h2>问题处理</h2>
-
-<p>1 切换到另一分支例如运行命令 <strong>git checkout develop</strong> 时提示：</p>
-
-<pre><code>error: The following untracked working tree files would be overwritten by checkout:
-...
-Please move or remove them before you can switch branches.
-Aborting
-</code></pre>
-
-<p>错误原因很清楚了，有untracked的文件未处理，如果这些文件是需要提交的，那么git commit后再切换分支;如果这些改动可能本来就不要的；那么直接执行下面命令先清理掉即可：</p>
-
-<pre><code>git clean -d -f
-</code></pre>
-
-<p>-d参数的含义是删除untracked目录与文件;-f含义是force, 强制执行。</p>
-
-<p>然后再执行 <strong>git checkout develop</strong> 就没问题了.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)/">Facebook Pop使用指南（翻译）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-02T16:03:28+08:00'><span class='date'>2015 年12 月2 日</span> <span class='time'>4:03 pm</span></time>
-        
-        
-           | <a href="/blog/2015/12/02/facebook-popshi-yong-zhi-nan-(fan-yi-)/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文链接：</p>
-
-<p><a href="https://github.com/maxmyers/FacebookPop">maxmyers/FacebookPop</a></p>
-
-<h1>使用Facebook Pop库的五个步骤</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="c1">// 1. 选择一种动画类型 </span>
-</span><span class='line'>  <span class="c1">// 存在如下几种动画类型: POPBasicAnimation  POPSpringAnimation POPDecayAnimation</span>
-</span><span class='line'>  <span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 2. 决定你是要针对View的属性做动画还是Layer的属性做动画, 这里我们选择一个View的属性kPOPViewFrame, 顾名思义，这是针对View的Frame变化做动画</span>
-</span><span class='line'>  <span class="c1">// View的属性包括： kPOPViewAlpha kPOPViewBackgroundColor kPOPViewBounds kPOPViewCenter kPOPViewFrame kPOPViewScaleXY kPOPViewSize</span>
-</span><span class='line'>  <span class="c1">// Layer的属性包括 - kPOPLayerBackgroundColor kPOPLayerBounds kPOPLayerScaleXY kPOPLayerSize kPOPLayerOpacity kPOPLayerPosition kPOPLayerPositionX kPOPLayerPositionY kPOPLayerRotation kPOPLayerBackgroundColor</span>
-</span><span class='line'>  <span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewFrame</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 3. 确定使用下面其中一种方法来设置toValue</span>
-</span><span class='line'>   <span class="c1">//  anim.toValue = @(1.0);</span>
-</span><span class='line'>  <span class="c1">//  anim.toValue =  [NSValue valueWithCGRect:CGRectMake(0, 0, 400, 400)];</span>
-</span><span class='line'>  <span class="c1">//  anim.toValue =  [NSValue valueWithCGSize:CGSizeMake(40, 40)];</span>
-</span><span class='line'>  <span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">190</span><span class="p">)];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 4. 为动画创建名字以及设置Delegate</span>
-</span><span class='line'>   <span class="n">basicAnimation</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="s">@&quot;AnyAnimationNameYouWant&quot;</span><span class="p">;</span>
-</span><span class='line'>   <span class="n">basicAnimation</span><span class="p">.</span><span class="n">delegate</span><span class="o">=</span><span class="nb">self</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 5. 将动画附加到View或者Layer, 这里我们选择self.tableView</span>
-</span><span class='line'>  <span class="c1">// 如果我们之前设置的是针对Layer的属性，那么我们可以选择一个Layer例如self.tableView.layer</span>
-</span><span class='line'>  <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nl">pop_addAnimation</span><span class="p">:</span><span class="n">basicAnimation</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;WhatEverNameYouWant&quot;</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>第一步 选择一种动画类型</h2>
-
-<h3>POPBasicAnimation （基本动画）</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">timingFunction</span><span class="o">=</span><span class="p">[</span><span class="bp">CAMediaTimingFunction</span> <span class="nl">functionWithName</span><span class="p">:</span><span class="n">kCAMediaTimingFunctionLinear</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// kCAMediaTimingFunctionLinear  kCAMediaTimingFunctionEaseIn  kCAMediaTimingFunctionEaseOut  kCAMediaTimingFunctionEaseInEaseOut</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>POPSpringAnimation (弹簧动画)</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">springAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">springAnimation</span><span class="p">.</span><span class="n">velocity</span><span class="o">=</span><span class="l">@(</span><span class="mi">1000</span><span class="l">)</span><span class="p">;</span>       <span class="c1">// change of value units per second</span>
-</span><span class='line'><span class="n">springAnimation</span><span class="p">.</span><span class="n">springBounciness</span><span class="o">=</span><span class="mi">14</span><span class="p">;</span>    <span class="c1">// value between 0-20 default at 4</span>
-</span><span class='line'><span class="n">springAnimation</span><span class="p">.</span><span class="n">springSpeed</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span>     <span class="c1">// value between 0-20 default at 4</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>POPDecayAnimation  (衰减动画)</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPDecayAnimation</span> <span class="o">*</span><span class="n">decayAnimation</span><span class="o">=</span><span class="p">[</span><span class="n">POPDecayAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">decayAnimation</span><span class="p">.</span><span class="n">velocity</span><span class="o">=</span><span class="l">@(</span><span class="mi">233</span><span class="l">)</span><span class="p">;</span> <span class="c1">//change of value units per second</span>
-</span><span class='line'><span class="n">decayAnimation</span><span class="p">.</span><span class="n">deceleration</span><span class="o">=</span><span class="mf">.833</span><span class="p">;</span> <span class="c1">//range of 0 to 1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>例如</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Step 2 选择是需要在view的属性上做动画还是Layer的属性上做动画</h2>
-
-<h3>View 的属性</h3>
-
-<p>下列枚举值与UIView的属性对应, 例如 alpha, color, bounds, center, frame, size等等;</p>
-
-<h5>Alpha - kPOPViewAlpha</h5>
-
-<h5>Color - kPOPViewBackgroundColor</h5>
-
-<h5>Size - kPOPViewBounds</h5>
-
-<h5>Center - kPOPViewCenter</h5>
-
-<h5>Location &amp; Size - kPOPViewFrame</h5>
-
-<h5>Size - kPOPViewScaleXY</h5>
-
-<h5>Size(Scale) - kPOPViewSize</h5>
-
-<h3>Layer的属性</h3>
-
-<p>下列枚举值与CALayer的属性对应，例如opaque等等</p>
-
-<h5>Color - kPOPLayerBackgroundColor</h5>
-
-<h5>Size - kPOPLayerBounds</h5>
-
-<h5>Size - kPOPLayerScaleXY</h5>
-
-<h5>Size - kPOPLayerSize</h5>
-
-<h5>Opacity - kPOPLayerOpacity</h5>
-
-<h5>Position - kPOPLayerPosition</h5>
-
-<h5>X Position - kPOPLayerPositionX</h5>
-
-<h5>Y Position - kPOPLayerPositionY</h5>
-
-<h5>Rotation - kPOPLayerRotation</h5>
-
-<h5>Color - kPOPLayerBackgroundColor</h5>
-
-<h3>例如</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// 选择在View的Frame属性上应用动画</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewFrame</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>注意: 这些属性在任意的Layer属性或者UIView的属性上都可以生效，例如 UIToolbar | UIPickerView | UIDatePicker | UIScrollView |  UITextView | UIImageView | UITableViewCell | UIStepper | UIProgressView | UIActivityIndicatorView | UISwitch | UISlider | UITextField | UISegmentedControl | UIButton | UIView | UITableView</h4>
-
-<p>(意思是：可以对任意UIView的子类以及其layer应用动画)</p>
-
-<h2>Step 3 找到对应的属性并且设置.toValue的值</h2>
-
-<h3>View属性</h3>
-
-<h5>Alpha - kPOPViewAlpha</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewAlpha</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="l">@(</span><span class="mi">0</span><span class="l">)</span><span class="p">;</span> <span class="c1">// scale from 0 to 1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Color - kPOPViewBackgroundColor</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPViewBackgroundColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">redColor</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Size - kPOPViewBounds</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewBounds</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">190</span><span class="p">)];</span> <span class="c1">//first 2 values dont matter</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Center - kPOPViewCenter</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewCenter</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGPoint</span><span class="p">:</span><span class="n">CGPointMake</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Location &amp; Size - kPOPViewFrame</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">140</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">140</span><span class="p">)];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Size - kPOPViewScaleXY</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewScaleXY</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGSize</span><span class="p">:</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Size(Scale) - kPOPViewSize</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewSize</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGSize</span><span class="p">:</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">200</span><span class="p">)];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Layer属性</h3>
-
-<h5>Color - kPOPLayerBackgroundColor</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerBackgroundColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">redColor</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Size - kPOPLayerBounds</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerBounds</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)];</span> <span class="c1">//first 2 values dont matter</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Size - kPOPLayerScaleXY</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerScaleXY</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGSize</span><span class="p">:</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)];</span><span class="c1">//increases width and height scales</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Size - kPOPLayerSize</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPBasicAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPBasicAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPLayerSize</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGSize</span><span class="p">:</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Opacity - kPOPLayerOpacity</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerOpacity</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span> <span class="o">=</span> <span class="l">@(</span><span class="mi">0</span><span class="l">)</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Position - kPOPLayerPosition</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerPosition</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">130</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)];</span><span class="c1">//last 2 values dont matter</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>X Position - kPOPLayerPositionX</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerPositionX</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="l">@(</span><span class="mi">240</span><span class="l">)</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Y Position - kPOPLayerPositionY</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">anim</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">anim</span><span class="p">.</span><span class="n">property</span><span class="o">=</span><span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPLayerPositionY</span><span class="p">];</span>
-</span><span class='line'><span class="n">anim</span><span class="p">.</span><span class="n">toValue</span> <span class="o">=</span> <span class="l">@(</span><span class="mi">320</span><span class="l">)</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Rotation - kPOPLayerRotation</h5>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerRotation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="l">@(</span><span class="n">M_PI</span><span class="o">/</span><span class="mi">4</span><span class="l">)</span><span class="p">;</span> <span class="c1">//2 M_PI is an entire rotation</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>注意: 属性的改变对于三种动画类型都有效 - POPBasicAnimation POPSpringAnimation POPDecayAnimation</h4>
-
-<h3>示例</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span> <span class="n">kPOPLayerRotation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span> <span class="l">@(</span><span class="n">M_PI</span><span class="o">/</span><span class="mi">4</span><span class="l">)</span><span class="p">;</span> <span class="c1">//2 M_PI is an entire rotation</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Step 4 为动画指定名字和代理</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="s">@&quot;WhatEverAnimationNameYouWant&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">delegate</span><span class="o">=</span><span class="nb">self</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>代理协议 <code>&lt;POPAnimatorDelegate&gt;</code></h5>
-
-<h3>委托方法</h3>
-
-<p><code>
-&lt;POPAnimatorDelegate&gt;
-</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">pop_animationDidStart:</span><span class="p">(</span><span class="n">POPAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">pop_animationDidStop:</span><span class="p">(</span><span class="n">POPAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span> <span class="nf">finished:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">finished</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">pop_animationDidReachToValue:</span><span class="p">(</span><span class="n">POPAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>示例</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">190</span><span class="p">)];</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="s">@&quot;WhatEverAnimationNameYouWant&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">basicAnimation</span><span class="p">.</span><span class="n">delegate</span><span class="o">=</span><span class="nb">self</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Step 5 向view添加动画</h2>
-
-<p>Note: 如果前面选择的是view的属性，那么应该针对view调用<code>pop_addAnimation</code>; 类似，如果前面选择的是layer的属性，那么应该对view的layer调用<code>pop_addAnimation</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nl">pop_addAnimation</span><span class="p">:</span><span class="n">basicAnimation</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;WhatEverNameYouWant&quot;</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>示例</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="n">POPSpringAnimation</span> <span class="o">*</span><span class="n">basicAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPSpringAnimation</span> <span class="n">animation</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">basicAnimation</span><span class="p">.</span><span class="n">property</span> <span class="o">=</span> <span class="p">[</span><span class="n">POPAnimatableProperty</span> <span class="nl">propertyWithName</span><span class="p">:</span><span class="n">kPOPViewFrame</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">basicAnimation</span><span class="p">.</span><span class="n">toValue</span><span class="o">=</span><span class="p">[</span><span class="bp">NSValue</span> <span class="nl">valueWithCGRect</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">190</span><span class="p">)];</span>
-</span><span class='line'>  <span class="n">basicAnimation</span><span class="p">.</span><span class="n">name</span><span class="o">=</span><span class="s">@&quot;SomeAnimationNameYouChoose&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">basicAnimation</span><span class="p">.</span><span class="n">delegate</span><span class="o">=</span><span class="nb">self</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nl">pop_addAnimation</span><span class="p">:</span><span class="n">basicAnimation</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;WhatEverNameYouWant&quot;</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>后记：其实翻译这个纯粹是偷懒，因为绝大部分都是代码，不需要翻译:) 不过算是个开头吧，然后真有兴趣的可以直接去原文链接看好了，是github上的一个仓库；另外，github上还有很多使用pop的动画例子可供参考.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -803,7 +394,15 @@ Aborting
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能优化</a>
+        <a href="/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/">iOS开发每周文章选读 之 第八周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/uivieiewyu-calayer/">UIVieiew与CALayer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能分析与优化</a>
       </li>
     
       <li class="post">
@@ -831,15 +430,7 @@ Aborting
       </li>
     
       <li class="post">
-        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
+        <a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/">iOS开发每周文章选读 之 第七周</a>
       </li>
     
   </ul>

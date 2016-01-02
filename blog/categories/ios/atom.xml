@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T13:31:32+08:00</updated>
+  <updated>2016-01-02T13:59:11+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -14,11 +14,42 @@
 
   
   <entry>
-    <title type="html"><![CDATA[iOS界面性能优化]]></title>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第八周]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/"/>
+    <updated>2016-01-02T13:54:06+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS界面性能分析与优化]]></title>
     <link href="http://agger0207.github.io/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/"/>
     <updated>2016-01-01T20:17:14+08:00</updated>
     <id>http://agger0207.github.io/blog/2016/01/01/iosjie-mian-xing-neng-you-hua</id>
-    <content type="html"><![CDATA[<p>Instrument</p>
+    <content type="html"><![CDATA[<h2>Instrument性能分析</h2>
+
+<h3>Time Profiler</h3>
+
+<h3>Core Animation</h3>
+
+<h3>OpenGL ES</h3>
+
+<h2>性能因素</h2>
+
+<h3>Blending</h3>
+
+<h3>离屏渲染</h3>
+
+<h3>DrawRect</h3>
+
+<h2>UITableView</h2>
+
+<h2>改进方案</h2>
+
+<h3>异步绘制</h3>
+
+<h3>AsyncDisplayKit</h3>
 ]]></content>
   </entry>
   
@@ -41,19 +72,10 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Xcode 7 UI Testing]]></title>
-    <link href="http://agger0207.github.io/blog/2015/12/17/xcode-7-ui-testing/"/>
-    <updated>2015-12-17T14:22:16+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/12/17/xcode-7-ui-testing</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[日常积累的开发技巧（一）]]></title>
-    <link href="http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/"/>
-    <updated>2015-12-12T14:35:06+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-([?]-)</id>
+    <title type="html"><![CDATA[iOS开发每周文章选读 之 第七周]]></title>
+    <link href="http://agger0207.github.io/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/"/>
+    <updated>2015-12-25T13:53:53+08:00</updated>
+    <id>http://agger0207.github.io/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>

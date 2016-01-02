@@ -9,7 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="用途 RestKit 测试服务器可以用来支持RestKit的单元测试，服务器默认运行在本地，路径在RestKit/Tests/Server下；其对应的帮助文档为RestKit/Tests/README.md, 但其中部分已经过时且在安装过程中会遇到一些问题。 &hellip;">
+  <meta name="description" content="一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用nvm which node命令查了下，貌似通过nvm安装的node在路径/Users/username &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +68,257 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/">nvm安装node后bash仍然提示找不到的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:57:05+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:57 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/nvman-zhuang-nodehou-bashreng-ran-ti-shi-zhao-bu-dao-de-wen-ti/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一个月前，重做了系统后需要安装node.js来跑起我的测试服务器程序，那天用homebrew死活装不上，总是提示下载出错，后来查了下就用nvm安装，结果安装后后运行node提示找不到这个命令；用<code>nvm which node</code>命令查了下，貌似通过nvm安装的node在路径<code>/Users/username/.nvm/versions/node/v4.2.1/bin/node</code>下，而不是在/usr/local/bin目录下，所以提示找不到。</p>
+
+<p>后来通过下面的命令解决了这个问题：</p>
+
+<pre><code>ln -s /Users/username/.nvm/versions/node/v4.2.1/bin/node /usr/local/bin/node
+</code></pre>
+
+<p>实际就是创建了一个到<code>/usr/local/bin/node</code>的软连接 。</p>
+
+<p>用homebrew直接安装的话没这个问题。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/">Cocoapods和Git submodules结合使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:41:59+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:41 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/cocoapodshe-git-submodulesjie-he-shi-yong/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS下第三方库管理一般就是CocoaPods和Git Submodule这两种方法（当然，现在可能还需要加上<a href="https://github.com/Carthage/Carthage">Carthage</a>）, 这两种的基本使用方法就不说了，相关介绍的文章一大把，一般用起来也比较简单。不过前不久遇到个问题，是需要两个结合使用的。</p>
+
+<p>情况是这样的，有个Library B，是部门B提供的，只以submodule的方式提供；然后我需要封装的另外一个库A, 需要依赖于B, 然后A需要以CocoaPods的方式提供给别的team使用，这两个都是公司内部的库。然后我需要在A里面描述清楚对B的依赖关系，而且希望使用者直接在PodFile里面加上A的描述就好了，大致搜了一下，找到了解决方法。</p>
+
+<p>首先，实现A的过程中，A还是通过submodules的方法来使用B,具体方法就不说了，无非是git submodule add, git submodule init和git submodule update这些命令；</p>
+
+<p>然后在使用A的时候，podfile里面额外添加 :submodules => true.</p>
+
+<p>例如如果库A的名字叫做AggerLib的话，那么PodFile里面就是</p>
+
+<pre><code>pod 'AggerLib', :git =&gt; 'https://github.com/git/agger/AggerLib.git', :branch =&gt; 'master', :submodules =&gt; true
+</code></pre>
+
+<p>Done.</p>
+
+<h2>参考资料</h2>
+
+<ol>
+<li><a href="http://www.geero.net/2014/06/using-submodules-in-cocoapods-sourced-from-git/">USING SUBMODULES IN COCOAPODS SOURCED FROM GIT</a></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/">ARC与MRC下 block的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T19:34:23+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>7:34 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/arcyu-mrcxia-blockde-qu-bie/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>主要区别：</p>
+
+<ol>
+<li>在ARC开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block； 而在MRC下，会有NSConcreteGlobalBlock, NSConcreteStackBlock, NSConcreteMallocBlock三种；而NSConcreteStackBlock这种block是保存在栈中的，需要注意在函数返回时会被销毁。</li>
+<li>在ARC下<code>__block id x</code>是会retain 对象x的，而MRC下这样写不会retain x, 所以MRC下<strong>block关键字可以用于打破block使用时的循环引用，而ARC下还是要用</strong>weak, 原文如下：</li>
+</ol>
+
+
+<p><code>In manual reference counting mode, __block id x; has the effect of not retaining x. In ARC mode, __block id x; defaults to retaining x (just like all other values). To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x;. As the name __unsafe_unretained implies, however, having a non-retained variable is dangerous (because it can dangle) and is therefore discouraged. Two better options are to either use __weak (if you don’t need to support iOS 4 or OS X v10.6), or set the __block value to nil to break the retain cycle.</code></p>
+
+<p>出自<a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a>.</p>
+
+<p>其余详细的对于block的剖析可以参见唐巧的文章:</p>
+
+<p><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/">iOS开发每周文章选读 第二周</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T18:35:26+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>6:35 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/20/mei-zhou-wen-zhang-xuan-du-di-er-zhou/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>一 <a href="http://www.infoq.com/cn/articles/design-patterns-in-swift?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=articles_link&amp;utm_content=link_text">Swift中的设计模式</a></h2>
+
+<p>InfoQ上的文章，主要介绍了在Swift中涉及到的一些设计模式，尤其是一些在语言层面就可以很好的支持的设计模式，同时也可以通过这篇文章加深对Swift语言和设计模式本身的理解。例如，作者提到，Swift支持函数式编程范式，那么高阶函数的使用就可以直接替换掉原有的命令模式(Command模式)。同理，Swift中的一些新语言特性也能够帮我们更好的理解策略模式，抽象工厂模式，适配器模式等。</p>
+
+<p>所以语言上对设计模式有原生的支持后，实际的编码过程就会更加容易。</p>
+
+<h2> 二 <a href="http://www.cnblogs.com/dsxniubility/p/4821184.html">整理iOS9适配中出现的坑</a></h2>
+
+<p>从github上的个人介绍来看，作者似乎是美团的，这篇文章主要就是记录了实际开发过程中适配iOS 9遇到的问题，主要包括：iOS 9默认使用HTTPS； Bitcode等等，很有实用价值，省得大家走弯路了。</p>
+
+<h2>三 <a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893">iOS 保持界面流畅的技巧</a></h2>
+
+<p>作者详细的分析了iOS界面构建中的各种性能问题以及对应的解决思路，尤其是对于列表界面。界面的优化很多时候都是用空间换时间，多做缓存，预先加载，提前进行异步绘制，避免离屏渲染等等都能有效的提升界面的流畅度，另外，我个人真心觉得要多用Instruments里面的Time Profiler、Core Animation、GPU Driver等来检测界面性能，找出真正的性能瓶颈然后有针对性的优化。</p>
+
+<p><a href="https://github.com/facebook/AsyncDisplayKit">AsyncDisplayKit</a>我之前没有用过，这篇文章有提到，有空可以研究一下。</p>
+
+<h2>四 <a href="http://xujim.github.io/ios/2014/12/07/AsyncDisplayKit_inside.html">AsyncDisplayKit技术分析</a></h2>
+
+<p>上面刚刚提到了AsyncDisplayKit, 我自己就又找到一篇介绍的技术文章，有空可以结合源代码看看:)</p>
+
+<h2>五 <a href="http://blog.cnbang.net/tech/2578/">iOS图片加载速度极限优化—FastImageCache解析</a></h2>
+
+<p>又是一篇关于性能优化的文章，主要是对于<a href="https://github.com/path/FastImageCache">FastImageCache</a>的分析，介绍FastImageCache是如何对含有大量图片的列表进行性能优化的。FastImageCache的滑动确实很流畅，我有个很旧的iPhone 4, 滑动的时候FPS还能有差不多50左右。</p>
+
+<h2>六 <a href="http://draveness.me/dknightversion-de-shi-xian-wei-ios-ying-yong-tian-jia-ye-jian-mo-shi/">DKNightVersion 的实现 &mdash; 如何为 iOS 应用添加夜间模式</a></h2>
+
+<p>主要介绍通过runtime来支持夜间模式，这个机制应该也可以用来支持通用的换肤机制。</p>
+
+<h2>七 <a href="http://ddrccw.github.io/2014/05/19/a-brief-analysis-and-tips-on-magialrecord/">浅析MagicalRecord</a></h2>
+
+<p>网易同事写的，还没来得及仔细看，主要是对<a href="https://github.com/magicalpanda/MagicalRecord">MagicalRecord</a>的一些介绍, MagicRecord是用来简化CoreData使用的一个开源库，在github上star数也是相当多哦!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/">Pods: Unable to satisfy the following requirements</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-12T18:06:36+08:00'><span class='date'>2015 年11 月12 日</span> <span class='time'>6:06 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/12/pods-unable-to-satisfy-the-following-requirements/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自己在AFNetworking基础上封装了个网络库给组里用，依赖于AFNetworking, podspec里依赖版本没有写死，如下</p>
+
+<pre><code>s.dependency "AFNetworking", "~&gt; 2.5"
+</code></pre>
+
+<p>再加上我们为了避免每个人都pods update一下，所以都是把pods文件夹上传到了代码服务器，然后就看到小伙伴们的提交中经常带有pods文件夹下AFNetworking的改动，原因就是大家的第三方库的pods并不总是最新的，(一般在更新pods文件夹的时候，避免更新repo可以加快速度,基本上都会加上参数&ndash;no-repo-update), 所以AF的版本从2.6.0到2.6.2都有。</p>
+
+<p>讨论后，索性就是写死固定的版本号啦；看了下，2.6.0肯定是要的，因为修正了很多Xcode 7里面会报warning的问题；2.6.2在2.6.0基础上差别不大，所以就写固定所依赖库的版本号：</p>
+
+<pre><code>s.dependency "AFNetworking", "2.6.2"
+</code></pre>
+
+<p>完了在自己的Demo上运行的时候就会报错：<strong>&ldquo;Pods: Unable to satisfy the following requirements&rdquo;</strong></p>
+
+<p>其实原因很简单，因为AFNetworking 2.6.0以上都不支持iOS 6.0了，而我的Demo工程里面Podfile中版本号仍然是6.0, 考虑到现在绝大部分应用都不需要支持6.0了，索性就将Demo和podspec的版本号全部改成iOS 7.0就解决问题啦。</p>
+
+<p>话说，也有人在AFNetworking上报issue提到这个问题：^_^</p>
+
+<p><a href="https://github.com/CocoaPods/CocoaPods/issues/4373">https://github.com/CocoaPods/CocoaPods/issues/4373</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -257,440 +508,9 @@ Building native extensions with: '--use-system-libraries=true --with-xml2-includ
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/">使用homebrew安装工具</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-10T20:06:29+08:00'><span class='date'>2015 年11 月10 日</span> <span class='time'>8:06 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/10/shi-yong-homebrewan-zhuang-gong-ju/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>可以参考自己写的RestKit测试服务器启动问题.</p>
-
-<h2>参考文章</h2>
-
-<ol>
-<li><a href="http://blog.csdn.net/maojudong/article/details/7920578">用HomeBrew直接安装ruby</a></li>
-<li><a href="http://heepo.github.io/%E5%B7%A5%E5%85%B7/2015/08/05/Homebrew-Mirror-Links.html">HomeBrew镜像替换</a></li>
-<li><a href="http://brew.sh/index_zh-cn.html">Homebrew</a></li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/">工作问题记录 一</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-09T20:20:44+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>8:20 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/09/gong-zuo-wen-ti-ji-lu-yi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前言：好记性不如烂笔头，现在觉得自己以前做得不太好的地方就是，好些东西都没怎么系统记录下来，尤其是一些遇到的具体问题。大部分还是有记录，但是记得比较分散，有些记在evernote上面，有些就是自己弄了些文档记录一下，或者记录在代码中间，一旦换了工作也不太去看原来的代码和笔记了。之前做PC上个人消费类软件开发还好，毕竟问题没那么通用；但是现在转到iOS开发后，技术更新又快，还需要指导新人，所以现在觉得有必要将自己遇到的、搜索的、或者是别人问过的问题作一些搜集整理，这样至少对指导新人还是有帮助的，不用每次去搜索笔记或者是搜索收藏夹了。有一些是最近的问题，有一些是来自于原有的记录。</p>
-
-<h2>一  使用RestKit的时候Crash</h2>
-
-<p>参考：
-<a href="https://github.com/RestKit/RestKit/issues/1680">Hard Crash When Mapping to Undefined Object Keypath</a></p>
-
-<h2>二 rac_signalForControlEvents在遇到Error事件后，按钮事件不会重新触发</h2>
-
-<p>参考：
-<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2136">rac_signalForControlEvents only works once</a></p>
-
-<h2>三 Framework签名问题</h2>
-
-<p>参考：
-<a href="http://stackoverflow.com/questions/30963294/creating-ios-osx-frameworks-is-it-necessary-to-codesign-them-before-distributin">Creating iOS/OSX Frameworks: is it necessary to codesign them before distributing to other developers?</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/">iOS开发每周文章选读 第一周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-09T19:58:05+08:00'><span class='date'>2015 年11 月9 日</span> <span class='time'>7:58 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/09/iosmei-zhou-wen-zhang-xuan-du-di-yi-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自己平时读得多，写得少，所以就想办法将自己最近看过的好文章慢慢整理起来，方便自己后续查阅和复习，也可以向公司的新人推荐这些文章，而且现在每周也需要向组里推荐好文章来学习，所以作此记录，既然坚持写那么难，那么就得坚持读了；当然，其实InfoQ的iOS技术开发周报已经是很好的文章合集了。</p>
-
-<h2>一 <a href="http://xiangwangfeng.com/2015/05/20/%E7%A7%BB%E5%8A%A8IM%E5%BC%80%E5%8F%91%E9%82%A3%E4%BA%9B%E4%BA%8B/">移动IM开发那些事</a></h2>
-
-<p>最近公司内部老是有网易云信的广告，后续有时间可以研究一下。</p>
-
-<p>这篇文章主要是介绍了移动IM开发相关的一些知识点，尤其是技术方案的选择。一些小公司可能会直接用云信或者环信提供的IM服务，不过，稍微大一些的公司还是都会自己去做IM开发相关的事情，比如蘑菇街啊，英坦网络技术等，都有自己做移动IM。如果需要做移动IM或者说公司产品需要设计私有协议进行网络通信的话，还是可以从里面得到很多启发，至少不会踩很多坑了。</p>
-
-<p>对于我个人而言，MessagePack, MQTT和XMPP都有接触过，不过都没啥深入的学习，以后有空还是可以好好研究一下。</p>
-
-<h2>二 <a href="http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a></h2>
-
-<p>RunLoop 是 iOS 和 OSX 开发中非常基础的一个概念，这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的。</p>
-
-<h2>三 <a href="https://github.com/ChenYilong/ParseSourceCodeStudy/blob/master/01_Parse%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF/Parse%E7%9A%84%E5%BA%95%E5%B1%82%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.md#gcd%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E5%83%8Foperationqueue%E9%82%A3%E6%A0%B7%E7%BB%88%E6%AD%A2%E4%BB%BB%E5%8A%A1">Parse源码浅析系列（一）&mdash;Parse的底层多线程处理思路：GCD高级用法</a></h2>
-
-<p>GCD的简单使用方法，相信大部分iOS开发者都会，但是高级用法就不一定了；看过的不少开源库，对于GCD的使用都有很多值得学习的地方。</p>
-
-<h2>四 <a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">谈Objective-C Block的实现</a></h2>
-
-<p>很久以前的文章了，温故而知新.</p>
-
-<h2>五 <a href="http://blog.devtang.com/blog/2015/11/02/mvc-and-mvvm/">被误解的 MVC 和被神化的 MVVM</a></h2>
-
-<p>唐巧最新的文章，主要是介绍了一下作者自己对MVC和MVVM的一些理解，以及对应用新技术的一些看法，并且给出一些实际开发工程中的建议。其实，相关的道理都是浅显易懂，但是在实际的开发过程中，要使得架构层次清晰、便于维护和扩展又不是一件容易的事情，大家可以从这篇文章中汲取对自己有益的部分，并在实际开发过程中慢慢体会并且逐步应用一些实用的技巧。</p>
-
-<h2>六 <a href="http://blog.ibireme.com/">iOS 处理图片的一些小 Tip</a></h2>
-
-<p>图片处理相关</p>
-
-<h2>七 <a href="http://blog.sunnyxx.com/2015/06/12/objc-new-features-in-2015/">2015 Objective-C 新特性</a></h2>
-
-<p>描述了Objective-C的一些新特性，Lightweight Generics还是挺有用的，现在有开始用到自己的代码中。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/">使用Octopress搭建博客流程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-02T20:11:23+08:00'><span class='date'>2015 年11 月2 日</span> <span class='time'>8:11 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/02/shi-yong-octopressda-jian-bo-ke-liu-cheng/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>网上关于Octopress搭建个人博客的文章太多了，自己写这篇文章主要也是记录自己搭建过程中遇到的问题以及后续操作常用的命令，然后基本的操作与配置部分大家直接看参考资料中列出的链接就好了，里面写得比我详细多了，我这里就不再复制粘贴了。</p>
-
-<h2>Ruby和Octopress安装</h2>
-
-<p>直接按照<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>上面的文章搭建即可。</p>
-
-<h2>常见操作</h2>
-
-<p>以下操作都是在octopress目录下进行.</p>
-
-<h3>添加新文章</h3>
-
-<p>1 执行如下命令</p>
-
-<pre><code>rake new_post["title"] 
-</code></pre>
-
-<p>可以在 source/_posts 目录下创建一篇新博文, 文章是采用<a href="http://wowubuntu.com/markdown/">Markdown语法</a>进行书写的, 直接使用Markdown的免费编辑器来书写就好了；我暂时用的是Mou, 不过在编辑比较长的文章后会有卡顿，以后慢慢会尝试别人推荐的Sublime Text 3 + MarkdownEditing进行书写。</p>
-
-<p>2 执行如下命令进行预览</p>
-
-<pre><code>rake preview 
-</code></pre>
-
-<p>然后在浏览器中输入<a href="http://localhost:4000/">http://localhost:4000/</a> 就可以预览.</p>
-
-<h3>生成与发布</h3>
-
-<p>执行如下命令生成页面与发布页面.</p>
-
-<pre><code>rake generate # 生成页面
-rake deploy   # 发布到站点
-</code></pre>
-
-<p>从执行的时候命令行输出的信息可以看出，生成页面的命令实际上是在public目录生成html页面，而deploy命令实际上就是将public页面中的数据push到你的git仓库的master分支上，而我们日常编辑的文章原始内容就与source分支对应。</p>
-
-<p>因此，为了保存本地的更改，那么可以提交自己的源文件，并且push到远程source分支上.</p>
-
-<pre><code>git add .
-git commit
-git push origin source
-</code></pre>
-
-<p>同样，如果你像我一样，看到别人漂亮的排版后想参考对方的源文件，那么可以从github上找到对方对应的仓库，切换到source分支然后参考对方的源文件, 比如_config.yml是怎么写的啊，等等&hellip;</p>
-
-<h3>添加友情链接</h3>
-
-<p>在_config.yml文件中的default_asides栏中添加一项，然后在对应目录下添加一个html文件.</p>
-
-<p>例如我自己的_config.yml文件中对应的内容为：</p>
-
-<pre><code>default_asides: [asides/about.html, asides/recent_posts.html, asides/friendly_link.html]
-</code></pre>
-
-<p>那么在source->_includes->asides文件夹下要保证有这几个文件，html文件里面的内容无非就是添加一个标题和链接，比如:</p>
-
-<pre><code>&lt;section&gt;
-  &lt;h1&gt;友情链接&lt;/h1&gt;
-  &lt;ul id="friendly_link"&gt;
-    &lt;li class="post"&gt;
-      &lt;a href="http://blog.devtang.com"&gt;唐巧的技术博客&lt;/a&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/section&gt;
-</code></pre>
-
-<h3>调整列表缩进</h3>
-
-<p>当写好文章发布后，我发现在Markdown里面添加的列表的缩进存在问题，列表符号（或者编号）默认溢出左侧文字内容边界, 没有和上下文对齐，显得非常难看，例如本文末尾的参考链接里的列表，而调整正常的方法就是在<code>sass/custom/_layout.scss</code>中找到<code>//$indented-lists: true;</code>然后再去掉注释符号<code>//</code>即可开启列表自动缩进的功能。</p>
-
-<h3>添加导航栏上的链接</h3>
-
-<p>在<code>source/_includes/custom/navigation.html</code>里可以设置导航栏上显示的内容和链接，例如，如果想要在导航栏上显示<code>首页</code>, <code>工具</code>, <code>所有文章</code>这几项，那么<code>navigation.html</code>的内容应该类似下面这样子:</p>
-
-<pre><code>&lt;ul class="main-navigation"&gt;
-  &lt;li&gt;&lt;a href="/"&gt;首页&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href="/blog/categories/gong-ju"&gt;工具&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href="/blog/archives"&gt;所有文章&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-
-<p>链接怎么知道呢？在<code>_deploy</code>目录下实际放着的就是这个博客对应的网页文件，在<code>blog/categories</code>目录下就是所有的分类，那么这个url其实就是和文件的相对路径对应的了。</p>
-
-<h3>添加分类</h3>
-
-<p>新生成的Markdown文件中，有<code>categories:</code>内容，直接在后面写上分类的名字即可；如果一篇文章属于多个分类，那么多个分类之间用空格隔开即可。</p>
-
-<h3>分类首字母大写的问题</h3>
-
-<p>添加了一个<code>iOS</code>的分类后发现点开来显示的是<code>Category: Ios</code>, 首字母大写了，google了一下，发现人家的问题都是想大写结果默认全转小写了；虽然正确的拼法是<code>iOS</code>但要真全小写我也能接受啊；后来用<code>Beyond Compare</code>对比了一下自己的和别人家的代码，通过改动<code>plugins/titlecase.rb</code>里面的代码，注释掉了<code>self[i,1] = self[i,1].upcase unless x =~ /[A-Z]/ or x =~ /\.\w+/</code>这行用于将首字母大写的代码解决了这个问题：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='Ruby'><span class='line'>  <span class="k">def</span> <span class="nf">smart_capitalize</span>
-</span><span class='line'>    <span class="c1"># ignore any leading crazy characters and capitalize the first real character</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span> <span class="o">=~</span> <span class="sr">/^[&#39;&quot;\(\[&#39;]*([a-z])/</span>
-</span><span class='line'>      <span class="n">i</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="vg">$1</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">x</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="p">,</span><span class="nb">self</span><span class="o">.</span><span class="n">length</span><span class="o">]</span>
-</span><span class='line'>      <span class="c1"># word with capitals and periods mid-word are left alone</span>
-</span><span class='line'>      <span class="c1"># 注释掉下面一行代码主要是为了修正Category大小写的问题, 之前名为iOS的Category大小写总是错误的显示为Ios</span>
-</span><span class='line'>      <span class="c1"># self[i,1] = self[i,1].upcase unless x =~ /[A-Z]/ or x =~ /\.\w+/</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="nb">self</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>不过每个人遇到的问题都不太一样，这里只是个参考，如果熟悉Ruby的话应该就没啥问题：）
-这个改动对应的github commit见：<a href="https://github.com/agger0207/agger0207.github.io/commit/8cd062c45534be6a83e749fe5ea691d1c14d68cb">https://github.com/agger0207/agger0207.github.io/commit/8cd062c45534be6a83e749fe5ea691d1c14d68cb</a></p>
-
-<h3>代码着色</h3>
-
-<p>直接用Markdown的语法即可为代码着色。</p>
-
-<h3>编辑格式调整</h3>
-
-<p>基本就是普通的Markdown编辑，后面会写一篇介绍如何使用Markdown的文档；实在不行，参照别人git上的源码整整或者google一下，方便又快捷。</p>
-
-<h2>评论系统</h2>
-
-<p>TODO: 使用多说的评论系统</p>
-
-<h2>如何加快访问速度</h2>
-
-<p>TODO</p>
-
-<h2>参考链接</h2>
-
-<p>如下几个著名的blog都是机遇Octopress搭建的，我也参考了他们的源码. 其中有好几个都是非常优秀的iOS工程师, 里面的文章都非常值得一读.</p>
-
-<ol>
-<li><a href="http://southpeak.github.io/">南峰子的技术博客</a></li>
-<li><a href="http://blog.leichunfeng.com/">雷纯锋的技术博客</a></li>
-</ol>
-
-
-<p>其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验, 上面写的这些都是在安装好<code>Octopress</code>和<code>Ruby</code>之后的一些操作。</p>
-
-<ol>
-<li><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a></li>
-<li><a href="http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/">使用 Octopress+GitHub Pages 搭建个人博客</a></li>
-<li><a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">唐巧的技术博客</a></li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/31/my-first-post-for-testing-octopresee/">My First Post for Testing Octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-31T15:46:15+08:00'><span class='date'>2015 年10 月31 日</span> <span class='time'>3:46 pm</span></time>
-        
-        
-           | <a href="/blog/2015/10/31/my-first-post-for-testing-octopresee/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>正文</h2>
-
-<p>It is a test file</p>
-
-<p>这是我使用Octopress搭建的blog的测试文章，用来看看效果如何。</p>
-
-<p>主要参考教程是<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a>, 另外blog的一些配置参考了<a href="http://southpeak.github.io/">南峰子的技术博客</a>, 这也是我非常推荐的一个iOS相关的技术博客，后续我会逐步完善自己的blog内容，例如样式排版什么的.</p>
-
-<p>随便贴个代码试试看:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">getPropertyList:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">theClass</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">dic</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableDictionary</span> <span class="n">dictionary</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">outCount</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">objc_property_t</span> <span class="o">*</span><span class="n">properties</span> <span class="o">=</span> <span class="n">class_copyPropertyList</span><span class="p">(</span><span class="n">theClass</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outCount</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">outCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">objc_property_t</span> <span class="n">property</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">propertyNameString</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">property_getName</span><span class="p">(</span><span class="n">property</span><span class="p">)</span> <span class="nl">encoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
-</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">propertyAttributeString</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">property_getAttributes</span><span class="p">(</span><span class="n">property</span><span class="p">)</span> <span class="nl">encoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="bp">NSMutableString</span> <span class="o">*</span><span class="n">filedTypeString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableString</span> <span class="nl">stringWithString</span><span class="p">:</span><span class="n">propertyAttributeString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">NSRange</span> <span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="n">filedTypeString</span> <span class="nl">rangeOfString</span><span class="p">:</span><span class="s">@&quot;,&quot;</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">filedTypeString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSMutableString</span> <span class="o">*</span><span class="p">)[</span><span class="n">filedTypeString</span> <span class="nl">substringToIndex</span><span class="p">:</span><span class="n">range</span><span class="p">.</span><span class="n">location</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="p">[</span><span class="n">dic</span> <span class="nl">setObject</span><span class="p">:</span><span class="n">filedTypeString</span> <span class="nl">forKey</span><span class="p">:</span><span class="n">propertyNameString</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">dic</span> <span class="n">allKeys</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h2>参考资料</h2>
-
-<ol>
-<li><a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">Octopress 教程目录</a></li>
-<li><a href="http://southpeak.github.io/">南峰子的技术博客</a></li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/8">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -712,7 +532,15 @@ git push origin source
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能优化</a>
+        <a href="/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/">iOS开发每周文章选读 之 第八周</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/uivieiewyu-calayer/">UIVieiew与CALayer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/iosjie-mian-xing-neng-you-hua/">iOS界面性能分析与优化</a>
       </li>
     
       <li class="post">
@@ -740,15 +568,7 @@ git push origin source
       </li>
     
       <li class="post">
-        <a href="/blog/2015/12/17/xcode-7-ui-testing/">Xcode 7 UI Testing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/">Xcode 7调试选项 Address Sanitizer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a>
+        <a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/">iOS开发每周文章选读 之 第七周</a>
       </li>
     
   </ul>
