@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T13:59:11+08:00</updated>
+  <updated>2016-01-02T14:00:34+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -23,7 +23,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[UIVieiew与CALayer]]></title>
+    <title type="html"><![CDATA[UIView与CALayer]]></title>
     <link href="http://agger0207.github.io/blog/2016/01/02/uivieiewyu-calayer/"/>
     <updated>2016-01-02T13:49:22+08:00</updated>
     <id>http://agger0207.github.io/blog/2016/01/02/uivieiewyu-calayer</id>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T13:59:11+08:00</updated>
+  <updated>2016-01-02T14:00:34+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -18,6 +18,15 @@
     <link href="http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/"/>
     <updated>2016-01-02T13:54:06+08:00</updated>
     <id>http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[UIView与CALayer]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/02/uivieiewyu-calayer/"/>
+    <updated>2016-01-02T13:49:22+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/02/uivieiewyu-calayer</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
@@ -67,15 +76,6 @@
     <link href="http://agger0207.github.io/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/"/>
     <updated>2015-12-27T17:02:50+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发每周文章选读 之 第七周]]></title>
-    <link href="http://agger0207.github.io/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/"/>
-    <updated>2015-12-25T13:53:53+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
