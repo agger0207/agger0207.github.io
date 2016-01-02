@@ -9,8 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="问题描述:
-之前是在晚上在公司机器上来发布文章，但是同时也会在自己家里写文章，我们知道，octopress日常操作的实际就是blog所在的git仓库的source分支，例如我自己的blog对应的仓库实际上就是https://github.com/agger0207/agger0207.github &hellip;">
+  <meta name="description" content="前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +68,65 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/">github上Contributions丢失的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-01T14:09:54+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:09 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/01/githubshang-contributionsdiu-shi-de-wen-ti/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前几天无意中瞟了一眼自己的github, 虽然自己都怎么向github上提交代码，但是contributions明显不对，中间空了好几个月，再仔细看看，发现提交上去的作者都链接不到自己的profile, google一下答案就找到了，因为自己机器重做后忘记设置git 的user email了，而github是通过user email来对应到实际的用户的；解决这个问题一般通过命令</p>
+
+<pre><code>$ git config --global user.email "xxxx@xxxx.com"
+</code></pre>
+
+<p>其中的email地址需要和自己github profile的email地址一样;</p>
+
+<p>而如果希望不在commit中暴露自己的email地址的话，可以用如下命令</p>
+
+<pre><code>$ git config --global user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>其中<code>username</code>是自己的github用户明名，这样既可以同自己的profile关联起来，自己在profile中将email地址不对外开放的话，别人也看到你的email地址。</p>
+
+<p>但是<code>git config --global</code>这个命令是全局生效的，也就是所有git的提交都会使用这个email, 如果自己还使用了另外一个email提交代码，比如说一般公司内网都会搭建gitbucket之类，自己同时还在内网提交代码，那么所用的账户对应的email可能是不一样的，那么就需要对具体某个local repo来设置email了，命令如下：</p>
+
+<pre><code>$ git config --local user.email "username@users.noreply.github.com"
+</code></pre>
+
+<p>这样就可以对当前的repo设置一个email, 在当前repo下所有commit都会和这个email关联起来，其实这样也挺麻烦的，按道理说应该可以配置得更加智能些，毕竟这些config信息都是存在配置文件上的，改天自己实践过后再来更新这篇文章吧！话说我发现我的某个分支好像又是存在问题的，commit的作者显示不正确，看来改天又要去检查下啦。。。。</p>
+
+<p>参考资料:</p>
+
+<ul>
+<li><a href="https://help.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile/">Why are my contributions not showing up on my profile?</a></li>
+<li><a href="https://help.github.com/articles/keeping-your-email-address-private/">Keeping your email address private</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -338,38 +396,6 @@ $ ls -a
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/">日常积累的开发技巧（一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-12T14:35:06+08:00'><span class='date'>2015 年12 月12 日</span> <span class='time'>2:35 pm</span></time>
-        
-        
-           | <a href="/blog/2015/12/12/ri-chang-ji-lei-de-kai-fa-ji-qiao-(%5B%3F%5D-)/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -392,6 +418,10 @@ $ ls -a
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/macxia-you-yong-de-gong-ju/">Mac下有用的工具</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/">iOS开发每周文章选读 之 第八周</a>
@@ -427,10 +457,6 @@ $ ls -a
     
       <li class="post">
         <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/">iOS开发每周文章选读 之 第七周</a>
       </li>
     
   </ul>

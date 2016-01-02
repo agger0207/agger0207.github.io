@@ -9,7 +9,8 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="之前只知道使用git submodule和CocoaPods来做包的依赖管理，前段时间看一个开源库的时候，不记得是Mantle还是MagicRecord的时候发现ReadMe里面有介绍可以用Carthage来做包的依赖管理。 不过根据ReadMe中说明，只支持动态框架，所以只能用于iOS &hellip;">
+  <meta name="description" content="这几天在ASO100的微信公众号上看到2015年App Store审核被拒的23个理由, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。 App中出现安卓字样；一般是活动页面；
+App中活动页面奖品中出现iPhone等； &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +69,79 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/">App Store审核拒绝理由</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:28:17+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:28 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/app-storeshen-he-ju-jue-li-you/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这几天在ASO100的微信公众号上看到<a href="%E5%9C%B0%E5%9D%80%E6%89%BE%E4%B8%8D%E5%88%B0">2015年App Store审核被拒的23个理由</a>, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。</p>
+
+<ol>
+<li>App中出现安卓字样；一般是活动页面；</li>
+<li>App中活动页面奖品中出现iPhone等；</li>
+<li>App中活动页面没有返回按钮；
+这个问题出现的原因是，活动页面一般使用H5来做，然后有的H5带了Header, 有的没有带；客户端通过URL参数来判断是否要加导航栏头部，然后万一运营上了个活动页面，自己没有带H5 Header, 配置又不正确的话，就悲剧了；</li>
+<li>应用内提供了检查更新机制；
+吐槽：话说尽管苹果审核指南明确规定了所有应用都应该通过AppStore更新，但其实很多应用都在设置页面提供了检查更新的机制，然后在2015年的某一天，突然这个就成为了被拒的理由了，即使同样的功能已经存在一年多了。。。。</li>
+<li>推荐其他应用
+别家的应用是一定不能推荐的，自家的应用不清楚，不过我看大家基本都在推，好像问题不太大。</li>
+<li>求好评
+具体不记得了，一般在设置页面放一栏是没啥问题的，但是好像某种弹出界面以比较强的提示要求给好评的话，会过不了审核</li>
+<li>彩票类栏目没有提供用户协议
+嗯，这个也是一个某个功能存在了很久，突然就因为这个被拒了。。。。</li>
+<li>提供用户注册功能的应用必须提供隐私协议
+同上，之前好好的过审，苹果艳照门之后就一定要提供隐私协议了</li>
+<li>社区模块没有提供举报功能
+吐槽：不说啥，社区水很深，据说社区里面的帖子里面要是有“安卓”字样都可能被拒</li>
+<li>在status bar上显示自己的信息
+吐槽：这个是听兄弟部门的哥们说的，以前大家都会在status bar上显示一些提示信息，比如说下载进度、同步进度或者active状态下收到的push消息等等，但是兄弟部门的哥们说iOS 9之后，不让加了，因为这个被拒了一次，据说是因为status bar上苹果自己要在那上面显示信息了。。。</li>
+<li>非用户创造的数据没有放在/tmp下也没有打上do not back up属性，会被拒，因为苹果认为只有用户创造的数据才允许被iCloud backup备份, 上次其他组因为这个原因被拒是因为下载的H5资源包放在Documents目录下没有加do not back up属性.
+可以参见下面两个链接：
+<a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">https://developer.apple.com/library/ios/qa/qa1719/_index.html</a>
+<a href="https://developer.apple.com/icloud/documentation/data-storage/index.html">https://developer.apple.com/icloud/documentation/data-storage/index.html</a></li>
+<li>H5资源包升级的时候卡住界面了&hellip;.
+其实是个bug, 不过也提醒我们，这种资源包升级的事情明显可以在审核过程中避免或者在测试过程中出现的，应该尽早处理掉.</li>
+</ol>
+
+
+<p>有些想不起来了，想起来了后面再加：） 当然，你还可以在<a href="https://github.com/jcccn/Why-Reject">苹果审核拒绝理由</a> 下面看到更多奇葩理由。</p>
+
+<p>小结：</p>
+
+<ol>
+<li>审核期间运营上活动一定要注意沟通，一般运营都不明白审核规则，有些甚至上了活动之后自己都不会去测试；当然，有些公司会直接在后台做一些配置确保当前递交版本不会出现新的活动页面；</li>
+<li>可能因为网络原因导致出错的主要功能要在审核前格外注意.</li>
+<li>为了保证审核通过，还是要仔细研究苹果官方的审核指南，不过其实大家很多时候都没有严格按照审核指南来做，很多时候甚至是想一些办法来绕过审核的。苹果的审核由于是人工审核，有的时候也会有一些奇葩的事情发生，经常会出现多年不修改的功能，突然某个版本就过不了审核了；尤其是在苹果发布新版本的Xcode，iOS或者出了一些隐私泄漏的大事的时候，审核都会收紧。</li>
+</ol>
+
+
+<p>建议新产品第一次上线前，有专人能够根据审核规则进行一次详细的Review, 这样大家能够形成共识，避免下次出现问题, 至少不会把未完成的功能加上去或者说出现“敬请期待”等等。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -678,263 +752,6 @@ dispatch_async(dispatch_get_main_queue(), {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/">YYModel源码略读</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T20:13:42+08:00'><span class='date'>2015 年11 月20 日</span> <span class='time'>8:13 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/20/yymodelyuan-ma-jie-xi/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在iOS开发中总会用到各种JSON模型转换库，比如JSOMModel，Mantle, MJExtension等等；前段时间又了解到一个简单的JSON模型转换库叫做<a href="https://github.com/ibireme/YYModel">YYModel</a>, 作者博客上有很多好文章，我经常去读的；其中一篇就说提到了<a href="http://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/">iOS JSON 模型转换库评测</a>。</p>
-
-<p>JSON模型转换库的源代码里面值得去看的主要就是其中对于runtime的运用，因为基本上不用runtime就干不了这个活。而YYModel也比较简单，对于想多了解runtime应用的人来说其实是比较方便的，而且作者将runtime获取到类的信息，属性信息，方法信息都封装成了ObjC的类，这样大家如果想获取这些信息的话，就不需要自己去重新获取了。</p>
-
-<p>例如其中的YYClassInfo类的定义如下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'><span class="k">@interface</span> <span class="nc">YYClassInfo</span> : <span class="bp">NSObject</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">Class</span> <span class="n">cls</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">Class</span> <span class="n">superCls</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">Class</span> <span class="n">metaCls</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">isMeta</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="n">YYClassInfo</span> <span class="o">*</span><span class="n">superClassInfo</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">ivarInfos</span><span class="p">;</span>     <span class="c1">///&lt; key:NSString(ivar),     value:YYClassIvarInfo</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">methodInfos</span><span class="p">;</span>   <span class="c1">///&lt; key:NSString(selector), value:YYClassMethodInfo</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">propertyInfos</span><span class="p">;</span> <span class="c1">///&lt; key:NSString(property), value:YYClassPropertyInfo</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">classInfoWithClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">cls</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">classInfoWithClassName:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">className</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>看上去是不是直观了很多，实际上就是对runtime的那些方法做了一些上层的封装，里面用到的方法也还是<code>class_copyPropertyList</code>， <code>class_copyMethodList</code>这些。但封装之后看上去就直观了很多，对runtime不那么了解的人也可以获取到这些信息了，可以根据类名字轻易获取到类的信息，里面方法列表，属性列表等统统都有。</p>
-
-<p>另，使用<code>class_copyPropertyList</code>时候需要注意，<code>class_copyPropertyList</code>只能获取到定义在自己的属性，而不能获取定义在父类的属性，官方文档有这样一段注释：</p>
-
-<pre><code>Any properties declared by superclasses are not included. 
-</code></pre>
-
-<p>所以在_YYModelMeta的- (instancetype)initWithClass:(Class)cls方法中，可以看到下面的代码：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'>  <span class="c1">// Create all property metas.</span>
-</span><span class='line'>  <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">allPropertyMetas</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableDictionary</span> <span class="n">new</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">YYClassInfo</span> <span class="o">*</span><span class="n">curClassInfo</span> <span class="o">=</span> <span class="n">classInfo</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="n">curClassInfo</span> <span class="o">&amp;&amp;</span> <span class="n">curClassInfo</span><span class="p">.</span><span class="n">superCls</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// recursive parse super class, but ignore root class (NSObject/NSProxy)</span>
-</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">YYClassPropertyInfo</span> <span class="o">*</span><span class="n">propertyInfo</span> <span class="k">in</span> <span class="n">curClassInfo</span><span class="p">.</span><span class="n">propertyInfos</span><span class="p">.</span><span class="n">allValues</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">blacklist</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">blacklist</span> <span class="nl">containsObject</span><span class="p">:</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">whitelist</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">[</span><span class="n">whitelist</span> <span class="nl">containsObject</span><span class="p">:</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>          <span class="n">_YYModelPropertyMeta</span> <span class="o">*</span><span class="n">meta</span> <span class="o">=</span> <span class="p">[</span><span class="n">_YYModelPropertyMeta</span> <span class="nl">metaWithClassInfo</span><span class="p">:</span><span class="n">classInfo</span>
-</span><span class='line'>                                                                  <span class="nl">propertyInfo</span><span class="p">:</span><span class="n">propertyInfo</span>
-</span><span class='line'>                                                                       <span class="nl">generic</span><span class="p">:</span><span class="n">genericMapper</span><span class="p">[</span><span class="n">propertyInfo</span><span class="p">.</span><span class="n">name</span><span class="p">]];</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">meta</span> <span class="o">||</span> <span class="o">!</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_name</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_getter</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_setter</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">allPropertyMetas</span><span class="p">[</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_name</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>          <span class="n">allPropertyMetas</span><span class="p">[</span><span class="n">meta</span><span class="o">-&gt;</span><span class="n">_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="n">curClassInfo</span> <span class="o">=</span> <span class="n">curClassInfo</span><span class="p">.</span><span class="n">superClassInfo</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">allPropertyMetas</span><span class="p">.</span><span class="n">count</span><span class="p">)</span> <span class="n">_allPropertyMetas</span> <span class="o">=</span> <span class="n">allPropertyMetas</span><span class="p">.</span><span class="n">allValues</span><span class="p">.</span><span class="k">copy</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>在这段代码中可以看到会去找到除了NSObject和NSProxy外所有父类的所有属性，最后拿到这个类定义的所有属性.</p>
-
-<p>另，在<code>YYClassPropertyInfo</code>的<code>- (instancetype)initWithProperty:(objc_property_t)property</code>方法中可以看到下面的代码：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-</pre></td><td class='code'><pre><code class='Objective-C'><span class='line'>  <span class="kt">objc_property_attribute_t</span> <span class="o">*</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">property_copyAttributeList</span><span class="p">(</span><span class="n">property</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attrCount</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">attrCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">switch</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;T&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// Type encoding</span>
-</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                  <span class="n">_typeEncoding</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
-</span><span class='line'>                  <span class="n">type</span> <span class="o">=</span> <span class="n">YYEncodingGetType</span><span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">);</span>
-</span><span class='line'>                  <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">&amp;</span> <span class="n">YYEncodingTypeObject</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                      <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">);</span>
-</span><span class='line'>                      <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                          <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">2</span><span class="p">];</span>
-</span><span class='line'>                          <span class="n">name</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
-</span><span class='line'>                          <span class="n">memcpy</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">3</span><span class="p">);</span>
-</span><span class='line'>                          <span class="n">_cls</span> <span class="o">=</span> <span class="n">objc_getClass</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-</span><span class='line'>                      <span class="p">}</span>
-</span><span class='line'>                  <span class="p">}</span>
-</span><span class='line'>              <span class="p">}</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;V&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// Instance variable</span>
-</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                  <span class="n">_ivarName</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
-</span><span class='line'>              <span class="p">}</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;R&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyReadonly</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;C&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyCopy</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;&amp;&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyRetain</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;N&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyNonatomic</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;D&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyDynamic</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;W&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyWeak</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;P&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyGarbage</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;G&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyCustomGetter</span><span class="p">;</span>
-</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                  <span class="n">_getter</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
-</span><span class='line'>              <span class="p">}</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">case</span> <span class="sc">&#39;S&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="n">type</span> <span class="o">|=</span> <span class="n">YYEncodingTypePropertyCustomSetter</span><span class="p">;</span>
-</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                  <span class="n">_setter</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">];</span>
-</span><span class='line'>              <span class="p">}</span>
-</span><span class='line'>          <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>          <span class="k">default</span><span class="o">:</span>
-</span><span class='line'>              <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这些&rsquo;D'还有'R'实际上就是说明了这个property的一些属性修饰符，详细的可以参见Apple的文档  <br/>
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html">Declared Properties: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/7">&larr; Older</a>
@@ -957,6 +774,10 @@ dispatch_async(dispatch_get_main_queue(), {
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/macxia-you-yong-de-gong-ju/">Mac下有用的工具</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/">iOS开发每周文章选读 之 第八周</a>
@@ -992,10 +813,6 @@ dispatch_async(dispatch_get_main_queue(), {
     
       <li class="post">
         <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/25/ioskai-fa-mei-zhou-wen-zhang-xuan-du-7/">iOS开发每周文章选读 之 第七周</a>
       </li>
     
   </ul>

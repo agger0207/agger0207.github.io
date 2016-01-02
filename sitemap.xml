@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://agger0207.github.io/blog/2016/01/02/macxia-you-yong-de-gong-ju/</loc>
+    <lastmod>2016-01-02T14:06:47+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2016/01/02/ioskai-fa-mei-zhou-wen-zhang-xuan-du-8/</loc>
     <lastmod>2016-01-02T13:54:06+08:00</lastmod>
   </url>
@@ -242,26 +246,5 @@
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/categories/pop/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/2/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/3/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/4/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/5/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/6/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/7/</loc>
-  </url>
-  <url>
-    <loc>http://agger0207.github.io/posts/8/</loc>
   </url>
 </urlset>

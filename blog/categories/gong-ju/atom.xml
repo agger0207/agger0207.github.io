@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 工具 | 穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/blog/categories/gong-ju/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T14:00:34+08:00</updated>
+  <updated>2016-01-02T14:22:43+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mac下有用的工具]]></title>
+    <link href="http://agger0207.github.io/blog/2016/01/02/macxia-you-yong-de-gong-ju/"/>
+    <updated>2016-01-02T14:06:47+08:00</updated>
+    <id>http://agger0207.github.io/blog/2016/01/02/macxia-you-yong-de-gong-ju</id>
+    <content type="html"><![CDATA[<h3>Prepo: 图标输出工具</h3>
+
+<p>可以快速输出iOS App开发中所需要的@2x, @1x, @3x 的图标;</p>
+
+<h2>通用工具</h2>
+
+<p>在各个系统下都好用的一些工具：</p>
+
+<p>WebStorm: Web开发IDE, 方便JS开发；
+Sublime Text 3:
+Beyond Compare: 文件与文件夹比较神器；</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[修改git commit历史]]></title>
@@ -214,15 +233,6 @@ $ ls -a
 <li><a href="http://stackoverflow.com/questions/19619280/octopress-pushing-error-to-github">Octopress pushing error to GitHub</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcode 7调试选项 Address Sanitizer]]></title>
-    <link href="http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer/"/>
-    <updated>2015-12-15T14:21:58+08:00</updated>
-    <id>http://agger0207.github.io/blog/2015/12/15/xcode-7diao-shi-xuan-xiang-address-sanitizer</id>
-    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
