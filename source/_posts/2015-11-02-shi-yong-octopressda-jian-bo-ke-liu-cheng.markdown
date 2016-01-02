@@ -6,6 +6,13 @@ comments: true
 categories: 工具
 ---
 
+
+网上关于Octopress搭建个人博客的文章太多了，自己写这篇文章主要也是记录自己搭建过程中遇到的问题以及后续操作常用的命令，然后基本的操作与配置部分大家直接看参考资料中列出的链接就好了，里面写得比我详细多了，我这里就不再复制粘贴了。
+
+## Ruby和Octopress安装
+
+直接按照[Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)上面的文章搭建即可。
+
 ## 常见操作
 
 以下操作都是在octopress目录下进行.
@@ -74,6 +81,26 @@ categories: 工具
 ### 添加分类
 新生成的Markdown文件中，有`categories:`内容，直接在后面写上分类的名字即可；如果一篇文章属于多个分类，那么多个分类之间用空格隔开即可。
 
+### 分类首字母大写的问题
+添加了一个`iOS`的分类后发现点开来显示的是`Category: Ios`, 首字母大写了，google了一下，发现人家的问题都是想大写结果默认全转小写了；虽然正确的拼法是`iOS`但要真全小写我也能接受啊；后来用`Beyond Compare`对比了一下自己的和别人家的代码，通过改动`plugins/titlecase.rb`里面的代码，注释掉了`self[i,1] = self[i,1].upcase unless x =~ /[A-Z]/ or x =~ /\.\w+/`这行用于将首字母大写的代码解决了这个问题：
+
+```Ruby
+  def smart_capitalize
+    # ignore any leading crazy characters and capitalize the first real character
+    if self =~ /^['"\(\[']*([a-z])/
+      i = index($1)
+      x = self[i,self.length]
+      # word with capitals and periods mid-word are left alone
+      # 注释掉下面一行代码主要是为了修正Category大小写的问题, 之前名为iOS的Category大小写总是错误的显示为Ios
+      # self[i,1] = self[i,1].upcase unless x =~ /[A-Z]/ or x =~ /\.\w+/
+    end
+    self
+  end
+```  
+
+不过每个人遇到的问题都不太一样，这里只是个参考，如果熟悉Ruby的话应该就没啥问题：）
+这个改动对应的github commit见：https://github.com/agger0207/agger0207.github.io/commit/8cd062c45534be6a83e749fe5ea691d1c14d68cb
+
 ### 代码着色
 直接用Markdown的语法即可为代码着色。
 
@@ -92,7 +119,7 @@ TODO
 1. [南峰子的技术博客](http://southpeak.github.io/)   
 2. [雷纯锋的技术博客](http://blog.leichunfeng.com/)
 
-其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验.
+其中还有几篇讲解如何搭建的文章, 其实我上面写的基本上都来自于下面的教程，然后再加上自己的一些实际操作经验, 上面写的这些都是在安装好`Octopress`和`Ruby`之后的一些操作。
 
 3. [Octopress 教程目录](http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/)  
 4. [使用 Octopress+GitHub Pages 搭建个人博客](http://blog.leichunfeng.com/blog/2014/11/11/use-octopress-plus-github-pages-to-setup-a-personal-blog/)     
