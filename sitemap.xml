@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://agger0207.github.io/blog/2016/01/02/gong-zuo-zhong-yu-dao-de-xiao-wen-ti-yu-jie-jue-fang-an-bei-wang-%5B%3F%5D/</loc>
+    <lastmod>2016-01-02T14:28:12+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://agger0207.github.io/blog/2016/01/02/macxia-you-yong-de-gong-ju/</loc>
     <lastmod>2016-01-02T14:06:47+08:00</lastmod>
   </url>
@@ -246,5 +250,26 @@
   </url>
   <url>
     <loc>http://agger0207.github.io/blog/categories/pop/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/3/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/4/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/5/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/6/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/7/</loc>
+  </url>
+  <url>
+    <loc>http://agger0207.github.io/posts/8/</loc>
   </url>
 </urlset>

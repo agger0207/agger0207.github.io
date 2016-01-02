@@ -9,10 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="Prepo: 图标输出工具 可以快速输出iOS App开发中所需要的@2x, @1x, @3x 的图标; 通用工具 在各个系统下都好用的一些工具： WebStorm: Web开发IDE, 方便JS开发；
-Sublime Text 3:
-Beyond Compare: 文件与文件夹比较神器；
-">
+  <meta name="description" content="Xcode使用 单元测试覆盖率 多个Xcode版本混装问题 在同一台机器上安装过不同版本的Xcode的时候，在执行某些操作的时候(比如说执行git命令的时候)会提示Xcode找不到之类的错误，此时可以通过如下命令指定使用某个对应的Xcode: $ sudo xcode-select -- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +68,55 @@ Beyond Compare: 文件与文件夹比较神器；
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/02/gong-zuo-zhong-yu-dao-de-xiao-wen-ti-yu-jie-jue-fang-an-bei-wang-%5B%3F%5D/">工作中遇到的小问题与解决方案备忘 一</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-02T14:28:12+08:00'><span class='date'>2016 年1 月2 日</span> <span class='time'>2:28 pm</span></time>
+        
+        
+           | <a href="/blog/2016/01/02/gong-zuo-zhong-yu-dao-de-xiao-wen-ti-yu-jie-jue-fang-an-bei-wang-%5B%3F%5D/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Xcode使用</h2>
+
+<h3>单元测试覆盖率</h3>
+
+<h3>多个Xcode版本混装问题</h3>
+
+<p>在同一台机器上安装过不同版本的Xcode的时候，在执行某些操作的时候(比如说执行git命令的时候)会提示Xcode找不到之类的错误，此时可以通过如下命令指定使用某个对应的Xcode:</p>
+
+<pre><code>$ sudo xcode-select --switch /Applications/Xcode.app
+</code></pre>
+
+<p>其中，<code>/Applications/Xcode.app</code>是要使用的Xcode版本的目录，一般默认的目录就是这个.</p>
+
+<h3>检查Xcode是否正版可用</h3>
+
+<p>在Xcode Ghost事件后，Apple提供了命令行来检查Xcode是否正版可用.</p>
+
+<p>参考链接：</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -355,44 +401,6 @@ Always verify that the rewritten version is correct: The original refs, if diffe
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/">如何创建自己的私有Pod Spec Repo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-01-01T14:10:19+08:00'><span class='date'>2016 年1 月1 日</span> <span class='time'>2:10 pm</span></time>
-        
-        
-           | <a href="/blog/2016/01/01/ru-he-chuang-jian-zi-ji-de-si-you-pod-spec-repo/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>晕，发现文章在公司写了没传到github上；假期结束后去公司发好了；其实很简单，直接看官网文章<a href="https://guides.cocoapods.org/making/private-cocoapods.html">Private Pods</a>就可以了，另外有一篇中文文章写得更细致点。</p>
-
-<p>提一句，CocoaPods Spec Repo的核心也就是一个github仓库<a href="https://github.com/CocoaPods/Specs">CocoaPods/Specs</a>, 然后这里面的所有内容就是各个开源库提交过来的Specs信息，<code>pod setup</code>的时候会将这个仓库clone到本地；为什么我们经常说在国内，<code>pod update</code>的时候非常慢，主要就是因为需要将本地的spec repo和github上做一个同步，而这个repo由于里面的文件非常多，更新也多，所以以国内的网速，同步起来非常非常慢，我试过将这个仓库一次性全clone到本地，要一个多小时。。。。所以一般大家在<code>pod update</code>的时候会加上参数<code>--no-repo-update</code>避免重新去同步这个仓库。</p>
-
-<p>而所谓的创建私有Pod Spec Repo或者说创建一个新的Repo镜像，本质都是维护一个github的仓库，这个仓库里面放的就是这些spec了</p>
-
-<p>话说创建好自己的私有Pod Spec Repo后，添加原有的那些内部用的podspec的时候，无一例外都报错，囧。。。。看来得花时间好好review这些podspec啦 ^_^</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -413,6 +421,10 @@ Always verify that the rewritten version is correct: The original refs, if diffe
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/gong-zuo-zhong-yu-dao-de-xiao-wen-ti-yu-jie-jue-fang-an-bei-wang-%5B%3F%5D/">工作中遇到的小问题与解决方案备忘 一</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/02/macxia-you-yong-de-gong-ju/">Mac下有用的工具</a>
@@ -448,10 +460,6 @@ Always verify that the rewritten version is correct: The original refs, if diffe
     
       <li class="post">
         <a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/">在两台机器上同时用octopress写博客的问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
       </li>
     
   </ul>

@@ -9,8 +9,7 @@
   <meta name="author" content="Agger">
 
   
-  <meta name="description" content="这几天在ASO100的微信公众号上看到2015年App Store审核被拒的23个理由, 觉得也可以分享一下自己所了解到的一些被拒绝的理由；有些是自己经历过，有些是别的团队经历过或者讲述的。 App中出现安卓字样；一般是活动页面；
-App中活动页面奖品中出现iPhone等； &hellip;">
+  <meta name="description" content="iOS一般都是HTTP/HTTPS网络请求，相应的有多个开源库来支持iOS客户端HTTP请求; 比较知名和常用的主要有如下几个： 一 ASIHttpRequest 比较老的开源网络库，现在已经不再维护了；ASIHttpRequest基于CFNetworking而不是NSURLConnection &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +68,130 @@ App中活动页面奖品中出现iPhone等； &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/">iOS开源库 之 网络请求</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-27T14:31:27+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:31 pm</span></time>
+        
+        
+           | <a href="/blog/2015/11/27/ioskai-yuan-ku-zhi-wang-luo-qing-qiu/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS一般都是HTTP/HTTPS网络请求，相应的有多个开源库来支持iOS客户端HTTP请求; 比较知名和常用的主要有如下几个：</p>
+
+<h2>一 ASIHttpRequest</h2>
+
+<p>比较老的开源网络库，现在已经不再维护了；ASIHttpRequest基于CFNetworking而不是NSURLConnection, 所以性能会更好；功能上会比AFNetworking更强大，但是使用起来不如AFNetworking那么方便，而且对于新的iOS版本没有提供支持；现在应该还有一些比较老的项目仍然在使用。</p>
+
+<p>项目地址：<a href="https://github.com/pokeb/asi-http-request">https://github.com/pokeb/asi-http-request</a></p>
+
+<p>ASI VS AFNetworking是之前大家经常讨论的话题，而且确实在支持的功能上也有一些不同，比如ASI支持同步请求，支持自定义Proxy设置(AFNetworking在iOS 7.0之前不支持),不过随着ASI不再维护，慢慢的也就没有这个比较了，可以参看下面的文章了解二者的差异.</p>
+
+<p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a></p>
+
+<h2>二 AFNetworking</h2>
+
+<p>github地址：<a href="https://github.com/AFNetworking/AFNetworking">https://github.com/AFNetworking/AFNetworking</a></p>
+
+<p>现在知名度最高、应用最广泛的开源网络库，使用起来非常简单；接口清晰明了；此外，还有很多在此基础上做的扩展，后面提到的RestKit和YTKNetworking其实下面都是在用AFNetworking做请求的发送；事实上，现存的绝大多数APP中，如果仅仅是支持HTTP协议的话，除了自己用苹果的API(NSURLSession或者NSURLConnection)外，基本就是用AFNetworking了.</p>
+
+<p>AFNetworking现在到了3.0版本，3.0版本去除了NSURLConnection那套接口，只有NSURLSession的接口，只支持iOS 7以上；
+另外，作者还开发了Swift版本<a href="https://github.com/Alamofire/Alamofire">Alamofire</a>. 可以查看RayWenderlich提供的教程<a href="http://www.raywenderlich.com/85080/beginning-alamofire-tutorial">alamofire-tutorial</a>或者该教程的翻译版本<a href="http://www.cocoachina.com/ios/20141202/10390.html">Alamofire网络库基础教程：使用 Alamofire 轻松实现 Swift 网络请求</a>获得更多信息.</p>
+
+<p>AFNetworking本身也是很值得学习的库，里面对于NSOperation的使用、网络请求相关的处理都很值得学习，这里有一篇关于AFNetworking源码解读的文章:<a href="http://blog.cnbang.net/tech/2320/">AFNetworking2.0源码解析</a>，不过并没有涉及到NSURLSession部分。
+另外，由于AFNetworking的作者Mattt Thompson本身是<a href="http://nshipster.com">NSHipter</a>的发起人，所以也可以看作者自己写的介绍文章<a href="http://nshipster.cn/afnetworking-2/">AFNetworking 2.0</a>，体会架构的优化与了解功能的变更. 另附<a href="http://nshipster.cn/">NSHipter中文版本</a>.</p>
+
+<p>各个大版本的变迁：
+<a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-3.0-Migration-Guide">AFNetworking 3.0 Migration Guide</a></p>
+
+<p><a href="https://github.com/AFNetworking/AFNetworking/wiki/AFNetworking-2.0-Migration-Guide">AFNetworking 2.0 Migration Guide</a></p>
+
+<h2>三 RestKit</h2>
+
+<p>项目地址：<a href="https://github.com/RestKit/RestKit">https://github.com/RestKit/RestKit</a></p>
+
+<p>RestKit is a modern Objective-C framework for implementing RESTful web services clients on iOS and Mac OS X. It provides a powerful object mapping engine that seamlessly integrates with Core Data and a simple set of networking primitives for mapping HTTP requests and responses built on top of AFNetworking.</p>
+
+<p>RestKit主要是在网络请求的发送之外额外提供了对象映射的功能，可以将服务器返回的结果(无论是JSON还是XML)自动映射成为Model对象，并且集成了CoreData的支持；它利用RequestDescriptor和ResponseDescriptor来描述请求与Model的对应关系，这样对于配置好后的RKObjectManager, 可以自动的对请求的结果进行映射；所以其强大之处就在于这个对象的映射功能，避免繁杂的JSON映射啊什么的.</p>
+
+<p>不过好像RestKit在国内的应用不多，我个人觉得是有这么几个原因：</p>
+
+<ol>
+<li>RestKit底下其实还是用AFNetworking来发送请求，而且还使用的是老的AFNetworking 1.x的版本；由于其与AFNetworking耦合比较紧，替换成为AFNetworking 2.x以上版本非常麻烦；RestKit的开发者本来计划是要升级到AFNetworking 2.x的，不过弄了一两年也没搞完，现在的方向貌似是直接抛弃AFNetworking，直接自己通过NSURLSession来发送网络请求，但是具体啥时候能够做完就不知道了；</li>
+<li>RestKit的设计、实现和使用都偏复杂，很多地方都会看到对这一点的抱怨；对于中小型应用，AFNetworking + Mantle 完全可以做掉 RestKit的工作，还更简单；想单独的替换/升级Mantle或者AFNetworking都方便很多；</li>
+<li>国内好像CoreData用得应该不太多，RestKit强大的ObjectMapping+CoreData的集成没有多少用武之地.</li>
+<li>中小型项目用RestKit嫌麻烦，大型项目要用RestKit倒是好，但是一般这种级别的项目或者公司都会希望能够集成自己的私有TCP协议，这个要集成起来也够头疼.</li>
+</ol>
+
+
+<p>我个人也不是太喜欢RestKit, 还是AFNetworking + Mantle会更简单，即使要支持Object Mapping, 在一些JSON&lt;>Model转换库的基础上做做也还好，毕竟，大多数时候，不需要考虑一些奇怪的JSON返回内容，可以约束服务器开发人员返回更友好更易快速解析的JSON内容，而不是一些不规范的、异构的内容.</p>
+
+<h2>四 MKNetworkKit</h2>
+
+<p>Github地址：<a href="https://github.com/MugunthKumar/MKNetworkKit">https://github.com/MugunthKumar/MKNetworkKit</a>
+介绍文章：<a href="http://www.cnblogs.com/scorpiozj/p/3222803.html">http://www.cnblogs.com/scorpiozj/p/3222803.html</a>
+License:MIT License</p>
+
+<p>主要特:</p>
+
+<ul>
+<li>超轻量级</li>
+<li>整个应用共享单一队列</li>
+<li>正确的显示网络连接的标志</li>
+<li>Auto queue sizing 自动队列大小</li>
+<li>Auto caching 自动缓存</li>
+<li>Operation freezing 操作冻结</li>
+<li>Image Caching 图片缓存</li>
+<li>Performance 性能</li>
+<li>Full support for Objective-C ARC 全面支持Ojbective-C ARC</li>
+</ul>
+
+
+<p>个人感觉:</p>
+
+<ol>
+<li>功能偏简单；库本身的设计上感觉没有什么特别的；主要就是封装了一个Operation和一个调度的Engine; Engine中涉及一些配置和调度；</li>
+<li>使用的时候需要自己去写MKNetworkEngine的子类; 当然，一个应用一般是访问同一个服务器，所以只需要在同一个Engine类中开放不同的API接口；每个接口里面去创建一个MKNetworkOperation;</li>
+<li>一般来说，不需要子类化MKNetworkOperation类</li>
+<li>创建MKNetworkOperation时参数要自己组装；所以实际使用的时候，还是需要在这之上封装一个网络层出来；</li>
+<li>坦白说，MKNetworkKit的代码风格都比较差，包括空行和空格什么的，可读性不那么好，没有其他几个知名库那样赏心悦目.</li>
+</ol>
+
+
+<h2>五 YTKNetwork</h2>
+
+<p>YTKNetwork 是猿题库 iOS 研发团队基于 AFNetworking 封装的 iOS 网络库，其实现了一套 High Level 的 API，提供了更高层次的网络访问抽象。
+项目地址: <a href="https://github.com/yuantiku/YTKNetwork">https://github.com/yuantiku/YTKNetwork</a></p>
+
+<p>总体还是基于AFNetworking 2.x的，做了一些上层封装，集成了Cache功能，让网络层请求写起来更加简单。我觉得大多数情况下，使用这个库足够了，方便又清晰.</p>
+
+<p>不过，我觉得实际使用的过程中，要是能够加上JSON-Model的映射功能，使用起来会更爽；另外，这套请求还是基于AFNetworking 2.x老的那套接口，也就是AFURLSessionManager那一套，底下还是NSURLConnection, 估计后面也会迁移到AFNetworking 3.x上使用NSURLSession吧！</p>
+
+<p>另外，安居客的作者貌似也开源过一套网络库的上层封装，大致思想和YTKNetwork差不太多，我没有细看，据说用起来也很Happy.</p>
+
+<p>全文完。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -688,70 +811,6 @@ dispatch_async(dispatch_get_main_queue(), {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/">iOS开发每周文章选读 第三周</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-27T14:19:24+08:00'><span class='date'>2015 年11 月27 日</span> <span class='time'>2:19 pm</span></time>
-        
-        
-           | <a href="/blog/2015/11/27/mei-zhou-wen-zhang-xuan-du-di-san-zhou/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这周偷懒，随便选了些以前读过的老文章</p>
-
-<h2>一 <a href="http://www.raywenderlich.com/46988/ios-design-patterns">iOS Design Patterns</a></h2>
-
-<p>raywenderlich出品的文章都很不错，主要就是介绍iOS开发中常用的那些设计模式，以及在什么场景下使用；内容充实，解释清楚，而且结合了iOS开发自身的特点。</p>
-
-<h2>二 <a href="http://www.raywenderlich.com/73602/dynamic-table-view-cell-height-auto-layout">Dynamic Table View Cell Height and Auto Layout</a></h2>
-
-<p>也是raywenderlich出品的文章， 介绍如何利用Auto Layout来动态调整UITableViewCell的高度, 核心就是先创建一个Cell之后，通过AutoLayout自动计算出高度来。话说动态调整TableViewCell的高度，一直都是个挺火的topic。我记得sunnyxxx有专门做个第三方库来快速的动态调整UITableViewCell的高度的，改天挑出来一起放在这里。</p>
-
-<p>说点感触，看过好些raywenderlich的文章，确实写得很详细啊，感觉那些作者花了不少时间在上面。</p>
-
-<h2>三 <a href="https://www.mikeash.com/pyblog/friday-qa-2009-05-22-objective-c-class-loading-and-initialization.html">Objective-C Class Loading and Initialization</a></h2>
-
-<p>讲+load和+initialize这两个方法的，一些文章里面提到必问的面试题里面就有这个题，不过我好像没问过别人这个问题，也没被人问过，囧&hellip;</p>
-
-<h2>四 <a href="http://onevcat.com/2015/08/watchos2/">WWDC15 Session笔记 - 30 分钟开发一个简单的 watchOS 2 app</a></h2>
-
-<p>30分钟根本不够好吗？而且遇到个坑爹的问题，偶尔会提示说Operation Could not be completed&hellip;.</p>
-
-<h2>五 <a href="http://onevcat.com/2014/07/ios-ui-unique/?mc_cid=023329096e&amp;mc_eid=5b294811da">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></h2>
-
-<p>喵神的WWDC Session笔记系列都很值得看。。。。</p>
-
-<h2>六 <a href="http://www.cocoachina.com/cms/wap.php?action=article&amp;id=9717">理解iOS 8中的Self Sizing Cells和Dynamic Type</a></h2>
-
-<p>动态计算UITableViewCell的行高，仅支持iOS 8以及以上</p>
-
-<h2>七 <a href="http://nshipster.cn/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a></h2>
-
-<p>Interface Builder相关.</p>
-
-<p>其实，今天好多内容都是和界面以及Interface Builder相关的。。。。不过我觉得，用代码写界面和用IB搭建界面都得非常熟练才比较有意思</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/7">&larr; Older</a>
@@ -774,6 +833,10 @@ dispatch_async(dispatch_get_main_queue(), {
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/02/gong-zuo-zhong-yu-dao-de-xiao-wen-ti-yu-jie-jue-fang-an-bei-wang-%5B%3F%5D/">工作中遇到的小问题与解决方案备忘 一</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/01/02/macxia-you-yong-de-gong-ju/">Mac下有用的工具</a>
@@ -809,10 +872,6 @@ dispatch_async(dispatch_get_main_queue(), {
     
       <li class="post">
         <a href="/blog/2016/01/01/zai-liang-tai-ji-qi-shang-tong-shi-yong-octopressxie-bo-ke-de-wen-ti/">在两台机器上同时用octopress写博客的问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/27/reactivecocoacao-zuo-fu-jie-shao/">ReactiveCocoa操作符介绍</a>
       </li>
     
   </ul>
