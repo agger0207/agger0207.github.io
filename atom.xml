@@ -4,7 +4,7 @@
   <title><![CDATA[穷小子Agger的技术博客]]></title>
   <link href="http://agger0207.github.io/atom.xml" rel="self"/>
   <link href="http://agger0207.github.io/"/>
-  <updated>2016-01-02T16:18:39+08:00</updated>
+  <updated>2016-07-02T21:37:08+08:00</updated>
   <id>http://agger0207.github.io/</id>
   <author>
     <name><![CDATA[Agger]]></name>
@@ -379,7 +379,11 @@ $ ls -a
     <link href="http://agger0207.github.io/blog/2015/12/11/ioskai-fa-mei-zhou-wen-zhang-xuan-du-5/"/>
     <updated>2015-12-11T13:53:35+08:00</updated>
     <id>http://agger0207.github.io/blog/2015/12/11/ioskai-fa-mei-zhou-wen-zhang-xuan-du-5</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<h2><a href="">一 深入理解Objective-C：方法缓存</a></h2>
+
+<p>来自美团技术团队，文章从runtime源码的角度探究了Objective-C在runtime层的方法决议（Method resolving）过程和方法缓存（Method cache）的实现，分析了Objective-C为什么要做方法缓存，为什么要这么做方法缓存，以及方法缓存在什么地方等等，对理解Objective-C底层机制很有帮助，也可以体会这种不断优化的过程。</p>
+
+<p>另外，关于方法缓存的优化中，还有一点，Objective-C在从散列表里检索方法的时候，规避掉了对方法名的字符串比较，而是直接用指针比较来做的以提高性能，而可以这样做的前提就是，所有method cache里面存放同一个方法名的都是同一个指针。</p>
 ]]></content>
   </entry>
   
